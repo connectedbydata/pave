@@ -1,0 +1,510 @@
+tblxVFG1lM7trGD5m:
+  name: Cases
+  primaryFieldId: fldQVZReHicFlY9Yp
+  fields:
+    fldQVZReHicFlY9Yp:
+      name: "\uFEFFProject Title"
+      type: singleLineText
+      sync: true
+    fldnGSaj7zRScwJt8:
+      name: Editing link
+      type: button
+      sync: false
+    fldrM6RRk8easAxSq:
+      name: 'Workflow: Status'
+      type: singleSelect
+      sync: false
+      choices:
+      - Nomination
+      - Submission
+      - Draft
+      - Completed
+    fldjqAHoLIaL3Aw5e:
+      name: Assigned to
+      type: singleCollaborator
+      sync: true
+    fldCWTk5Acivt17EF:
+      name: Next Action
+      type: multipleSelects
+      sync: false
+      choices:
+      - Invite to submit their own case
+      - Find contact details
+      - Complete case study research
+      - Peer-review
+    fld20rG6I32pf879z:
+      name: Outreach E-mail
+      type: email
+      sync: false
+    fld3vJnaTCYHD9SGg:
+      name: Research Journal Notes
+      type: richText
+      sync: false
+    fldyT0fI25iZQRBiH:
+      name: Curation decision
+      type: singleSelect
+      sync: false
+      choices:
+      - Featured Full Case
+      - Full Case
+      - Mapping Entry
+    fldVXcw3fVYGdRRM9:
+      name: Submitted by
+      type: singleLineText
+      sync: true
+    fldJTxxT0i74hH9tW:
+      name: Contact e-mail
+      type: email
+      sync: false
+    fldmEzeNxnodJnfHB:
+      name: Submitter role
+      type: multipleSelects
+      sync: false
+      choices:
+      - Commissioner
+      - Project leader
+      - Project team
+      - Participant
+      - Observer
+      - Other
+      - Not involved
+    fldNwWJty8hufq6t1:
+      name: Additional acknowledgements
+      type: singleLineText
+      sync: true
+    fldM0ClT9Ik6FuNnJ:
+      name: Funding Organisations
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblJCL1taIotM6y4Y
+    fldoCBwmPfW0Xrlpy:
+      name: How was the project initiated?
+      type: multipleSelects
+      sync: true
+      choices:
+      - Commissioned
+      - Community Led
+      - Co-created
+      - Academic research
+      - Other
+    fldxJ934AvP0LGna0:
+      name: Involved organisations
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblJCL1taIotM6y4Y
+    fld05RupsUvpbg8vU:
+      name: Lead organisations
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblJCL1taIotM6y4Y
+    fldq3vKeaKBBdOY6a:
+      name: Geographic scope
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblg0E17yrYVgCDOw
+    fldzgqKbADUHBkfxO:
+      name: Project URL
+      type: url
+      sync: true
+    fld3WCMM9BTILD6m8:
+      name: Project status
+      type: singleSelect
+      sync: true
+      choices:
+      - Planned
+      - In Progress
+      - Complete
+    fldKttntgUGpSigJs:
+      name: What year did the project start?
+      type: number
+      sync: true
+    fldwgrONWjl5apN0a:
+      name: What year did the project conclude?
+      type: number
+      sync: true
+    flddUvgeSB6VY4w9i:
+      name: Project goals
+      type: multipleSelects
+      sync: true
+      choices:
+      - 'Methods: Create re-usable participation tools & methods'
+      - 'Quantitative: Generate statistical evidence on public attitudes to AI'
+      - 'Qualitative: Capture qualitative evidence on public attitudes to AI'
+      - 'Policy: Inform a policy-making process'
+      - 'Capacity: Build participant capacity to engage with AI'
+      - 'AI Development: Shape the development of AI tools'
+      - 'Audit: Review design or implementation of AI tools'
+      - 'Empowerment: Build community power with respect to AI'
+      - 'Evaluate: Check the quality of evidence or engagement processes'
+    fldEnara6Czm8ChkH:
+      name: What form of AI is the project about?
+      type: multipleSelects
+      sync: true
+      choices:
+      - Generative AI
+      - Predictive AI
+      - Specific AI system(s)
+      - AI in general
+      - Current issues
+      - Future issues
+    fldmmG9MGLAEewrOT:
+      name: Describe the subject matter in your own words (one line)
+      type: singleLineText
+      sync: true
+    fld0oykyuwbVPbW0H:
+      name: Provide a brief description of the project
+      type: multilineText
+      sync: true
+    fld8UK4VG4qwQf4bA:
+      name: Headline findings
+      type: richText
+      sync: true
+    fldEuGi25yjQf3asH:
+      name: Messages
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblZ5YZLljxHXapOF
+    fldenspXfw7B7Odkr:
+      name: Was AI used to assist in summary generation?
+      type: multipleSelects
+      sync: false
+      choices:
+      - The summary was written by hand
+      - AI was used in generating this summary
+      - The summary has been edited and checked for accuracy
+    fldAQhKPRBSYGsJwD:
+      name: Participants
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblRGGoBamk2WGdUD
+    fldB1TUH1buE9uaFP:
+      name: Participation locations
+      type: multilineText
+      sync: true
+    fldaSwQdG23BdcH4J:
+      name: Why is this project important to include in the case book?
+      type: multilineText
+      sync: true
+    fldPOu99itaN5PMaK:
+      name: Inclusion efforts
+      type: multilineText
+      sync: true
+    fld3PwRR35QU6D1CK:
+      name: What limitations to the project should be noted?
+      type: multilineText
+      sync: true
+    fldx2fmatqG1K5Arm:
+      name: Which of the following resources are available for this project?
+      type: multipleSelects
+      sync: true
+      choices:
+      - A project report
+      - A project video
+      - An independent evaluation
+      - A research poster
+      - A method guide or toolkit
+    fldeQz7UtfY8zlyhv:
+      name: Supporting resources
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblu6lFzOdgEQKGC4
+    fldvXxCnSclvssxyK:
+      name: Photos available?
+      type: multipleSelects
+      sync: false
+      choices:
+      - I have photos from this project to upload
+      - Photos may be available from this project - contact me later
+      - There are no photos available from this project
+    fldd4B6cpBOP3n3is:
+      name: Photos and images
+      type: multipleAttachments
+      sync: true
+    fldV2q24E34ccLyqd:
+      name: Target group
+      type: multilineText
+      sync: true
+tblJCL1taIotM6y4Y:
+  name: Organisations
+  primaryFieldId: fldUH8cT7KyUpg1wT
+  fields:
+    fldUH8cT7KyUpg1wT:
+      name: Name
+      type: singleLineText
+      sync: true
+    fldYGUHxexgXk88fw:
+      name: Lead organisation for
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblxVFG1lM7trGD5m
+    fldnEvULtgnrqryUQ:
+      name: Funding organisation for
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblxVFG1lM7trGD5m
+    fldE09wBfEXIawc5T:
+      name: Involved organisation for
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblxVFG1lM7trGD5m
+    fldMPxskerPZgXyLV:
+      name: Website address
+      type: url
+      sync: true
+    fldHOkeRYbBEc5Qev:
+      name: Organisation type
+      type: multipleSelects
+      sync: true
+      choices: []
+    fldjNFI2YXLQ2PapK:
+      name: Location
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblg0E17yrYVgCDOw
+tblg0E17yrYVgCDOw:
+  name: Locations
+  primaryFieldId: fldNDwfliTbwWYd4l
+  fields:
+    fldNDwfliTbwWYd4l:
+      name: Name
+      type: singleLineText
+      sync: true
+    fldSwP1hLiQlRaB3E:
+      name: Cases
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblxVFG1lM7trGD5m
+    fldAtfj6KrVsh8jHF:
+      name: Participants
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblRGGoBamk2WGdUD
+    fldzvtgyrKNtzuKIL:
+      name: Organisations
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblJCL1taIotM6y4Y
+    fldy0zqeilb2NSEOB:
+      name: Country Code
+      type: singleLineText
+      sync: true
+    fldWtvMukYmq1IuWq:
+      name: Latitude
+      type: number
+      sync: true
+    fldCdYZ8Ay6f6ulq1:
+      name: Longitude
+      type: number
+      sync: true
+tblRGGoBamk2WGdUD:
+  name: Participants
+  primaryFieldId: fldHY0Cm0kPEMZ4Gg
+  fields:
+    fldHY0Cm0kPEMZ4Gg:
+      name: Name
+      type: formula
+      sync: true
+    fldHpcL2p4OYtkkvv:
+      name: Group description
+      type: singleLineText
+      sync: true
+    fld86CmkqMgbvMLP6:
+      name: Recruitment method
+      type: singleSelect
+      sync: true
+      choices:
+      - Self selected / volunteered
+      - Demographic lottery
+      - Statistical sample
+      - Peer recruitment (snowball)
+      - Other
+    fldjmbTHKUAw4M2zQ:
+      name: Recruitment description
+      type: singleLineText
+      sync: true
+    fldpvn1hM37AceKyM:
+      name: Was there a specific target population?
+      type: singleLineText
+      sync: true
+    fldY5TPx3FCNnQ9Fv:
+      name: How many people took part?
+      type: number
+      sync: true
+    fldDs16PFhLNn1Rag:
+      name: On average, how many hours did each participant engage for?
+      type: number
+      sync: true
+    fldDUHAWPMbAqFNot:
+      name: Which of the following methods were used to engage participants?
+      type: multipleSelects
+      sync: true
+      choices:
+      - Action Research
+      - Capacity Building Workshop
+      - "Citizens\u2019 Assembly"
+      - Citizens' Jury
+      - Co-creation workshops
+      - Community Advisory Group
+      - Community-led Audit
+      - Community-Based Participatory Research
+      - Collective Intelligence Process
+      - Crowdsourcing
+      - Deliberation
+      - "Deliberative Polling\xAE"
+      - Distributed dialogue
+      - Focus Group
+      - Forum Theatre
+      - Future Workshop
+      - Notice and Request for Public Comment
+      - Opinion Polling
+      - Participatory Arts
+      - Participatory futures workshop
+      - Peer-Research
+      - Prototyping
+      - Public Dialogue
+      - Public Hearing
+      - Roundtable Discussion
+      - Scenario Workshop
+      - Survey
+      - Workers' Council
+    fldLU10Hiao77UniS:
+      name: Do any of the following apply?
+      type: multipleSelects
+      sync: true
+      choices:
+      - There were trained facilitators involved
+      - There was a learning phase for participants
+      - Materials from the learning phase have been published
+    fldweSxXYJIXdml8C:
+      name: Where did engagement take place?
+      type: multipleSelects
+      sync: true
+      choices:
+      - Online
+      - Offline
+      - Hybrid
+    fldA8Li5xJXokGrFY:
+      name: Where were participants from?
+      type: singleLineText
+      sync: true
+    fld0BFLjrsMUNnQAv:
+      name: Locations
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblg0E17yrYVgCDOw
+    fldVSkZqFL1cykZ47:
+      name: Additional notes
+      type: multilineText
+      sync: true
+    fldbvRYPZaQe2mcdT:
+      name: Cases
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblxVFG1lM7trGD5m
+tblu6lFzOdgEQKGC4:
+  name: Resources
+  primaryFieldId: fld174spfMr309suV
+  fields:
+    fld174spfMr309suV:
+      name: Title
+      type: singleLineText
+      sync: true
+    fldzQYhMyANM5OvJP:
+      name: Select
+      type: singleSelect
+      sync: true
+      choices:
+      - Project report
+      - Evaluation
+      - Research poster
+      - Facilitation guide
+      - Workshop resource
+      - Media coverage
+      - Video
+      - Photo or image
+      - Citation
+      - Other
+    fldx5z1qUqdM71vbo:
+      name: Short description
+      type: singleLineText
+      sync: true
+    fldHNs68Xt8bkJN3E:
+      name: URL
+      type: url
+      sync: true
+    fldNl6UdLiRMpQYrc:
+      name: Attachments
+      type: multipleAttachments
+      sync: true
+    fldEE4ZowgagMZMWJ:
+      name: License
+      type: singleLineText
+      sync: true
+    fldtxL20ZxJG2ZdTG:
+      name: Cases
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblxVFG1lM7trGD5m
+tbl3Id3C9tKcFcnKm:
+  name: Method Codelist
+  primaryFieldId: fldlR2XVxIybX907z
+  fields:
+    fldlR2XVxIybX907z:
+      name: Name
+      type: multilineText
+      sync: true
+    fldrugVIl98xJkA9c:
+      name: Notes
+      type: checkbox
+      sync: true
+    fld0buRoxqkfSQmpb:
+      name: description
+      type: multilineText
+      sync: true
+    fldbr9FVlpzodzDnZ:
+      name: Assignee
+      type: singleLineText
+      sync: true
+tblZ5YZLljxHXapOF:
+  name: Messages
+  primaryFieldId: fldyrLCrggwZqFZmS
+  fields:
+    fldyrLCrggwZqFZmS:
+      name: Name
+      type: multilineText
+      sync: true
+    fld9WcxhWfobqkI72:
+      name: Type
+      type: singleSelect
+      sync: true
+      choices:
+      - Recommendation
+      - Issue
+      - Quote
+    fldo3jzKvZqYeXvYi:
+      name: Additional Credit Line
+      type: singleLineText
+      sync: true
+    fldCuzVkCPc37vZiY:
+      name: Cases
+      type: multipleRecordLinks
+      sync: true
+      options:
+        linkedTableId: tblxVFG1lM7trGD5m

@@ -1,0 +1,350 @@
+---
+layout: default
+---
+
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+  </header>
+
+  <div class="post-content">
+
+    <div class="case-fields">
+
+      <!-- fldQVZReHicFlY9Yp: Project Title -->
+      {% if page.fldQVZReHicFlY9Yp %}
+      <div class="field-container field-type-singleLineText">
+        <label class="field-label">Project Title</label>
+        <div class="field-value">{{ page.fldQVZReHicFlY9Yp }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldjqAHoLIaL3Aw5e: Assigned to -->
+      {% if page.fldjqAHoLIaL3Aw5e %}
+      <div class="field-container field-type-singleCollaborator">
+        <label class="field-label">Assigned to</label>
+        <div class="field-value">{{ page.fldjqAHoLIaL3Aw5e.name }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldVXcw3fVYGdRRM9: Submitted by -->
+      {% if page.fldVXcw3fVYGdRRM9 %}
+      <div class="field-container field-type-singleLineText">
+        <label class="field-label">Submitted by</label>
+        <div class="field-value">{{ page.fldVXcw3fVYGdRRM9 }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldNwWJty8hufq6t1: Additional acknowledgements -->
+      {% if page.fldNwWJty8hufq6t1 %}
+      <div class="field-container field-type-singleLineText">
+        <label class="field-label">Additional acknowledgements</label>
+        <div class="field-value">{{ page.fldNwWJty8hufq6t1 }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldM0ClT9Ik6FuNnJ: Funding Organisations -->
+      {% if page.fldM0ClT9Ik6FuNnJ %}
+      <div class="field-container field-type-multipleRecordLinks">
+        <label class="field-label">Funding Organisations</label>
+        <div class="field-value">
+          <ul>
+            {% for item in page.fldM0ClT9Ik6FuNnJ %}
+              <li>{{ item.fldUH8cT7KyUpg1wT }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldoCBwmPfW0Xrlpy: How was the project initiated? -->
+      {% if page.fldoCBwmPfW0Xrlpy %}
+      <div class="field-container field-type-multipleSelects">
+        <!-- Possible values: Commissioned; Community Led; Co-created; Academic research; Other -->
+        <label class="field-label">How was the project initiated?</label>
+        <div class="field-value">
+          {{ page.fldoCBwmPfW0Xrlpy | join: ", " }}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldxJ934AvP0LGna0: Involved organisations -->
+      {% if page.fldxJ934AvP0LGna0 %}
+      <div class="field-container field-type-multipleRecordLinks">
+        <label class="field-label">Involved organisations</label>
+        <div class="field-value">
+          <ul>
+            {% for item in page.fldxJ934AvP0LGna0 %}
+              <li>{{ item.fldUH8cT7KyUpg1wT }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fld05RupsUvpbg8vU: Lead organisations -->
+      {% if page.fld05RupsUvpbg8vU %}
+      <div class="field-container field-type-multipleRecordLinks">
+        <label class="field-label">Lead organisations</label>
+        <div class="field-value">
+          <ul>
+            {% for item in page.fld05RupsUvpbg8vU %}
+              <li>{{ item.fldUH8cT7KyUpg1wT }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldq3vKeaKBBdOY6a: Geographic scope -->
+      {% if page.fldq3vKeaKBBdOY6a %}
+      <div class="field-container field-type-multipleRecordLinks">
+        <label class="field-label">Geographic scope</label>
+        <div class="field-value">
+          <ul>
+            {% for item in page.fldq3vKeaKBBdOY6a %}
+              <li>{{ item.fldNDwfliTbwWYd4l }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldzgqKbADUHBkfxO: Project URL -->
+      {% if page.fldzgqKbADUHBkfxO %}
+      <div class="field-container field-type-url">
+        <label class="field-label">Project URL</label>
+        <div class="field-value"><a href="{{ page.fldzgqKbADUHBkfxO }}">{{ page.fldzgqKbADUHBkfxO }}</a></div>
+      </div>
+      {% endif %}
+
+      <!-- fld3WCMM9BTILD6m8: Project status -->
+      {% if page.fld3WCMM9BTILD6m8 %}
+      <div class="field-container field-type-singleSelect">
+        <!-- Possible values: Planned; In Progress; Complete -->
+        <label class="field-label">Project status</label>
+        <div class="field-value">{{ page.fld3WCMM9BTILD6m8 }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldKttntgUGpSigJs: What year did the project start? -->
+      {% if page.fldKttntgUGpSigJs %}
+      <div class="field-container field-type-number">
+        <label class="field-label">What year did the project start?</label>
+        <div class="field-value">{{ page.fldKttntgUGpSigJs }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldwgrONWjl5apN0a: What year did the project conclude? -->
+      {% if page.fldwgrONWjl5apN0a %}
+      <div class="field-container field-type-number">
+        <label class="field-label">What year did the project conclude?</label>
+        <div class="field-value">{{ page.fldwgrONWjl5apN0a }}</div>
+      </div>
+      {% endif %}
+
+      <!-- flddUvgeSB6VY4w9i: Project goals -->
+      {% if page.flddUvgeSB6VY4w9i %}
+      <div class="field-container field-type-multipleSelects">
+        <!-- Possible values: Methods: Create re-usable participation tools & methods; Quantitative: Generate statistical evidence on public attitudes to AI; Qualitative: Capture qualitative evidence on public attitudes to AI; Policy: Inform a policy-making process; Capacity: Build participant capacity to engage with AI; AI Development: Shape the development of AI tools; Audit: Review design or implementation of AI tools; Empowerment: Build community power with respect to AI; Evaluate: Check the quality of evidence or engagement processes -->
+        <label class="field-label">Project goals</label>
+        <div class="field-value">
+          {{ page.flddUvgeSB6VY4w9i | join: ", " }}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldEnara6Czm8ChkH: What form of AI is the project about? -->
+      {% if page.fldEnara6Czm8ChkH %}
+      <div class="field-container field-type-multipleSelects">
+        <!-- Possible values: Generative AI; Predictive AI; Specific AI system(s); AI in general; Current issues; Future issues -->
+        <label class="field-label">What form of AI is the project about?</label>
+        <div class="field-value">
+          {{ page.fldEnara6Czm8ChkH | join: ", " }}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldmmG9MGLAEewrOT: Describe the subject matter in your own words (one line) -->
+      {% if page.fldmmG9MGLAEewrOT %}
+      <div class="field-container field-type-singleLineText">
+        <label class="field-label">Describe the subject matter in your own words (one line)</label>
+        <div class="field-value">{{ page.fldmmG9MGLAEewrOT }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fld0oykyuwbVPbW0H: Provide a brief description of the project -->
+      {% if page.fld0oykyuwbVPbW0H %}
+      <div class="field-container field-type-multilineText">
+        <label class="field-label">Provide a brief description of the project</label>
+        <div class="field-value">{{ page.fld0oykyuwbVPbW0H | newline_to_br }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fld8UK4VG4qwQf4bA: Headline findings -->
+      {% if page.fld8UK4VG4qwQf4bA %}
+      <div class="field-container field-type-richText">
+        <label class="field-label">Headline findings</label>
+        <div class="field-value">{{ page.fld8UK4VG4qwQf4bA | newline_to_br }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldEuGi25yjQf3asH: Messages -->
+      {% if page.fldEuGi25yjQf3asH %}
+      <div class="field-container field-type-multipleRecordLinks">
+        <label class="field-label">Messages</label>
+        <div class="field-value">
+          <ul>
+            {% for item in page.fldEuGi25yjQf3asH %}
+              <li>{{ item.fldyrLCrggwZqFZmS }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldAQhKPRBSYGsJwD: Participants -->
+      {% if page.fldAQhKPRBSYGsJwD %}
+      <div class="field-container field-type-multipleRecordLinks">
+        <label class="field-label">Participants</label>
+        <div class="field-value">
+          <ul>
+            {% for item in page.fldAQhKPRBSYGsJwD %}
+              <li>
+                {{ item.fldHY0Cm0kPEMZ4Gg }}
+                {% if item.fldHpcL2p4OYtkkvv %}<br><small>{{ item.fldHpcL2p4OYtkkvv }}</small>{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldB1TUH1buE9uaFP: Participation locations -->
+      {% if page.fldB1TUH1buE9uaFP %}
+      <div class="field-container field-type-multilineText">
+        <label class="field-label">Participation locations</label>
+        <div class="field-value">{{ page.fldB1TUH1buE9uaFP | newline_to_br }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldaSwQdG23BdcH4J: Why is this project important to include in the case book? -->
+      {% if page.fldaSwQdG23BdcH4J %}
+      <div class="field-container field-type-multilineText">
+        <label class="field-label">Why is this project important to include in the case book?</label>
+        <div class="field-value">{{ page.fldaSwQdG23BdcH4J | newline_to_br }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldPOu99itaN5PMaK: Inclusion efforts -->
+      {% if page.fldPOu99itaN5PMaK %}
+      <div class="field-container field-type-multilineText">
+        <label class="field-label">Inclusion efforts</label>
+        <div class="field-value">{{ page.fldPOu99itaN5PMaK | newline_to_br }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fld3PwRR35QU6D1CK: What limitations to the project should be noted? -->
+      {% if page.fld3PwRR35QU6D1CK %}
+      <div class="field-container field-type-multilineText">
+        <label class="field-label">What limitations to the project should be noted?</label>
+        <div class="field-value">{{ page.fld3PwRR35QU6D1CK | newline_to_br }}</div>
+      </div>
+      {% endif %}
+
+      <!-- fldx2fmatqG1K5Arm: Which of the following resources are available for this project? -->
+      {% if page.fldx2fmatqG1K5Arm %}
+      <div class="field-container field-type-multipleSelects">
+        <!-- Possible values: A project report; A project video; An independent evaluation; A research poster; A method guide or toolkit -->
+        <label class="field-label">Which of the following resources are available for this project?</label>
+        <div class="field-value">
+          {{ page.fldx2fmatqG1K5Arm | join: ", " }}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldeQz7UtfY8zlyhv: Supporting resources -->
+      {% if page.fldeQz7UtfY8zlyhv %}
+      <div class="field-container field-type-multipleRecordLinks">
+        <label class="field-label">Supporting resources</label>
+        <div class="field-value">
+          <ul>
+            {% for item in page.fldeQz7UtfY8zlyhv %}
+              <li>
+                <a href="{{ item.fldHNs68Xt8bkJN3E }}">{{ item.fld174spfMr309suV }}</a>
+                {% if item.fldzQYhMyANM5OvJP %}({{ item.fldzQYhMyANM5OvJP }}){% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldd4B6cpBOP3n3is: Photos and images -->
+      {% if page.fldd4B6cpBOP3n3is %}
+      <div class="field-container field-type-multipleAttachments">
+        <label class="field-label">Photos and images</label>
+        <div class="field-value">
+          <div class="attachments-gallery">
+            {% for attachment in page.fldd4B6cpBOP3n3is %}
+              <div class="attachment" style="display: inline-block; margin: 10px; vertical-align: top;">
+                {% if attachment.type contains "image" %}
+                  <a href="{{ attachment.url | relative_url }}" target="_blank">
+                    <img src="{{ attachment.url | relative_url }}" alt="{{ attachment.filename }}" style="max-width: 200px; max-height: 200px; display: block; border: 1px solid #ddd;">
+                  </a>
+                {% else %}
+                  <a href="{{ attachment.url | relative_url }}" class="file-link">
+                    📄 {{ attachment.filename }}
+                  </a>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- fldV2q24E34ccLyqd: Target group -->
+      {% if page.fldV2q24E34ccLyqd %}
+      <div class="field-container field-type-multilineText">
+        <label class="field-label">Target group</label>
+        <div class="field-value">{{ page.fldV2q24E34ccLyqd | newline_to_br }}</div>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+</article>
+
+<style>
+.case-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.field-container {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+.field-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+.field-value {
+  color: #555;
+}
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.btn:hover {
+  background-color: #0056b3;
+}
+</style>
