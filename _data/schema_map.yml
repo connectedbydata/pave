@@ -22,7 +22,7 @@ tblxVFG1lM7trGD5m:
     fldjqAHoLIaL3Aw5e:
       name: Assigned to
       type: singleCollaborator
-      sync: true
+      sync: false
     fldCWTk5Acivt17EF:
       name: Next Action
       type: multipleSelects
