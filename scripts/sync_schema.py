@@ -26,7 +26,8 @@ def main():
     args = parser.parse_args()
 
     if not AIRTABLE_PAT or not AIRTABLE_BASE_ID:
-        print("Error: AIRTABLE_PAT and AIRTABLE_BASE_ID must be set in .env")
+        print("Error: AIRTABLE_PAT and AIRTABLE_BASE_ID must be provided.")
+        print("Ensure they are set in your .env file (local) or added as Repository Secrets (GitHub Actions).")
         exit(1)
 
     print("Fetching schema from Airtable...")
