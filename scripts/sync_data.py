@@ -27,9 +27,16 @@ api = Api(AIRTABLE_PAT)
 base = api.base(AIRTABLE_BASE_ID)
 
 # Target tables
-TABLE_NAMES = ["Cases", "Organisations", "Resources", "Participants", "Locations"]
+TABLE_CONFIG = {
+    "Cases": {"dir": Path("_cases"), "collection": "cases"},
+    "Organisations": {"dir": Path("_organisations"), "collection": "organisations"},
+    "Resources": {"dir": Path("_resources"), "collection": "resources"},
+    "Participants": {"dir": Path("_participants"), "collection": "participants"},
+    "Locations": {"dir": Path("_locations"), "collection": "locations"},
+    "Messages": {"dir": Path("_messages"), "collection": "messages"}
+}
+TABLE_NAMES = list(TABLE_CONFIG.keys())
 ATTACHMENT_DIR = Path("assets/attachments")
-CASES_DIR = Path("_cases")
 
 # Sync Settings
 FILTER_FIELD_ID = "fldrM6RRk8easAxSq"  # Default: Workflow: Status
@@ -40,7 +47,7 @@ def slugify(text):
     text = re.sub(r'[^\w\s-]', '', text)
     text = re.sub(r'[\s_-]+', '-', text)
     text = text.strip('-')
-    return text
+    return text[:100].rstrip('-')
 
 def hash_id(record_id):
     if not record_id:
@@ -80,7 +87,26 @@ def download_attachment(url, filename, record_id, field_id, suffix="", attachmen
                     f.write(chunk)
     return f"/assets/attachments/{local_filename}"
 
-def resolve_nested(data, all_tables_data, schema_map, current_table_id, rec_id):
+def get_record_title(fields, table_id, schema_map, record_id):
+    """Determine the title for a record based on schema and common field names."""
+    table_fields = schema_map.get(table_id, {}).get("fields", {})
+    
+    # Try primary field
+    primary_id = schema_map.get(table_id, {}).get("primaryFieldId")
+    if primary_id and primary_id in fields:
+        return str(fields[primary_id])
+        
+    # Fallback to common name fields
+    for f_id, f_val in fields.items():
+        f_info = table_fields.get(f_id)
+        if f_info:
+            clean_name = f_info["name"].strip().lower().replace("\ufeff", "")
+            if clean_name in ["title", "name", "project title", "case name"]:
+                return str(f_val)
+    
+    return record_id
+
+def resolve_fields(data, schema_map, current_table_id, rec_id, id_to_slug, synced_ids):
     resolved = {}
     table_fields = schema_map.get(current_table_id, {}).get("fields", {})
     
@@ -91,57 +117,21 @@ def resolve_nested(data, all_tables_data, schema_map, current_table_id, rec_id):
         if not field_info or not field_info.get("sync", False):
             continue
 
-        # Skip if value is solely a record ID and not resolved
+        # Skip if value is solely a record ID and not a link
         if is_record_id(value) and field_info["type"] != "multipleRecordLinks":
             continue
 
         # Check if it's a multiple record link
         if field_info["type"] == "multipleRecordLinks":
-            linked_table_id = field_info.get("options", {}).get("linkedTableId")
-            if linked_table_id and linked_table_id in all_tables_data:
-                nested_records = []
-                for l_rec_id in value:
-                    if l_rec_id in all_tables_data[linked_table_id]:
-                        l_rec_fields = all_tables_data[linked_table_id][l_rec_id]
-                        processed_l_rec = resolve_nested_simple(l_rec_fields, all_tables_data, schema_map, linked_table_id, l_rec_id)
-                        nested_records.append({**processed_l_rec, "id": hash_id(l_rec_id)})
-                resolved[field_id] = nested_records
-            # If we don't resolve it, we don't output the raw IDs
+            linked_slugs = []
+            for l_rec_id in value:
+                # ONLY include links to records that are actually being synced
+                if l_rec_id in synced_ids and l_rec_id in id_to_slug:
+                    linked_slugs.append(id_to_slug[l_rec_id])
+            resolved[field_id] = linked_slugs
         
         # Handle attachments
         elif field_info["type"] == "multipleAttachments":
-            local_attachments = []
-            for att in value:
-                att_id = att.get("id")
-                local_url = download_attachment(att["url"], att["filename"], rec_id, field_id, attachment_id=att_id)
-                new_att = {**att, "url": local_url}
-                if "thumbnails" in att:
-                    new_thumbnails = {}
-                    for size, thumb in att["thumbnails"].items():
-                        thumb_url = download_attachment(thumb["url"], att["filename"], rec_id, field_id, suffix=size, attachment_id=att_id)
-                        new_thumbnails[size] = {**thumb, "url": thumb_url}
-                    new_att["thumbnails"] = new_thumbnails
-                local_attachments.append(new_att)
-            resolved[field_id] = local_attachments
-        else:
-            resolved[field_id] = value
-    return resolved
-
-def resolve_nested_simple(data, all_tables_data, schema_map, current_table_id, rec_id):
-    """Simplified version for nested records to prevent deep recursion but handle attachments and sync status."""
-    resolved = {}
-    table_fields = schema_map.get(current_table_id, {}).get("fields", {})
-    
-    for field_id, value in data.items():
-        field_info = table_fields.get(field_id)
-        if not field_info or not field_info.get("sync", False):
-            continue
-
-        # Skip if value is solely a record ID
-        if is_record_id(value):
-            continue
-            
-        if field_info["type"] == "multipleAttachments":
             local_attachments = []
             for att in value:
                 att_id = att.get("id")
@@ -187,84 +177,140 @@ def main():
     
     print("Fetching records from Airtable...")
     all_tables_data = {}
+    id_to_slug = {}
+    used_slugs_by_table = {}
+
     for name in TABLE_NAMES:
         if name in name_to_id:
             t_id = name_to_id[name]
             print(f"  Fetching {name} ({t_id})...")
             records = base.table(t_id).all(use_field_ids=True)
             all_tables_data[t_id] = {r["id"]: r["fields"] for r in records}
+            
+            # Generate slugs first for cross-referencing
+            used_slugs_by_table[t_id] = set()
+            for rec_id, fields in all_tables_data[t_id].items():
+                title = get_record_title(fields, t_id, schema_map, rec_id)
+                base_slug = slugify(title)
+                if not base_slug:
+                    base_slug = hash_id(rec_id)
+                
+                slug = base_slug
+                counter = 1
+                while slug in used_slugs_by_table[t_id]:
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                used_slugs_by_table[t_id].add(slug)
+                id_to_slug[rec_id] = slug
         else:
             print(f"  Warning: Table '{name}' not found in schema map.")
 
-    # Process Cases
+    # 1. Identify active cases
     case_table_id = name_to_id.get("Cases")
-    if not case_table_id:
-        print("Error: 'Cases' table not found in schema map.")
-        return
-
-    CASES_DIR.mkdir(exist_ok=True)
-    # Clear existing cases to avoid duplicates or orphaned files
-    for f in CASES_DIR.glob("*.md"):
-        f.unlink()
+    active_case_ids = set()
     
-    print("Processing Cases...")
-    sync_count = 0
-    used_slugs = set()
-
-    for rec_id, fields in all_tables_data[case_table_id].items():
-        # Apply filtering
-        if FILTER_FIELD_ID:
-            current_status = fields.get(FILTER_FIELD_ID)
-            if isinstance(current_status, list):
-                if not any(s in FILTER_VALUES for s in current_status):
+    if case_table_id and case_table_id in all_tables_data:
+        for rec_id, fields in all_tables_data[case_table_id].items():
+            # Apply filtering
+            if FILTER_FIELD_ID:
+                current_status = fields.get(FILTER_FIELD_ID)
+                if isinstance(current_status, list):
+                    if not any(s in FILTER_VALUES for s in current_status):
+                        continue
+                elif current_status not in FILTER_VALUES:
                     continue
-            elif current_status not in FILTER_VALUES:
+            active_case_ids.add(rec_id)
+
+    # 2. Recursively find all reachable non-case records
+    referenced_ids = set(active_case_ids)
+    to_expand = list(active_case_ids)
+    
+    while to_expand:
+        current_id = to_expand.pop()
+        
+        # Find which table this record belongs to
+        found_fields = None
+        found_table_id = None
+        for t_id, t_data in all_tables_data.items():
+            if current_id in t_data:
+                found_fields = t_data[current_id]
+                found_table_id = t_id
+                break
+        
+        if found_fields:
+            table_fields = schema_map.get(found_table_id, {}).get("fields", {})
+            for f_id, f_val in found_fields.items():
+                f_info = table_fields.get(f_id)
+                # Only follow links if the field itself is marked for sync
+                if f_info and f_info.get("sync") and f_info["type"] == "multipleRecordLinks" and isinstance(f_val, list):
+                    for ref in f_val:
+                        # Determine if the reference is to a Case or something else
+                        is_ref_case = False
+                        for t_id, t_data in all_tables_data.items():
+                            if ref in t_data:
+                                if t_id == case_table_id:
+                                    is_ref_case = True
+                                break
+                        
+                        # Rules:
+                        # - If it's a Case, only include if it's already an ACTIVE case
+                        # - If it's not a Case, include it and continue expanding
+                        if is_ref_case:
+                            if ref in active_case_ids:
+                                referenced_ids.add(ref)
+                        else:
+                            if ref not in referenced_ids:
+                                referenced_ids.add(ref)
+                                to_expand.append(ref)
+
+    # 3. Process each table and write only referenced records
+    for table_name, config in TABLE_CONFIG.items():
+        t_id = name_to_id.get(table_name)
+        if not t_id or t_id not in all_tables_data:
+            continue
+
+        print(f"Processing {table_name}...")
+        config["dir"].mkdir(exist_ok=True)
+        # Clear existing
+        for f in config["dir"].glob("*.md"):
+            f.unlink()
+        
+        sync_count = 0
+        for rec_id, fields in all_tables_data[t_id].items():
+            # Only sync if it's in our discovered referenced set
+            if rec_id not in referenced_ids:
                 continue
 
-        print(f"  Processing Case {rec_id}...")
-        
-        # Resolve nesting and attachments (recursive, respects sync: true)
-        final_data = resolve_nested(fields, all_tables_data, schema_map, case_table_id, rec_id)
-        
-        # Title logic
-        title = rec_id
-        for f_id, f_val in final_data.items():
-            f_info = schema_map[case_table_id]["fields"].get(f_id)
-            if f_info:
-                clean_name = f_info["name"].strip().lower().replace("\ufeff", "")
-                if clean_name in ["title", "name", "project title", "case name"]:
-                    title = f_val
-                    break
+            # Resolve fields (cross-references use slugs, filtered by referenced_ids)
+            final_data = resolve_fields(fields, schema_map, t_id, rec_id, id_to_slug, referenced_ids)
+            
+            title = get_record_title(fields, t_id, schema_map, rec_id)
+            slug = id_to_slug[rec_id]
 
-        # Generate unique slug
-        base_slug = slugify(title)
-        if not base_slug:
-            base_slug = rec_id
-        
-        slug = base_slug
-        counter = 1
-        while slug in used_slugs:
-            slug = f"{base_slug}-{counter}"
-            counter += 1
-        used_slugs.add(slug)
+            if table_name == "Cases":
+                layout = "case"
+            elif table_name == "Organisations":
+                layout = "organisation"
+            else:
+                layout = "generic"
+            front_matter = {
+                "layout": layout,
+                "title": title,
+                "airtable_id": hash_id(rec_id),
+                "slug": slug,
+                **final_data
+            }
+            
+            file_path = config["dir"] / f"{slug}.md"
+            with open(file_path, "w") as f:
+                f.write("---\n")
+                fm_yaml = yaml.dump(front_matter, sort_keys=False)
+                f.write(annotate_yaml(fm_yaml, field_id_to_name))
+                f.write("\n---\n")
+            sync_count += 1
+        print(f"  {sync_count} records processed for {table_name}.")
 
-        front_matter = {
-            "layout": "case",
-            "title": title,
-            "airtable_id": hash_id(rec_id),
-            "slug": slug,
-            **final_data
-        }
-        
-        file_path = CASES_DIR / f"{slug}.md"
-        with open(file_path, "w") as f:
-            f.write("---\n")
-            fm_yaml = yaml.dump(front_matter, sort_keys=False)
-            f.write(annotate_yaml(fm_yaml, field_id_to_name))
-            f.write("\n---\n")
-        sync_count += 1
-
-    print(f"Sync complete! {sync_count} records processed.")
+    print(f"Sync complete!")
 
 if __name__ == "__main__":
     main()

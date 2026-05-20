@@ -1,0 +1,102 @@
+---
+layout: default
+---
+
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+    {% if page.fldMPxskerPZgXyLV %}
+      <p><a href="{{ page.fldMPxskerPZgXyLV }}" class="btn">Visit Website</a></p>
+    {% endif %}
+  </header>
+
+  <div class="post-content">
+    
+    <div class="organisation-details">
+      {% if page.fldHOkeRYbBEc5Qev %}
+        <div class="field-container">
+          <label class="field-label">Organisation Type</label>
+          <div class="field-value">{{ page.fldHOkeRYbBEc5Qev | join: ", " }}</div>
+        </div>
+      {% endif %}
+
+      {% if page.fldjNFI2YXLQ2PapK %}
+        <div class="field-container">
+          <label class="field-label">Locations</label>
+          <div class="field-value">
+            <ul>
+              {% for slug in page.fldjNFI2YXLQ2PapK %}
+                {% assign loc = site.locations | where: "slug", slug | first %}
+                <li>{{ loc.title }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <hr>
+
+    <h3>Cases Involved In</h3>
+    <div class="organisation-cases">
+      {% assign lead_cases = page.fldYGUHxexgXk88fw %}
+      {% assign funded_cases = page.fldnEvULtgnrqryUQ %}
+      {% assign involved_cases = page.fldE09wBfEXIawc5T %}
+      
+      {% assign all_case_slugs = "" | split: "," %}
+      {% if lead_cases %}{% assign all_case_slugs = all_case_slugs | concat: lead_cases %}{% endif %}
+      {% if funded_cases %}{% assign all_case_slugs = all_case_slugs | concat: funded_cases %}{% endif %}
+      {% if involved_cases %}{% assign all_case_slugs = all_case_slugs | concat: involved_cases %}{% endif %}
+      {% assign unique_case_slugs = all_case_slugs | uniq %}
+
+      {% if unique_case_slugs.size > 0 %}
+        <ul class="case-list">
+          {% for slug in unique_case_slugs %}
+            {% assign case = site.cases | where: "slug", slug | first %}
+            {% if case %}
+              <li>
+                <a href="{{ case.url | relative_url }}"><strong>{{ case.title }}</strong></a>
+                <br>
+                <small>
+                  Role: 
+                  {% assign roles = "" | split: "," %}
+                  {% if lead_cases contains slug %}{% assign roles = roles | push: "Lead" %}{% endif %}
+                  {% if funded_cases contains slug %}{% assign roles = roles | push: "Funder" %}{% endif %}
+                  {% if involved_cases contains slug %}{% assign roles = roles | push: "Involved" %}{% endif %}
+                  {{ roles | join: ", " }}
+                </small>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No cases found for this organisation.</p>
+      {% endif %}
+    </div>
+
+  </div>
+</article>
+
+<style>
+.organisation-details {
+  margin-bottom: 2rem;
+}
+.field-container {
+  margin-bottom: 1rem;
+}
+.field-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.case-list {
+  list-style: none;
+  padding-left: 0;
+}
+.case-list li {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+</style>
