@@ -10,6 +10,7 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    environment: Actions  
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
@@ -31,7 +32,6 @@ jobs:
           AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
         run: |
-          python scripts/sync_schema.py
           python scripts/sync_data.py
 
       - name: Create Pull Request
