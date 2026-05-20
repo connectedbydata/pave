@@ -6,5 +6,10 @@ vendor
 .env
 .ve/
 _cases/
+_organisations/
+_participants/
+_resources/
+_locations/
+_messages/
 assets/attachments/
 build.log
