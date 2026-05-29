@@ -28,8 +28,8 @@ layout: default
         {% endif %}
       </header>
 
-      <!-- Bold Hero Image Area with Carousel Overlay -->
-      <div class="case-hero-wrapper" style="position: relative;">
+      <!-- Bold Hero Image Area -->
+      <div class="case-hero-wrapper">
         {% assign hero_image = "" %}
         {% assign hero_alt = "" %}
         {% if page.fldd4B6cpBOP3n3is and page.fldd4B6cpBOP3n3is.size > 0 %}
@@ -48,63 +48,8 @@ layout: default
         <!-- Curated gradient color block default -->
         <div class="case-hero-image default-gradient-hero"></div>
         {% endif %}
-
-        <!-- Premium Key Messages Carousel Overlay -->
-        {% assign carousel_messages = "" | split: "" %}
-        {% if page.fldEuGi25yjQf3asH %}
-        {% for slug in page.fldEuGi25yjQf3asH %}
-        {% assign item = site.messages | where: "slug", slug | first %}
-        {% if item %}
-        {% assign carousel_messages = carousel_messages | push: item %}
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-
-        {% if carousel_messages.size > 0 %}
-        <div class="hero-carousel-overlay">
-          <button class="carousel-nav-btn prev-btn" aria-label="Previous slide"
-            onclick="event.stopPropagation()">‹</button>
-
-          <div class="carousel-slides-container">
-            <div class="carousel-slides-track">
-              {% for item in carousel_messages %}
-              <div class="carousel-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}">
-                <div class="carousel-slide-content">
-                  <span class="carousel-type-badge type-{{ item.fld9WcxhWfobqkI72 | downcase }}">{{
-                    item.fld9WcxhWfobqkI72 }}</span>
-                  {% if item.fld9WcxhWfobqkI72 == "Quote" %}
-                  <p class="carousel-slide-text quote-text">“{{ item.title }}”</p>
-                  {% else %}
-                  <p class="carousel-slide-text">{{ item.title }}</p>
-                  {% endif %}
-                  {% if item.fldo3jzKvZqYeXvYi %}
-                  <span class="carousel-slide-credit">{{ item.fldo3jzKvZqYeXvYi }}</span>
-                  {% endif %}
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-
-          <button class="carousel-nav-btn next-btn" aria-label="Next slide" onclick="event.stopPropagation()">›</button>
-
-          <!-- Dot Indicators with Fast Forward Toggle -->
-          <div class="carousel-indicators-wrapper"
-            style="position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.75rem; z-index: 30;">
-            <div class="carousel-indicators" style="display: flex; gap: 0.5rem; position: static; transform: none;">
-              {% for item in carousel_messages %}
-              <button class="carousel-dot {% if forloop.first %}active{% endif %}" data-slide-to="{{ forloop.index0 }}"
-                aria-label="Slide {{ forloop.index }}"></button>
-              {% endfor %}
-            </div>
-
-            <button class="carousel-ff-toggle" aria-label="Toggle Fast Playback" title="Fast Forward (Toggle Speed)">
-              <span class="ff-icon">⏩</span>
-            </button>
-          </div>
-        </div>
-        {% endif %}
       </div>
+
 
       <!-- Premium Case Tabs Section (About, Importance, Participants, Inclusion) -->
       <section class="case-tabs-section">
@@ -128,10 +73,6 @@ layout: default
 
           {% if page.fld3PwRR35QU6D1CK %}
           <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-limitations">Limitations</button>
-          {% endif %}
-
-          {% if carousel_messages.size > 0 %}
-          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-what-was-said">What was said</button>
           {% endif %}
         </div>
 
@@ -210,165 +151,119 @@ layout: default
             </div>
           </div>
           {% endif %}
-
-          <!-- Tab 6: What was said -->
-          {% if carousel_messages.size > 0 %}
-          {% assign rec_items = "" | split: "" %}
-          {% assign issue_items = "" | split: "" %}
-          {% assign quote_items = "" | split: "" %}
-
-          {% for slug in page.fldEuGi25yjQf3asH %}
-            {% assign item = site.messages | where: "slug", slug | first %}
-            {% if item %}
-              {% assign type_lower = item.fld9WcxhWfobqkI72 | downcase %}
-              {% if type_lower == "recommendation" %}
-                {% assign rec_items = rec_items | push: item %}
-              {% elsif type_lower == "issue" %}
-                {% assign issue_items = issue_items | push: item %}
-              {% elsif type_lower == "quote" %}
-                {% assign quote_items = quote_items | push: item %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-
-          <div class="tab-content-panel" id="tab-what-was-said" role="tabpanel">
-            <div class="tab-rich-content">
-              
-              <!-- Tab Header & View Switcher -->
-              <div class="what-was-said-header">
-                <h4 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: #0f172a;">Key Messages &amp; Outputs</h4>
-                <div class="view-switcher-container">
-                  <button class="view-switch-btn active" data-view="categorized">
-                    <span>📑</span> Categorized View
-                  </button>
-                  <button class="view-switch-btn" data-view="table">
-                    <span>📊</span> Table View
-                  </button>
-                </div>
-              </div>
-
-              <!-- VIEW 1: Categorized Sub-Tabs View -->
-              <div id="wws-categorized-view">
-                <div class="message-tabs-container">
-                  <div class="msg-tab-buttons" role="tablist">
-                    {% assign active_set = false %}
-                    {% if rec_items.size > 0 %}
-                      <button class="msg-tab-btn active" role="tab" aria-selected="true" data-target="msg-rec-panel">Recommendations ({{ rec_items.size }})</button>
-                      {% assign active_set = true %}
-                    {% endif %}
-                    {% if issue_items.size > 0 %}
-                      <button class="msg-tab-btn {% if active_set == false %}active{% endif %}" role="tab" aria-selected="{% if active_set == false %}true{% else %}false{% endif %}" data-target="msg-issue-panel">Issues ({{ issue_items.size }})</button>
-                      {% assign active_set = true %}
-                    {% endif %}
-                    {% if quote_items.size > 0 %}
-                      <button class="msg-tab-btn {% if active_set == false %}active{% endif %}" role="tab" aria-selected="{% if active_set == false %}true{% else %}false{% endif %}" data-target="msg-quote-panel">Quotes ({{ quote_items.size }})</button>
-                    {% endif %}
-                  </div>
-
-                  <div class="msg-tab-contents">
-                    {% assign active_set = false %}
-                    
-                    <!-- Recommendations Panel -->
-                    {% if rec_items.size > 0 %}
-                    <div class="msg-tab-panel active" id="msg-rec-panel" role="tabpanel">
-                      <div class="messages-list">
-                        {% for item in rec_items %}
-                        <div class="message-item type-recommendation-item">
-                          <span class="message-type-badge type-recommendation">Recommendation</span>
-                          <p class="message-title">{{ item.title }}</p>
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
-                          {% endif %}
-                        </div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                    {% assign active_set = true %}
-                    {% endif %}
-
-                    <!-- Issues Panel -->
-                    {% if issue_items.size > 0 %}
-                    <div class="msg-tab-panel {% if active_set == false %}active{% endif %}" id="msg-issue-panel" role="tabpanel">
-                      <div class="messages-list">
-                        {% for item in issue_items %}
-                        <div class="message-item type-issue-item">
-                          <span class="message-type-badge type-issue">Issue</span>
-                          <p class="message-title">{{ item.title }}</p>
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
-                          {% endif %}
-                        </div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                    {% assign active_set = true %}
-                    {% endif %}
-
-                    <!-- Quotes Panel -->
-                    {% if quote_items.size > 0 %}
-                    <div class="msg-tab-panel {% if active_set == false %}active{% endif %}" id="msg-quote-panel" role="tabpanel">
-                      <div class="messages-list">
-                        {% for item in quote_items %}
-                        <div class="message-item type-quote-item">
-                          <span class="message-type-badge type-quote">Quote</span>
-                          <blockquote style="margin: 0; font-style: italic; font-size: 1.05rem; color: #475569; border: none; padding: 0; line-height: 1.5;">
-                            “{{ item.title }}”
-                          </blockquote>
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          <div class="message-credit" style="margin-top: 0.5rem;">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
-                          {% endif %}
-                        </div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-
-              <!-- VIEW 2: Table View -->
-              <div id="wws-table-view" style="display: none;">
-                <div class="table-container" style="overflow-x: auto; border-radius: 12px; border: 1px solid rgba(226, 232, 240, 0.8);">
-                  <table class="what-was-said-table">
-                    <thead>
-                      <tr>
-                        <th style="width: 140px;">Type</th>
-                        <th>Details</th>
-                        <th style="width: 220px;">Credit</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for item in carousel_messages %}
-                      <tr>
-                        <td>
-                          <span class="message-type-badge type-{{ item.fld9WcxhWfobqkI72 | downcase }}" style="margin: 0; display: inline-block;">{{ item.fld9WcxhWfobqkI72 }}</span>
-                        </td>
-                        <td style="font-weight: 500; color: #1e293b;">
-                          {% if item.fld9WcxhWfobqkI72 == "Quote" %}
-                          <span style="font-style: italic; color: #475569;">“{{ item.title }}”</span>
-                          {% else %}
-                          {{ item.title }}
-                          {% endif %}
-                        </td>
-                        <td style="font-size: 0.8rem; font-weight: 500; color: #64748b;">
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          {{ item.fldo3jzKvZqYeXvYi }}
-                          {% else %}
-                          <span style="color: #cbd5e1; font-style: italic;">N/A</span>
-                          {% endif %}
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          {% endif %}
         </div>
       </section>
+
+      <!-- Narrative Section: Recommendations / Messages -->
+      {% if page.fldEuGi25yjQf3asH %}
+      <section class="narrative-block-section recommendations-block">
+        <div class="block-badge">OUTPUTS</div>
+        <h2>Recommendations &amp; Key Messages</h2>
+
+        {% assign rec_items = "" | split: "" %}
+        {% assign issue_items = "" | split: "" %}
+        {% assign quote_items = "" | split: "" %}
+
+        {% for slug in page.fldEuGi25yjQf3asH %}
+        {% assign item = site.messages | where: "slug", slug | first %}
+        {% if item %}
+        {% assign type_lower = item.fld9WcxhWfobqkI72 | downcase %}
+        {% if type_lower == "recommendation" %}
+        {% assign rec_items = rec_items | push: item %}
+        {% elsif type_lower == "issue" %}
+        {% assign issue_items = issue_items | push: item %}
+        {% elsif type_lower == "quote" %}
+        {% assign quote_items = quote_items | push: item %}
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+
+        <!-- Sub-Tabs Switcher for Messages -->
+        <div class="message-tabs-container">
+          <div class="msg-tab-buttons" role="tablist">
+            {% assign active_set = false %}
+            {% if rec_items.size > 0 %}
+            <button class="msg-tab-btn active" role="tab" aria-selected="true"
+              data-target="msg-rec-panel">Recommendations ({{ rec_items.size }})</button>
+            {% assign active_set = true %}
+            {% endif %}
+            {% if issue_items.size > 0 %}
+            <button class="msg-tab-btn {% if active_set == false %}active{% endif %}" role="tab"
+              aria-selected="{% if active_set == false %}true{% else %}false{% endif %}"
+              data-target="msg-issue-panel">Issues ({{ issue_items.size }})</button>
+            {% assign active_set = true %}
+            {% endif %}
+            {% if quote_items.size > 0 %}
+            <button class="msg-tab-btn {% if active_set == false %}active{% endif %}" role="tab"
+              aria-selected="{% if active_set == false %}true{% else %}false{% endif %}"
+              data-target="msg-quote-panel">Quotes ({{ quote_items.size }})</button>
+            {% endif %}
+          </div>
+
+          <div class="msg-tab-contents">
+            {% assign active_set = false %}
+
+            <!-- Recommendations Panel -->
+            {% if rec_items.size > 0 %}
+            <div class="msg-tab-panel active" id="msg-rec-panel" role="tabpanel">
+              <div class="messages-list">
+                {% for item in rec_items %}
+                <div class="message-item type-recommendation-item">
+                  <span class="message-type-badge type-recommendation">Recommendation</span>
+                  <p class="message-title">{{ item.title }}</p>
+                  {% if item.fldo3jzKvZqYeXvYi %}
+                  <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% assign active_set = true %}
+            {% endif %}
+
+            <!-- Issues Panel -->
+            {% if issue_items.size > 0 %}
+            <div class="msg-tab-panel {% if active_set == false %}active{% endif %}" id="msg-issue-panel"
+              role="tabpanel">
+              <div class="messages-list">
+                {% for item in issue_items %}
+                <div class="message-item type-issue-item">
+                  <span class="message-type-badge type-issue">Issue</span>
+                  <p class="message-title">{{ item.title }}</p>
+                  {% if item.fldo3jzKvZqYeXvYi %}
+                  <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% assign active_set = true %}
+            {% endif %}
+
+            <!-- Quotes Panel -->
+            {% if quote_items.size > 0 %}
+            <div class="msg-tab-panel {% if active_set == false %}active{% endif %}" id="msg-quote-panel"
+              role="tabpanel">
+              <div class="messages-list">
+                {% for item in quote_items %}
+                <div class="message-item type-quote-item">
+                  <span class="message-type-badge type-quote">Quote</span>
+                  <blockquote
+                    style="margin: 0; font-style: italic; font-size: 1.05rem; color: #475569; border: none; padding: 0; line-height: 1.5;">
+                    “{{ item.title }}”
+                  </blockquote>
+                  {% if item.fldo3jzKvZqYeXvYi %}
+                  <div class="message-credit" style="margin-top: 0.5rem;">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
     </main>
 
     <!-- RIGHT COLUMN: Sidebar Metadata & Context (1/4 Width) -->
@@ -715,7 +610,7 @@ layout: default
     font-weight: 500;
   }
 
-  /* 4. Bold Hero Image Area with Carousel Overlay */
+  /* 4. Bold Hero Image Area */
   .case-hero-wrapper {
     width: 100%;
     aspect-ratio: 21 / 9;
@@ -735,239 +630,12 @@ layout: default
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
+  .case-hero-wrapper:hover .case-hero-image {
+    transform: scale(1.02);
+  }
+
   .default-gradient-hero {
     background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
-  }
-
-  /* Premium Hero Carousel Overlay Styles */
-  .hero-carousel-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.5) 60%, rgba(15, 23, 42, 0.15) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2rem 4rem;
-    color: #ffffff;
-    z-index: 20;
-    transition: background 0.3s ease;
-  }
-
-  .carousel-slides-container {
-    flex: 1;
-    height: 100%;
-    position: relative;
-    margin-inline: 1.5rem;
-    overflow: hidden;
-  }
-
-  .carousel-slides-track {
-    display: flex;
-    height: 100%;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    width: 100%;
-  }
-
-  .carousel-slide {
-    flex: 0 0 100%;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-sizing: border-box;
-    padding-inline: 1rem;
-    transition: opacity 0.4s ease;
-    opacity: 0.65;
-  }
-
-  .carousel-slide.active {
-    opacity: 1;
-  }
-
-  .carousel-slide-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .carousel-type-badge {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 0.25rem 0.65rem;
-    border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
-  .carousel-type-badge.type-recommendation {
-    border-color: rgba(34, 197, 94, 0.4);
-    background: rgba(34, 197, 94, 0.15);
-    color: #4ade80;
-  }
-
-  .carousel-type-badge.type-issue {
-    border-color: rgba(239, 68, 68, 0.4);
-    background: rgba(239, 68, 68, 0.15);
-    color: #fca5a5;
-  }
-
-  .carousel-type-badge.type-quote {
-    border-color: rgba(168, 85, 247, 0.4);
-    background: rgba(168, 85, 247, 0.15);
-    color: #d8b4fe;
-  }
-
-  .carousel-slide-text {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.22rem;
-    /* Optimized size for longer texts */
-    font-weight: 600;
-    line-height: 1.45;
-    margin: 0;
-    color: #ffffff;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  }
-
-  .carousel-slide-text.quote-text {
-    font-style: italic;
-    font-weight: 500;
-  }
-
-  .carousel-slide-credit {
-    font-size: 0.775rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.75);
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  }
-
-  .carousel-nav-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-    font-size: 1.5rem;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    user-select: none;
-    z-index: 30;
-  }
-
-  .carousel-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: scale(1.05);
-  }
-
-  .carousel-indicators {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 0.5rem;
-    z-index: 30;
-  }
-
-  .carousel-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.25s ease;
-  }
-
-  .carousel-dot.active {
-    background: #ffffff;
-    width: 18px;
-    border-radius: 9999px;
-  }
-
-  /* Fast Forward Toggle button styles */
-  .carousel-ff-toggle {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    font-size: 0.75rem;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 0;
-    user-select: none;
-    z-index: 35;
-  }
-
-  .carousel-ff-toggle:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
-  }
-
-  .carousel-ff-toggle.active {
-    background: #4f46e5;
-    border-color: #6366f1;
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
-    animation: ffPulse 2s infinite;
-  }
-
-  @keyframes ffPulse {
-    0% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
-    }
-
-    70% {
-      transform: scale(1.05);
-      box-shadow: 0 0 0 6px rgba(99, 102, 241, 0);
-    }
-
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .hero-carousel-overlay {
-      padding: 1rem 1.5rem;
-    }
-
-    .carousel-slide-text {
-      font-size: 0.95rem;
-      /* Clean size on mobile to prevent overflow */
-    }
-
-    .carousel-nav-btn {
-      width: 2.25rem;
-      height: 2.25rem;
-      font-size: 1.2rem;
-    }
   }
 
   /* 5. Pills mapping Row */
@@ -1070,96 +738,6 @@ layout: default
 
   .tab-content-panel.active {
     display: block;
-  }
-
-  /* What was said table styling */
-  .what-was-said-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-    background: #ffffff;
-  }
-
-  .what-was-said-table th {
-    background: #f8fafc;
-    padding: 0.95rem 1.25rem;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    color: #64748b;
-    font-size: 0.725rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    text-align: left;
-  }
-
-  .what-was-said-table td {
-    padding: 1.15rem 1.25rem;
-    vertical-align: middle;
-    line-height: 1.5;
-    color: #1e293b;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
-    text-align: left;
-  }
-
-  .what-was-said-table tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  .what-was-said-table tbody tr {
-    transition: background 0.2s ease;
-  }
-
-  .what-was-said-table tbody tr:hover {
-    background: rgba(248, 250, 252, 0.5);
-  }
-
-  /* View Switcher toggle style inside 'What was said' tab */
-  .what-was-said-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    gap: 1rem;
-    flex-wrap: wrap;
-    border-bottom: 1px dashed rgba(226, 232, 240, 0.8);
-    padding-bottom: 1rem;
-  }
-
-  .view-switcher-container {
-    display: inline-flex;
-    background: #f1f5f9;
-    padding: 0.25rem;
-    border-radius: 9999px;
-    border: 1px solid rgba(226, 232, 240, 0.8);
-  }
-
-  .view-switch-btn {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.775rem;
-    font-weight: 600;
-    padding: 0.4rem 0.95rem;
-    border: none;
-    border-radius: 9999px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    background: transparent;
-    color: #64748b;
-    user-select: none;
-  }
-
-  .view-switch-btn:hover {
-    color: #0f172a;
-    background: rgba(226, 232, 240, 0.4);
-  }
-
-  .view-switch-btn.active {
-    background: #ffffff;
-    color: #4f46e5;
-    box-shadow: 0 2px 8px rgba(148, 163, 184, 0.15);
   }
 
   @keyframes tabFadeIn {
@@ -1772,33 +1350,12 @@ layout: default
   }
 </style>
 
-<!-- Custom layout JS logic (Interactive Tabs, Carousel & Leaflet mini map) -->
+<!-- Custom layout JS logic (Interactive Tabs & Leaflet mini map) -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     // 1. Interactive Tabs Switcher logic
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabPanels = document.querySelectorAll('.tab-content-panel');
-
-    tabButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const targetId = btn.dataset.target;
-
-        // De-activate all buttons & panels
-        tabButtons.forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        tabPanels.forEach(p => p.classList.remove('active'));
-
-        // Activate clicked button & matched panel
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        const activePanel = document.getElementById(targetId);
-        if (activePanel) {
-          activePanel.classList.add('active');
-        }
-      });
-    });
 
     // 1b. Interactive Message Tabs Switcher logic
     const msgTabButtons = document.querySelectorAll('.msg-tab-btn');
@@ -1825,135 +1382,28 @@ layout: default
       });
     });
 
-    // 1c. View Switcher logic (Categorized vs Table View in 'What was said' tab)
-    const viewSwitchBtns = document.querySelectorAll('.view-switch-btn');
-    const categorizedView = document.getElementById('wws-categorized-view');
-    const tableView = document.getElementById('wws-table-view');
-
-    viewSwitchBtns.forEach(btn => {
+    tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        const view = btn.dataset.view;
+        const targetId = btn.dataset.target;
 
-        // Toggle active class
-        viewSwitchBtns.forEach(b => b.classList.remove('active'));
+        // De-activate all buttons & panels
+        tabButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        // Activate clicked button & matched panel
         btn.classList.add('active');
-
-        // Show/hide views
-        if (view === 'categorized') {
-          if (categorizedView) categorizedView.style.display = 'block';
-          if (tableView) tableView.style.display = 'none';
-        } else {
-          if (categorizedView) categorizedView.style.display = 'none';
-          if (tableView) tableView.style.display = 'block';
+        btn.setAttribute('aria-selected', 'true');
+        const activePanel = document.getElementById(targetId);
+        if (activePanel) {
+          activePanel.classList.add('active');
         }
       });
     });
 
-    // 2. Premium Hero Key Messages Carousel
-    const track = document.querySelector('.carousel-slides-track');
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.carousel-dot');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    const ffToggle = document.querySelector('.carousel-ff-toggle');
-
-    if (slides.length > 0 && track) {
-      let currentIndex = 0;
-      let autoplayTimer = null;
-      let isFastMode = false;
-
-      const defaultDelay = 8000;  // 8 seconds delay (Slow by default)
-      const fastDelay = 3000;     // 3 seconds delay (Fast speed)
-
-      function getDelay() {
-        return isFastMode ? fastDelay : defaultDelay;
-      }
-
-      function showSlide(index) {
-        // Handle wrapping indices
-        if (index < 0) {
-          currentIndex = slides.length - 1;
-        } else if (index >= slides.length) {
-          currentIndex = 0;
-        } else {
-          currentIndex = index;
-        }
-
-        // Translate the track horizontally
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-
-        // Update active class on slides & dots
-        slides.forEach((slide, idx) => {
-          if (idx === currentIndex) {
-            slide.classList.add('active');
-          } else {
-            slide.classList.remove('active');
-          }
-        });
-
-        dots.forEach((dot, idx) => {
-          if (idx === currentIndex) {
-            dot.classList.add('active');
-          } else {
-            dot.classList.remove('active');
-          }
-        });
-      }
-
-      function nextSlide() {
-        showSlide(currentIndex + 1);
-        resetAutoplay();
-      }
-
-      function prevSlide() {
-        showSlide(currentIndex - 1);
-        resetAutoplay();
-      }
-
-      function startAutoplay() {
-        if (!autoplayTimer) {
-          autoplayTimer = setInterval(nextSlide, getDelay());
-        }
-      }
-
-      function resetAutoplay() {
-        if (autoplayTimer) {
-          clearInterval(autoplayTimer);
-          autoplayTimer = null;
-        }
-        startAutoplay();
-      }
-
-      // Add navigation button event listeners
-      if (prevBtn) {
-        prevBtn.addEventListener('click', prevSlide);
-      }
-      if (nextBtn) {
-        nextBtn.addEventListener('click', nextSlide);
-      }
-
-      // Add dot click event listeners
-      dots.forEach((dot, idx) => {
-        dot.addEventListener('click', () => {
-          showSlide(idx);
-          resetAutoplay();
-        });
-      });
-
-      // Fast Forward Toggle Click Logic
-      if (ffToggle) {
-        ffToggle.addEventListener('click', () => {
-          isFastMode = !isFastMode;
-          ffToggle.classList.toggle('active', isFastMode);
-          resetAutoplay();
-        });
-      }
-
-      // Start the autoplay loop
-      startAutoplay();
-    }
-
-    // 3. Include the isolated map engine
+    // 2. Include the isolated map engine
     {% include case_mini_map.js %}
   });
 </script>
