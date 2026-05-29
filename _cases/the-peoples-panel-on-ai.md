@@ -180,11 +180,6 @@ fldeQz7UtfY8zlyhv:
 - peoples-panel-video
 - independent-evaluation
 - detailed-findings-report
-# Assigned to
-fldjqAHoLIaL3Aw5e:
-  id: usrour7eCXgX2nuRf
-  email: tim@connectedbydata.org
-  name: Tim Davies
 # Describe the subject matter in your own words (one line)
 fldmmG9MGLAEewrOT: The UK AI Safety Summit
 # How was the project initiated?

@@ -6,8 +6,16 @@ slug: sortition-foundation
 # Involved organisation for
 fldE09wBfEXIawc5T:
 - the-peoples-panel-on-ai
+# Organisation type
+fldHOkeRYbBEc5Qev:
+- Non-profit
+# Website address
+fldMPxskerPZgXyLV: https://www.sortitionfoundation.org/
 # Name
 fldUH8cT7KyUpg1wT: Sortition Foundation
 # Lead organisation for
 fldYGUHxexgXk88fw: []
+# Location
+fldjNFI2YXLQ2PapK:
+- united-kingdom
 ---

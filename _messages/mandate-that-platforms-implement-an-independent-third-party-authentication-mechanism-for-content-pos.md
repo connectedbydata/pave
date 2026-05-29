@@ -1,0 +1,19 @@
+---
+layout: generic
+title: Mandate that platforms implement an independent third-party authentication
+  mechanism for content posted from news and other public service organizations to
+  promote and prioritize credible and reliable content.
+airtable_id: a7bb8f7e43136ae4
+slug: mandate-that-platforms-implement-an-independent-third-party-authentication-mechanism-for-content-pos
+# Type
+fld9WcxhWfobqkI72: Recommendation
+# Cases
+fldCuzVkCPc37vZiY:
+- genzai
+# Additional Credit Line
+fldo3jzKvZqYeXvYi: 'Gen(Z)AI recommendations on AI & Information Integrity '
+# Name
+fldyrLCrggwZqFZmS: Mandate that platforms implement an independent third-party authentication
+  mechanism for content posted from news and other public service organizations to
+  promote and prioritize credible and reliable content.
+---

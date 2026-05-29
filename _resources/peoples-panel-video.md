@@ -10,4 +10,6 @@ fldHNs68Xt8bkJN3E: https://www.youtube.com/watch?v=h8Cp_6hnmTo
 # Cases
 fldtxL20ZxJG2ZdTG:
 - the-peoples-panel-on-ai
+# Select
+fldzQYhMyANM5OvJP: Video
 ---

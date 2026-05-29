@@ -5,7 +5,7 @@ airtable_id: b138c8809210156f
 slug: the-peoples-panel-on-ai-peoples-panel
 # Locations
 fld0BFLjrsMUNnQAv:
-- england
+- england-united-kingdom
 # Recruitment method
 fld86CmkqMgbvMLP6: Demographic lottery
 # Where were participants from?
