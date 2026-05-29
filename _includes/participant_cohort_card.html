@@ -1,0 +1,93 @@
+<div class="cohort-item-box">
+  <h5>{{ item.fldHpcL2p4OYtkkvv }}</h5> <!--Cohort name-->
+
+  <div class="cohort-stats">
+    {% if item.fld86CmkqMgbvMLP6 %}
+    <div class="cohort-stat">
+      <span class="stat-label">Recruitment method</span>
+      <span class="stat-val">{{ item.fld86CmkqMgbvMLP6 }}</span>
+    </div>
+    {% endif %}
+
+    {% if item.fldY5TPx3FCNnQ9Fv %}
+    <div class="cohort-stat">
+      <span class="stat-label">Size</span>
+      <span class="stat-val">{{ item.fldY5TPx3FCNnQ9Fv }} people</span>
+    </div>
+    {% endif %}
+
+    {% if item.fldpvn1hM37AceKyM %}
+    <div class="cohort-stat">
+      <span class="stat-label">Target Population</span>
+      <span class="stat-val">{{ item.fldpvn1hM37AceKyM }}</span>
+    </div>
+    {% endif %}
+
+    {% if item.fldDUHAWPMbAqFNot %}
+    <div class="cohort-stat">
+      <span class="stat-label">Engagement Methods</span>
+      <span class="stat-val">
+        {% for method in item.fldDUHAWPMbAqFNot %}
+        <span class="stat-list-item">{{ method }}</span>
+        {% endfor %}
+      </span>
+    </div>
+    {% endif %}
+
+    {% if item.fldweSxXYJIXdml8C %}
+    <div class="cohort-stat">
+      <span class="stat-label">Engagement Setting</span>
+      <span class="stat-val">{{ item.fldweSxXYJIXdml8C | join: ", " }}</span>
+    </div>
+    {% endif %}
+
+    {% if item.fldDs16PFhLNn1Rag %}
+    <div class="cohort-stat">
+      <span class="stat-label">Average Engagement</span>
+      <span class="stat-val">{{ item.fldDs16PFhLNn1Rag }} hours</span>
+    </div>
+    {% endif %}
+
+    {% assign has_locs = false %}
+    {% assign loc_titles = "" | split: "" %}
+    {% if item.fld0BFLjrsMUNnQAv %}
+    {% for loc_slug in item.fld0BFLjrsMUNnQAv %}
+    {% assign loc_obj = site.locations | where: "slug", loc_slug | first %}
+    {% if loc_obj %}
+    {% assign loc_titles = loc_titles | push: loc_obj.title %}
+    {% assign has_locs = true %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if has_locs %}
+    <div class="cohort-stat">
+      <span class="stat-label">Locations</span>
+      <span class="stat-val">
+        {% for loc_title in loc_titles %}
+        <span class="stat-list-item">{{ loc_title }}</span>
+        {% endfor %}
+      </span>
+    </div>
+    {% else %}
+    {% if item.fldA8Li5xJXokGrFY %}
+    <div class="cohort-stat">
+      <span class="stat-label">Locations</span>
+      <span class="stat-val">
+        {% if item.fldA8Li5xJXokGrFY contains ";" %}
+        {% assign split_locs = item.fldA8Li5xJXokGrFY | split: ";" %}
+        {% for sloc in split_locs %}
+        {% assign trimmed_loc = sloc | strip %}
+        {% if trimmed_loc != "" %}
+        <span class="stat-list-item">{{ trimmed_loc }}</span>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <span class="stat-list-item">{{ item.fldA8Li5xJXokGrFY }}</span>
+        {% endif %}
+      </span>
+    </div>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>

@@ -2,362 +2,1400 @@
 layout: default
 ---
 
-<article class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title | escape }}</h1>
-  </header>
+<!-- Import Modern Premium Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+  rel="stylesheet">
 
-  <div class="post-content">
+<!-- Import Leaflet Mapping Library for Case Mini Maps -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <div class="case-fields">
+<article class="case-study-page">
+  <div class="case-layout-grid">
 
-      <!-- fldQVZReHicFlY9Yp: Project Title -->
-      {% if page.fldQVZReHicFlY9Yp %}
-      <div class="field-container field-type-singleLineText">
-        <label class="field-label">Project Title</label>
-        <div class="field-value">{{ page.fldQVZReHicFlY9Yp }}</div>
+    <!-- LEFT COLUMN: Main Narrative & Content (3/4 Width) -->
+    <main class="case-main-column">
+      <!-- Title & Subtitle Section -->
+      <header class="case-header-main">
+        <h1 class="case-page-title">{{ page.title | escape }}</h1>
+        {% if page.fldmmG9MGLAEewrOT %}
+        <p class="case-page-subtitle">{{ page.fldmmG9MGLAEewrOT | escape }}</p>
+        {% endif %}
+      </header>
+
+      <!-- Bold Hero Image Area -->
+      <div class="case-hero-wrapper">
+        {% assign hero_image = "" %}
+        {% assign hero_alt = "" %}
+        {% if page.fldd4B6cpBOP3n3is and page.fldd4B6cpBOP3n3is.size > 0 %}
+        {% for attachment in page.fldd4B6cpBOP3n3is %}
+        {% if attachment.type contains "image" and hero_image == "" %}
+        {% assign hero_image = attachment.url %}
+        {% assign hero_alt = attachment.filename %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        {% if hero_image != "" %}
+        <div class="case-hero-image" style="background-image: url('{{ hero_image | relative_url }}');" role="img"
+          aria-label="{{ hero_alt | escape }}"></div>
+        {% else %}
+        <!-- Curated gradient color block default -->
+        <div class="case-hero-image default-gradient-hero"></div>
+        {% endif %}
       </div>
-      {% endif %}
 
-      <!-- fldjqAHoLIaL3Aw5e: Assigned to -->
-      {% if page.fldjqAHoLIaL3Aw5e %}
-      <div class="field-container field-type-singleCollaborator">
-        <label class="field-label">Assigned to</label>
-        <div class="field-value">{{ page.fldjqAHoLIaL3Aw5e.name }}</div>
-      </div>
-      {% endif %}
 
-      <!-- fldVXcw3fVYGdRRM9: Submitted by -->
-      {% if page.fldVXcw3fVYGdRRM9 %}
-      <div class="field-container field-type-singleLineText">
-        <label class="field-label">Submitted by</label>
-        <div class="field-value">{{ page.fldVXcw3fVYGdRRM9 }}</div>
-      </div>
-      {% endif %}
+      <!-- Premium Case Tabs Section (About, Importance, Participants, Inclusion) -->
+      <section class="case-tabs-section">
+        <div class="tab-buttons-container" role="tablist">
+          <button class="tab-btn active" role="tab" aria-selected="true" data-target="tab-about">About the
+            Project</button>
 
-      <!-- fldNwWJty8hufq6t1: Additional acknowledgements -->
-      {% if page.fldNwWJty8hufq6t1 %}
-      <div class="field-container field-type-singleLineText">
-        <label class="field-label">Additional acknowledgements</label>
-        <div class="field-value">{{ page.fldNwWJty8hufq6t1 }}</div>
-      </div>
-      {% endif %}
+          {% if page.fldaSwQdG23BdcH4J %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-importance">Why It Matters</button>
+          {% endif %}
 
-      <!-- fldM0ClT9Ik6FuNnJ: Funding Organisations -->
-      {% if page.fldM0ClT9Ik6FuNnJ %}
-      <div class="field-container field-type-multipleRecordLinks">
-        <label class="field-label">Funding Organisations</label>
-        <div class="field-value">
-          <ul>
-            {% for slug in page.fldM0ClT9Ik6FuNnJ %}
-              {% assign item = site.organisations | where: "slug", slug | first %}
-              <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a>{% if item.fldMPxskerPZgXyLV %} - <a href="{{ item.fldMPxskerPZgXyLV }}">{{ item.fldMPxskerPZgXyLV }}</a>{% endif %}</li>
-            {% endfor %}
-          </ul>
+          {% if page.fldAQhKPRBSYGsJwD or page.fldB1TUH1buE9uaFP %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-participants">Who
+            Participated</button>
+          {% endif %}
+
+          {% if page.fldPOu99itaN5PMaK %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-inclusion">Inclusion
+            Efforts</button>
+          {% endif %}
+
+          {% if page.fld3PwRR35QU6D1CK %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-limitations">Limitations</button>
+          {% endif %}
         </div>
-      </div>
-      {% endif %}
 
-      <!-- fldoCBwmPfW0Xrlpy: How was the project initiated? -->
-      {% if page.fldoCBwmPfW0Xrlpy %}
-      <div class="field-container field-type-multipleSelects">
-        <!-- Possible values: Commissioned; Community Led; Co-created; Academic research; Other -->
-        <label class="field-label">How was the project initiated?</label>
-        <div class="field-value">
-          {{ page.fldoCBwmPfW0Xrlpy | join: ", " }}
-        </div>
-      </div>
-      {% endif %}
+        <div class="tab-contents-container">
+          <!-- Tab 1: About the Project -->
+          <div class="tab-content-panel active" id="tab-about" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page.fld0oykyuwbVPbW0H | markdownify }}
 
-      <!-- fldxJ934AvP0LGna0: Involved organisations -->
-      {% if page.fldxJ934AvP0LGna0 %}
-      <div class="field-container field-type-multipleRecordLinks">
-        <label class="field-label">Involved organisations</label>
-        <div class="field-value">
-          <ul>
-            {% for slug in page.fldxJ934AvP0LGna0 %}
-              {% assign item = site.organisations | where: "slug", slug | first %}
-              <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a>{% if item.fldMPxskerPZgXyLV %} - <a href="{{ item.fldMPxskerPZgXyLV }}">{{ item.fldMPxskerPZgXyLV }}</a>{% endif %}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fld05RupsUvpbg8vU: Lead organisations -->
-      {% if page.fld05RupsUvpbg8vU %}
-      <div class="field-container field-type-multipleRecordLinks">
-        <label class="field-label">Lead organisations</label>
-        <div class="field-value">
-          <ul>
-            {% for slug in page.fld05RupsUvpbg8vU %}
-              {% assign item = site.organisations | where: "slug", slug | first %}
-              <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a>{% if item.fldMPxskerPZgXyLV %} - <a href="{{ item.fldMPxskerPZgXyLV }}">{{ item.fldMPxskerPZgXyLV }}</a>{% endif %}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldq3vKeaKBBdOY6a: Geographic scope -->
-      {% if page.fldq3vKeaKBBdOY6a %}
-      <div class="field-container field-type-multipleRecordLinks">
-        <label class="field-label">Geographic scope</label>
-        <div class="field-value">
-          <ul>
-            {% for slug in page.fldq3vKeaKBBdOY6a %}
-              {% assign item = site.locations | where: "slug", slug | first %}
-              <li>{{ item.title }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldzgqKbADUHBkfxO: Project URL -->
-      {% if page.fldzgqKbADUHBkfxO %}
-      <div class="field-container field-type-url">
-        <label class="field-label">Project URL</label>
-        <div class="field-value"><a href="{{ page.fldzgqKbADUHBkfxO }}">{{ page.fldzgqKbADUHBkfxO }}</a></div>
-      </div>
-      {% endif %}
-
-      <!-- fld3WCMM9BTILD6m8: Project status -->
-      {% if page.fld3WCMM9BTILD6m8 %}
-      <div class="field-container field-type-singleSelect">
-        <!-- Possible values: Planned; In Progress; Complete -->
-        <label class="field-label">Project status</label>
-        <div class="field-value">{{ page.fld3WCMM9BTILD6m8 }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fldKttntgUGpSigJs: What year did the project start? -->
-      {% if page.fldKttntgUGpSigJs %}
-      <div class="field-container field-type-number">
-        <label class="field-label">What year did the project start?</label>
-        <div class="field-value">{{ page.fldKttntgUGpSigJs }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fldwgrONWjl5apN0a: What year did the project conclude? -->
-      {% if page.fldwgrONWjl5apN0a %}
-      <div class="field-container field-type-number">
-        <label class="field-label">What year did the project conclude?</label>
-        <div class="field-value">{{ page.fldwgrONWjl5apN0a }}</div>
-      </div>
-      {% endif %}
-
-      <!-- flddUvgeSB6VY4w9i: Project goals -->
-      {% if page.flddUvgeSB6VY4w9i %}
-      <div class="field-container field-type-multipleSelects">
-        <!-- Possible values: Methods: Create re-usable participation tools & methods; Quantitative: Generate statistical evidence on public attitudes to AI; Qualitative: Capture qualitative evidence on public attitudes to AI; Policy: Inform a policy-making process; Capacity: Build participant capacity to engage with AI; AI Development: Shape the development of AI tools; Audit: Review design or implementation of AI tools; Empowerment: Build community power with respect to AI; Evaluate: Check the quality of evidence or engagement processes -->
-        <label class="field-label">Project goals</label>
-        <div class="field-value">
-          {{ page.flddUvgeSB6VY4w9i | join: ", " }}
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldEnara6Czm8ChkH: What form of AI is the project about? -->
-      {% if page.fldEnara6Czm8ChkH %}
-      <div class="field-container field-type-multipleSelects">
-        <!-- Possible values: Generative AI; Predictive AI; Specific AI system(s); AI in general; Current issues; Future issues -->
-        <label class="field-label">What form of AI is the project about?</label>
-        <div class="field-value">
-          {{ page.fldEnara6Czm8ChkH | join: ", " }}
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldmmG9MGLAEewrOT: Describe the subject matter in your own words (one line) -->
-      {% if page.fldmmG9MGLAEewrOT %}
-      <div class="field-container field-type-singleLineText">
-        <label class="field-label">Describe the subject matter in your own words (one line)</label>
-        <div class="field-value">{{ page.fldmmG9MGLAEewrOT }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fld0oykyuwbVPbW0H: Provide a brief description of the project -->
-      {% if page.fld0oykyuwbVPbW0H %}
-      <div class="field-container field-type-multilineText">
-        <label class="field-label">Provide a brief description of the project</label>
-        <div class="field-value">{{ page.fld0oykyuwbVPbW0H | newline_to_br }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fld8UK4VG4qwQf4bA: Headline findings -->
-      {% if page.fld8UK4VG4qwQf4bA %}
-      <div class="field-container field-type-richText">
-        <label class="field-label">Headline findings</label>
-        <div class="field-value">{{ page.fld8UK4VG4qwQf4bA | newline_to_br }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fldEuGi25yjQf3asH: Messages -->
-      {% if page.fldEuGi25yjQf3asH %}
-      <div class="field-container field-type-multipleRecordLinks">
-        <label class="field-label">Messages</label>
-        <div class="field-value">
-          <ul>
-            {% for slug in page.fldEuGi25yjQf3asH %}
-              {% assign item = site.messages | where: "slug", slug | first %}
-              <li>
-                <strong>{{ item.fld9WcxhWfobqkI72 }}:</strong> {{ item.title }}
-                {% if item.fldo3jzKvZqYeXvYi %}<br><small>Credit: {{ item.fldo3jzKvZqYeXvYi }}</small>{% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldAQhKPRBSYGsJwD: Participants -->
-      {% if page.fldAQhKPRBSYGsJwD %}
-      <div class="field-container field-type-multipleRecordLinks">
-        <label class="field-label">Participants</label>
-        <div class="field-value">
-          <ul>
-            {% for slug in page.fldAQhKPRBSYGsJwD %}
-              {% assign item = site.participants | where: "slug", slug | first %}
-              <li>
-                {{ item.title }}
-                {% if item.fldHpcL2p4OYtkkvv %}<br><small>{{ item.fldHpcL2p4OYtkkvv }}</small>{% endif %}
-                {% if item.fld86CmkqMgbvMLP6 %}<br><small>Recruitment: {{ item.fld86CmkqMgbvMLP6 }}</small>{% endif %}
-                {% if item.fldY5TPx3FCNnQ9Fv %}<br><small>Count: {{ item.fldY5TPx3FCNnQ9Fv }}</small>{% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldB1TUH1buE9uaFP: Participation locations -->
-      {% if page.fldB1TUH1buE9uaFP %}
-      <div class="field-container field-type-multilineText">
-        <label class="field-label">Participation locations</label>
-        <div class="field-value">{{ page.fldB1TUH1buE9uaFP | newline_to_br }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fldaSwQdG23BdcH4J: Why is this project important to include in the case book? -->
-      {% if page.fldaSwQdG23BdcH4J %}
-      <div class="field-container field-type-multilineText">
-        <label class="field-label">Why is this project important to include in the case book?</label>
-        <div class="field-value">{{ page.fldaSwQdG23BdcH4J | newline_to_br }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fldPOu99itaN5PMaK: Inclusion efforts -->
-      {% if page.fldPOu99itaN5PMaK %}
-      <div class="field-container field-type-multilineText">
-        <label class="field-label">Inclusion efforts</label>
-        <div class="field-value">{{ page.fldPOu99itaN5PMaK | newline_to_br }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fld3PwRR35QU6D1CK: What limitations to the project should be noted? -->
-      {% if page.fld3PwRR35QU6D1CK %}
-      <div class="field-container field-type-multilineText">
-        <label class="field-label">What limitations to the project should be noted?</label>
-        <div class="field-value">{{ page.fld3PwRR35QU6D1CK | newline_to_br }}</div>
-      </div>
-      {% endif %}
-
-      <!-- fldx2fmatqG1K5Arm: Which of the following resources are available for this project? -->
-      {% if page.fldx2fmatqG1K5Arm %}
-      <div class="field-container field-type-multipleSelects">
-        <!-- Possible values: A project report; A project video; An independent evaluation; A research poster; A method guide or toolkit -->
-        <label class="field-label">Which of the following resources are available for this project?</label>
-        <div class="field-value">
-          {{ page.fldx2fmatqG1K5Arm | join: ", " }}
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldeQz7UtfY8zlyhv: Supporting resources -->
-      {% if page.fldeQz7UtfY8zlyhv %}
-      <div class="field-container field-type-multipleRecordLinks">
-        <label class="field-label">Supporting resources</label>
-        <div class="field-value">
-          <ul>
-            {% for slug in page.fldeQz7UtfY8zlyhv %}
-              {% assign item = site.resources | where: "slug", slug | first %}
-              <li>
-                <a href="{{ item.fldHNs68Xt8bkJN3E }}">{{ item.title }}</a>
-                {% if item.fldzQYhMyANM5OvJP %}({{ item.fldzQYhMyANM5OvJP }}){% endif %}
-                {% if item.fldx5z1qUqdM71vbo %}<br><small>{{ item.fldx5z1qUqdM71vbo }}</small>{% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- fldd4B6cpBOP3n3is: Photos and images -->
-      {% if page.fldd4B6cpBOP3n3is %}
-      <div class="field-container field-type-multipleAttachments">
-        <label class="field-label">Photos and images</label>
-        <div class="field-value">
-          <div class="attachments-gallery">
-            {% for attachment in page.fldd4B6cpBOP3n3is %}
-              <div class="attachment" style="display: inline-block; margin: 10px; vertical-align: top;">
-                {% if attachment.type contains "image" %}
-                  <a href="{{ attachment.url | relative_url }}" target="_blank">
-                    <img src="{{ attachment.url | relative_url }}" alt="{{ attachment.filename }}" style="max-width: 200px; max-height: 200px; display: block; border: 1px solid #ddd;">
-                  </a>
-                {% else %}
-                  <a href="{{ attachment.url | relative_url }}" class="file-link">
-                    📄 {{ attachment.filename }}
-                  </a>
-                {% endif %}
+              {% if page.flddUvgeSB6VY4w9i %}
+              <div class="tab-project-goals"
+                style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed rgba(226, 232, 240, 0.8);">
+                <span class="goals-prefix-label"
+                  style="font-weight: 700; color: #0f172a; font-size: 0.95rem; font-family: 'Outfit', sans-serif;">Project
+                  goals:</span>
+                <div class="goals-inline-pills"
+                  style="display: inline-flex; flex-wrap: wrap; gap: 0.5rem; margin-left: 0.5rem; vertical-align: middle;">
+                  {% for goal in page.flddUvgeSB6VY4w9i %}
+                  <span class="pill-badge goal-pill"
+                    style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: inline-block;">{{
+                    goal }}</span>
+                  {% endfor %}
+                </div>
               </div>
-            {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Tab 2: Why It Matters (Importance) -->
+          {% if page.fldaSwQdG23BdcH4J %}
+          <div class="tab-content-panel" id="tab-importance" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page.fldaSwQdG23BdcH4J | markdownify }}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Tab 3: Who Participated -->
+          {% if page.fldAQhKPRBSYGsJwD or page.fldB1TUH1buE9uaFP %}
+          <div class="tab-content-panel" id="tab-participants" role="tabpanel">
+            {% if page.fldAQhKPRBSYGsJwD %}
+            <div class="cohorts-tabs-display">
+              <h4 class="cohorts-title">Participant Cohorts</h4>
+              <div class="cohorts-grid">
+                {% for slug in page.fldAQhKPRBSYGsJwD %}
+                {% assign item = site.participants | where: "slug", slug | first %}
+                {% include participant_cohort_card.html %}
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            {% if page.fldB1TUH1buE9uaFP %}
+            <div class="participation-settings-block">
+              <h4>Engagement Settings</h4>
+              <p class="settings-desc">{{ page.fldB1TUH1buE9uaFP }}</p>
+            </div>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <!-- Tab 4: Inclusion Efforts -->
+          {% if page.fldPOu99itaN5PMaK %}
+          <div class="tab-content-panel" id="tab-inclusion" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page.fldPOu99itaN5PMaK | markdownify }}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Tab 5: Limitations -->
+          {% if page.fld3PwRR35QU6D1CK %}
+          <div class="tab-content-panel" id="tab-limitations" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page.fld3PwRR35QU6D1CK | markdownify }}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+
+      <!-- Narrative Section: Recommendations / Messages -->
+      {% if page.fldEuGi25yjQf3asH %}
+      <section class="narrative-block-section recommendations-block">
+        <div class="block-badge">OUTPUTS</div>
+        <h2>Recommendations &amp; Key Messages</h2>
+
+        {% assign rec_items = "" | split: "" %}
+        {% assign issue_items = "" | split: "" %}
+        {% assign quote_items = "" | split: "" %}
+
+        {% for slug in page.fldEuGi25yjQf3asH %}
+          {% assign item = site.messages | where: "slug", slug | first %}
+          {% if item %}
+            {% assign type_lower = item.fld9WcxhWfobqkI72 | downcase %}
+            {% if type_lower == "recommendation" %}
+              {% assign rec_items = rec_items | push: item %}
+            {% elsif type_lower == "issue" %}
+              {% assign issue_items = issue_items | push: item %}
+            {% elsif type_lower == "quote" %}
+              {% assign quote_items = quote_items | push: item %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        <!-- Sub-Tabs Switcher for Messages -->
+        <div class="message-tabs-container">
+          <div class="msg-tab-buttons" role="tablist">
+            {% assign active_set = false %}
+            {% if rec_items.size > 0 %}
+              <button class="msg-tab-btn active" role="tab" aria-selected="true" data-target="msg-rec-panel">Recommendations ({{ rec_items.size }})</button>
+              {% assign active_set = true %}
+            {% endif %}
+            {% if issue_items.size > 0 %}
+              <button class="msg-tab-btn {% if active_set == false %}active{% endif %}" role="tab" aria-selected="{% if active_set == false %}true{% else %}false{% endif %}" data-target="msg-issue-panel">Issues ({{ issue_items.size }})</button>
+              {% assign active_set = true %}
+            {% endif %}
+            {% if quote_items.size > 0 %}
+              <button class="msg-tab-btn {% if active_set == false %}active{% endif %}" role="tab" aria-selected="{% if active_set == false %}true{% else %}false{% endif %}" data-target="msg-quote-panel">Quotes ({{ quote_items.size }})</button>
+            {% endif %}
+          </div>
+
+          <div class="msg-tab-contents">
+            {% assign active_set = false %}
+            
+            <!-- Recommendations Panel -->
+            {% if rec_items.size > 0 %}
+            <div class="msg-tab-panel active" id="msg-rec-panel" role="tabpanel">
+              <div class="messages-list">
+                {% for item in rec_items %}
+                <div class="message-item type-recommendation-item">
+                  <span class="message-type-badge type-recommendation">Recommendation</span>
+                  <p class="message-title">{{ item.title }}</p>
+                  {% if item.fldo3jzKvZqYeXvYi %}
+                  <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% assign active_set = true %}
+            {% endif %}
+
+            <!-- Issues Panel -->
+            {% if issue_items.size > 0 %}
+            <div class="msg-tab-panel {% if active_set == false %}active{% endif %}" id="msg-issue-panel" role="tabpanel">
+              <div class="messages-list">
+                {% for item in issue_items %}
+                <div class="message-item type-issue-item">
+                  <span class="message-type-badge type-issue">Issue</span>
+                  <p class="message-title">{{ item.title }}</p>
+                  {% if item.fldo3jzKvZqYeXvYi %}
+                  <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% assign active_set = true %}
+            {% endif %}
+
+            <!-- Quotes Panel -->
+            {% if quote_items.size > 0 %}
+            <div class="msg-tab-panel {% if active_set == false %}active{% endif %}" id="msg-quote-panel" role="tabpanel">
+              <div class="messages-list">
+                {% for item in quote_items %}
+                <div class="message-item type-quote-item">
+                  <span class="message-type-badge type-quote">Quote</span>
+                  <blockquote style="margin: 0; font-style: italic; font-size: 1.05rem; color: #475569; border: none; padding: 0; line-height: 1.5;">
+                    “{{ item.title }}”
+                  </blockquote>
+                  {% if item.fldo3jzKvZqYeXvYi %}
+                  <div class="message-credit" style="margin-top: 0.5rem;">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
           </div>
         </div>
+      </section>
+      {% endif %}
+    </main>
+
+    <!-- RIGHT COLUMN: Sidebar Metadata & Context (1/4 Width) -->
+    <aside class="case-sidebar-column">
+
+      <!-- CARD 1: Quick Facts -->
+      <div class="sidebar-card facts-card">
+        <h3>Quick Facts</h3>
+
+        <!-- Premium Case Mini Map -->
+        <div id="case-mini-map" class="case-mini-map" aria-label="Project Engagement Map"></div>
+
+        <!-- Timeline -->
+        {% if page.fldKttntgUGpSigJs or page.fldwgrONWjl5apN0a %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Timeline</span>
+          <span class="sidebar-value">
+            {{ page.fldKttntgUGpSigJs }}
+            {% if page.fldwgrONWjl5apN0a %}
+            &ndash; {{ page.fldwgrONWjl5apN0a }}
+            {% endif %}
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Geographic scope -->
+        {% if page.fldq3vKeaKBBdOY6a %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Geographic Scope</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page.fldq3vKeaKBBdOY6a %}
+              {% assign item = site.locations | where: "slug", slug | first %}
+              <li>{{ item.title }}</li>
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Target Group -->
+        {% if page.fldV2q24E34ccLyqd %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Target Group</span>
+          <span class="sidebar-value">{{ page.fldV2q24E34ccLyqd }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Project URL -->
+        {% if page.fldzgqKbADUHBkfxO %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Project Link</span>
+          <span class="sidebar-value"><a href="{{ page.fldzgqKbADUHBkfxO }}" target="_blank"
+              rel="noopener noreferrer">Visit Project Site &rarr;</a></span>
+        </div>
+        {% endif %}
+
+        <!-- AI Focus -->
+        {% if page.fldEnara6Czm8ChkH %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">AI Focus</span>
+          <span class="sidebar-value" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem;">
+            {% for ai_form in page.fldEnara6Czm8ChkH %}
+            <span class="pill-badge ai-pill"
+              style="font-size: 0.7rem; padding: 0.2rem 0.5rem; border-color: #bfdbfe; background: #eff6ff; color: #1e40af;"
+              title="AI Focus">{{ ai_form }}</span>
+            {% endfor %}
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Methods Used -->
+        {% assign unique_methods = "" | split: "" %}
+        {% if page.fldAQhKPRBSYGsJwD %}
+        {% for part_slug in page.fldAQhKPRBSYGsJwD %}
+        {% assign part = site.participants | where: "slug", part_slug | first %}
+        {% if part and part.fldDUHAWPMbAqFNot %}
+        {% for method in part.fldDUHAWPMbAqFNot %}
+        {% unless unique_methods contains method %}
+        {% assign unique_methods = unique_methods | push: method %}
+        {% endunless %}
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        {% if unique_methods.size > 0 %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Methods Used</span>
+          <span class="sidebar-value" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem;">
+            {% for method in unique_methods %}
+            <span class="pill-badge method-pill"
+              style="font-size: 0.7rem; padding: 0.2rem 0.5rem; border-color: #fed7aa; background: #fff7ed; color: #c2410c;"
+              title="Method">{{ method }}</span>
+            {% endfor %}
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Assigned To -->
+        {% if page.fldjqAHoLIaL3Aw5e %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Assigned To</span>
+          <span class="sidebar-value">{{ page.fldjqAHoLIaL3Aw5e.name }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- CARD 2: Supporting Resources & Media (Moved Up) -->
+      {% if page.fldeQz7UtfY8zlyhv or page.fldd4B6cpBOP3n3is %}
+      <!-- Intelligently filter attachments to exclude the first image which is used as the hero -->
+      {% assign image_found = false %}
+      {% assign additional_attachments = "" | split: "," %}
+      {% for att in page.fldd4B6cpBOP3n3is %}
+      {% if att.type contains "image" %}
+      {% if image_found == false %}
+      {% assign image_found = true %}
+      {% else %}
+      {% assign additional_attachments = additional_attachments | push: att %}
+      {% endif %}
+      {% else %}
+      {% assign additional_attachments = additional_attachments | push: att %}
+      {% endif %}
+      {% endfor %}
+
+      {% if page.fldeQz7UtfY8zlyhv or additional_attachments.size > 0 %}
+      <div class="sidebar-card resources-card">
+        <h3>Resources &amp; Media</h3>
+
+        <!-- Supporting links -->
+        {% if page.fldeQz7UtfY8zlyhv %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Case Library</span>
+          <span class="sidebar-value">
+            <ul class="resource-links-list">
+              {% for slug in page.fldeQz7UtfY8zlyhv %}
+              {% assign item = site.resources | where: "slug", slug | first %}
+              <li>
+                <a href="{{ item.fldHNs68Xt8bkJN3E }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                {% if item.fldzQYhMyANM5OvJP %}
+                <span class="inline-res-badge">{{ item.fldzQYhMyANM5OvJP }}</span>
+                {% endif %}
+                {% if item.fldx5z1qUqdM71vbo %}
+                <span class="res-sub-desc">{{ item.fldx5z1qUqdM71vbo }}</span>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Remaining attachments gallery -->
+        {% if additional_attachments.size > 0 %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Additional Media</span>
+          <div class="sidebar-value">
+            <div class="sidebar-attachments-grid">
+              {% for attachment in additional_attachments %}
+              <div class="sidebar-attachment-item">
+                {% if attachment.type contains "image" %}
+                <a href="{{ attachment.url | relative_url }}" target="_blank" title="{{ attachment.filename }}">
+                  <img src="{{ attachment.url | relative_url }}" alt="{{ attachment.filename }}"
+                    class="attachment-thumbnail">
+                </a>
+                {% else %}
+                <a href="{{ attachment.url | relative_url }}" target="_blank" class="attachment-file-link">
+                  <span class="file-icon-badge">📄</span>
+                  <span class="file-label-text">{{ attachment.filename }}</span>
+                </a>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <!-- CARD 3: Who was involved? -->
+      {% if page.fld05RupsUvpbg8vU or page.fldxJ934AvP0LGna0 or page.fldM0ClT9Ik6FuNnJ or page.fldoCBwmPfW0Xrlpy %}
+      <div class="sidebar-card organisations-card">
+        <h3>Who was involved?</h3>
+
+        <!-- Lead Org -->
+        {% if page.fld05RupsUvpbg8vU %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Lead Organisations</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page.fld05RupsUvpbg8vU %}
+              {% assign item = site.organisations | where: "slug", slug | first %}
+              <li>
+                <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+                {% if item.fldMPxskerPZgXyLV %}
+                <a href="{{ item.fldMPxskerPZgXyLV }}" target="_blank" rel="noopener noreferrer"
+                  class="org-ext-link">🔗</a>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Involved Org -->
+        {% if page.fldxJ934AvP0LGna0 %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Involved</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page.fldxJ934AvP0LGna0 %}
+              {% assign item = site.organisations | where: "slug", slug | first %}
+              <li>
+                <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+                {% if item.fldMPxskerPZgXyLV %}
+                <a href="{{ item.fldMPxskerPZgXyLV }}" target="_blank" rel="noopener noreferrer"
+                  class="org-ext-link">🔗</a>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Funding Org -->
+        {% if page.fldM0ClT9Ik6FuNnJ %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Funded By</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page.fldM0ClT9Ik6FuNnJ %}
+              {% assign item = site.organisations | where: "slug", slug | first %}
+              <li>
+                <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+                {% if item.fldMPxskerPZgXyLV %}
+                <a href="{{ item.fldMPxskerPZgXyLV }}" target="_blank" rel="noopener noreferrer"
+                  class="org-ext-link">🔗</a>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Initiation Method (Moved Here) -->
+        {% if page.fldoCBwmPfW0Xrlpy %}
+        <div
+          class="sidebar-field {% if page.fld05RupsUvpbg8vU or page.fldxJ934AvP0LGna0 or page.fldM0ClT9Ik6FuNnJ %}border-top-divider{% endif %}">
+          <span class="sidebar-label">Initiation Method</span>
+          <span class="sidebar-value">{{ page.fldoCBwmPfW0Xrlpy | join: ", " }}</span>
+        </div>
+        {% endif %}
       </div>
       {% endif %}
 
-      <!-- fldV2q24E34ccLyqd: Target group -->
-      {% if page.fldV2q24E34ccLyqd %}
-      <div class="field-container field-type-multilineText">
-        <label class="field-label">Target group</label>
-        <div class="field-value">{{ page.fldV2q24E34ccLyqd | newline_to_br }}</div>
+
+      <!-- CARD 5: Credits (New Combined Card) -->
+      {% if page.fldVXcw3fVYGdRRM9 or page.fldNwWJty8hufq6t1 %}
+      <div class="sidebar-card credits-card">
+        <h3>Credits</h3>
+
+        <!-- Submitted By -->
+        {% if page.fldVXcw3fVYGdRRM9 %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Submitted By</span>
+          <span class="sidebar-value">{{ page.fldVXcw3fVYGdRRM9 }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Acknowledgements -->
+        {% if page.fldNwWJty8hufq6t1 %}
+        <div class="sidebar-field {% if page.fldVXcw3fVYGdRRM9 %}border-top-divider{% endif %}">
+          <span class="sidebar-label">Acknowledgements</span>
+          <span class="sidebar-value desc-text">{{ page.fldNwWJty8hufq6t1 }}</span>
+        </div>
+        {% endif %}
       </div>
       {% endif %}
 
-    </div>
-
+    </aside>
   </div>
 </article>
 
+<!-- Custom Premium CSS overrides and layouts -->
 <style>
-.case-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-.field-container {
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #f0f0f0;
-}
-.field-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-.field-value {
-  color: #555;
-}
-.btn {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-}
-.btn:hover {
-  background-color: #0056b3;
-}
+  /* 1. Reset wrapper width dynamically on case pages for Wide Screen aesthetics */
+  body {
+    background-color: #f8fafc;
+  }
+
+  .site-header .wrapper,
+  .site-footer .wrapper,
+  .page-content .wrapper {
+    max-width: 1360px !important;
+    transition: max-width 0.3s ease;
+  }
+
+  /* 2. Grid Columns layout mapping */
+  .case-study-page {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #1e293b;
+    padding-block: 1rem 3rem;
+  }
+
+  .case-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 992px) {
+    .case-layout-grid {
+      grid-template-columns: 3fr 1fr;
+      /* 3/4 and 1/4 split */
+      align-items: start;
+    }
+  }
+
+  /* 3. Case Header Main Section */
+  .case-header-main {
+    margin-block-end: 2rem;
+  }
+
+  .case-page-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.15;
+    color: #0f172a;
+  }
+
+  .case-page-subtitle {
+    font-size: 1.15rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  /* 4. Bold Hero Image Area */
+  .case-hero-wrapper {
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08), 0 2px 8px rgba(148, 163, 184, 0.04);
+    margin-block-end: 2rem;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    background: #0f172a;
+  }
+
+  .case-hero-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .case-hero-wrapper:hover .case-hero-image {
+    transform: scale(1.02);
+  }
+
+  .default-gradient-hero {
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+  }
+
+  /* 5. Pills mapping Row */
+  .case-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block-end: 2rem;
+  }
+
+  .pill-badge {
+    font-size: 0.775rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .pill-badge:hover {
+    transform: translateY(-1px);
+  }
+
+  .goal-pill {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+  }
+
+  .goal-pill:hover {
+    background: #dcfce7;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+  }
+
+  .ai-pill {
+    background: #eff6ff;
+    color: #1e40af;
+    border-color: #bfdbfe;
+  }
+
+  .ai-pill:hover {
+    background: #dbeafe;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  }
+
+  /* 6. Premium Tabbed Switcher container */
+  .case-tabs-section {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(148, 163, 184, 0.02);
+    margin-block-end: 2.5rem;
+  }
+
+  .tab-buttons-container {
+    display: flex;
+    background: #f8fafc;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .tab-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.925rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    user-select: none;
+  }
+
+  .tab-btn:hover {
+    color: #0f172a;
+    background: rgba(226, 232, 240, 0.3);
+  }
+
+  .tab-btn.active {
+    color: #4f46e5;
+    border-bottom-color: #4f46e5;
+    background: #ffffff;
+  }
+
+  .tab-contents-container {
+    padding: 2rem;
+  }
+
+  .tab-content-panel {
+    display: none;
+    animation: tabFadeIn 0.35s ease;
+  }
+
+  .tab-content-panel.active {
+    display: block;
+  }
+
+  @keyframes tabFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .tab-rich-content {
+    font-size: 1.025rem;
+    line-height: 1.65;
+    color: #334155;
+  }
+
+  .tab-rich-content p {
+    margin-bottom: 1.25rem;
+  }
+
+  .tab-rich-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Participants tab layout */
+  .cohorts-tabs-display {
+    margin-bottom: 1.5rem;
+  }
+
+  .cohorts-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+
+  .cohorts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 1200px) {
+    .cohorts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .cohort-item-box {
+    background: #f8fafc;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    transition: all 0.25s ease;
+  }
+
+  .cohort-item-box:hover {
+    border-color: rgba(99, 102, 241, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(148, 163, 184, 0.05);
+  }
+
+  .cohort-item-box h5 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #0f172a;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    padding-bottom: 0.5rem;
+  }
+
+  .cohort-desc {
+    font-size: 0.875rem;
+    color: #475569;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .cohort-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgba(226, 232, 240, 0.6);
+  }
+
+  .cohort-stat {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    padding-block: 0.4rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+    align-items: start;
+  }
+
+  .cohort-stat:last-child {
+    border-bottom: none;
+  }
+
+  .cohort-stat .stat-label {
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .cohort-stat .stat-val {
+    color: #1e293b;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .stat-list-item {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-list-item:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 576px) {
+    .cohort-stat {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+      padding-block: 0.3rem;
+    }
+
+    .cohort-stat .stat-val {
+      text-align: left;
+    }
+  }
+
+  .participation-settings-block {
+    background: rgba(99, 102, 241, 0.04);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+
+  .participation-settings-block h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #4f46e5;
+  }
+
+  .settings-desc {
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* 7. Narrative and detailed blocks section styling */
+  .narrative-block-section {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(148, 163, 184, 0.02);
+    margin-block-end: 2.5rem;
+    position: relative;
+  }
+
+  .block-badge {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .narrative-block-section h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    color: #0f172a;
+  }
+
+  .narrative-rich-content {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #334155;
+  }
+
+  .narrative-rich-content p {
+    margin-bottom: 1.25rem;
+  }
+
+  .narrative-rich-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .narrative-rich-content ul,
+  .narrative-rich-content ol {
+    padding-left: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .narrative-rich-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .secondary-narrative {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .narrative-sub-block h2 {
+    font-size: 1.35rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .narrative-content {
+    font-size: 0.975rem;
+    line-height: 1.6;
+    color: #475569;
+  }
+
+  /* 8. Recommendations Messages style */
+  .recommendations-block {
+    border-left: 4px solid #4f46e5;
+  }
+
+  .messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .message-item {
+    background: #f8fafc;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .message-item.type-recommendation-item {
+    border-left: 4px solid #22c55e;
+  }
+
+  .message-item.type-issue-item {
+    border-left: 4px solid #ef4444;
+  }
+
+  .message-item.type-quote-item {
+    border-left: 4px solid #a855f7;
+  }
+
+  /* Message Tabs Switcher Styling */
+  .msg-tab-buttons {
+    display: flex;
+    gap: 0.25rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    padding-bottom: 0px;
+    margin-bottom: 1.5rem;
+  }
+
+  .msg-tab-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.6rem 1.15rem;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+
+  .msg-tab-btn:hover {
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.03);
+  }
+
+  .msg-tab-btn.active {
+    color: #4f46e5;
+    border-bottom: 2px solid #4f46e5;
+  }
+
+  .msg-tab-panel {
+    display: none;
+    animation: tabFadeIn 0.3s ease;
+  }
+
+  .msg-tab-panel.active {
+    display: block;
+  }
+
+  .message-item:hover {
+    border-color: rgba(79, 70, 229, 0.2);
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.04);
+  }
+
+  .message-type-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .message-type-badge.type-recommendation {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+
+  .message-type-badge.type-quote {
+    background: #faf5ff;
+    color: #6b21a8;
+    border: 1px solid #e9d5ff;
+  }
+
+  .message-type-badge.type-issue {
+    background: #fff5f5;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+  }
+
+  .message-title {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .message-credit {
+    font-size: 0.775rem;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  /* 9. Sidebar facts Column Layout */
+  .case-sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar-card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(148, 163, 184, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .sidebar-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    margin: 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .sidebar-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .sidebar-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sidebar-value {
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .sidebar-value ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar-value li {
+    position: relative;
+    padding-left: 0.75rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .sidebar-value li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+    font-weight: 700;
+  }
+
+  .sidebar-value li:last-child {
+    margin-bottom: 0;
+  }
+
+  .sidebar-value a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .sidebar-value a:hover {
+    color: #6366f1;
+    text-decoration: underline;
+  }
+
+  .border-top-divider {
+    border-top: 1px solid rgba(226, 232, 240, 0.7);
+    padding-top: 0.75rem;
+  }
+
+  /* Specific status badges */
+  .status-badge {
+    display: inline-block;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .badge-complete {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+
+  .badge-in-progress {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+  }
+
+  .badge-planned {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+  }
+
+  .org-ext-link {
+    font-size: 0.7rem;
+    margin-left: 0.2rem;
+    display: inline-block;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .org-ext-link:hover {
+    opacity: 1;
+  }
+
+  .text-muted {
+    color: #64748b;
+    display: block;
+  }
+
+  .desc-text {
+    font-size: 0.85rem;
+    color: #475569;
+  }
+
+  /* Sidebar Resources Links list styling */
+  .resource-links-list li {
+    margin-bottom: 0.6rem !important;
+  }
+
+  .inline-res-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+  }
+
+  .res-sub-desc {
+    display: block;
+    font-size: 0.725rem;
+    color: #94a3b8;
+    margin-top: 0.15rem;
+    line-height: 1.35;
+  }
+
+  /* Sidebar attachments grid */
+  .sidebar-attachments-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .sidebar-attachment-item {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .sidebar-attachment-item:hover {
+    border-color: rgba(79, 70, 229, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .attachment-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .attachment-file-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .file-icon-badge {
+    font-size: 1.25rem;
+  }
+
+  .file-label-text {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #64748b;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.2;
+  }
+
+  /* Premium Mini Map Styling */
+  .case-mini-map {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    margin-bottom: 0.25rem;
+    background: #f1f5f9;
+    z-index: 10;
+  }
 </style>
+
+<!-- Custom layout JS logic (Interactive Tabs & Leaflet mini map) -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Interactive Tabs Switcher logic
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-content-panel');
+
+    // 1b. Interactive Message Tabs Switcher logic
+    const msgTabButtons = document.querySelectorAll('.msg-tab-btn');
+    const msgTabPanels = document.querySelectorAll('.msg-tab-panel');
+
+    msgTabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+
+        // De-activate all buttons & hide all panels
+        msgTabButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        msgTabPanels.forEach(p => p.classList.remove('active'));
+
+        // Activate clicked button & show matched panel
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const activePanel = document.getElementById(targetId);
+        if (activePanel) {
+          activePanel.classList.add('active');
+        }
+      });
+    });
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+
+        // De-activate all buttons & panels
+        tabButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        // Activate clicked button & matched panel
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const activePanel = document.getElementById(targetId);
+        if (activePanel) {
+          activePanel.classList.add('active');
+        }
+      });
+    });
+
+    // 2. Include the isolated map engine
+    {% include case_mini_map.js %}
+  });
+</script>
