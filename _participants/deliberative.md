@@ -1,8 +1,8 @@
 ---
 layout: generic
-title: Gen(Z)AI -Deliberative
+title: -Deliberative
 airtable_id: 4abda1acc44274d8
-slug: genzai-deliberative
+slug: deliberative
 # Locations
 fld0BFLjrsMUNnQAv:
 - canada
@@ -13,7 +13,7 @@ fldDUHAWPMbAqFNot:
 - Deliberation
 - "Citizens\u2019 Assembly"
 # Name
-fldHY0Cm0kPEMZ4Gg: Gen(Z)AI -Deliberative
+fldHY0Cm0kPEMZ4Gg: -Deliberative
 # Group description
 fldHpcL2p4OYtkkvv: Deliberative
 # Do any of the following apply?
@@ -22,9 +22,6 @@ fldLU10Hiao77UniS:
 - There was a learning phase for participants
 # How many people took part?
 fldY5TPx3FCNnQ9Fv: 100
-# Cases
-fldbvRYPZaQe2mcdT:
-- genzai
 # Was there a specific target population?
 fldpvn1hM37AceKyM: "Young Canadians (17\u201323)"
 # Where did engagement take place?
