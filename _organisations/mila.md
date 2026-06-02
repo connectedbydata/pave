@@ -13,10 +13,7 @@ fldHOkeRYbBEc5Qev:
 fldMPxskerPZgXyLV: https://mila.quebec/
 # Name
 fldUH8cT7KyUpg1wT: MILA
-# Mission statement
-flddoGqidRIofZTI7: 'To be a global hub of scientific excellence that inspires innovation
-  and the growth of AI for the benefit of all. (Source: https://mila.quebec/)'
-# Main Location
+# Location
 fldjNFI2YXLQ2PapK:
 - montreal-canada
 ---

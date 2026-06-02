@@ -13,10 +13,7 @@ fldHOkeRYbBEc5Qev:
 fldMPxskerPZgXyLV: https://www.hopkinsvanmil.org.uk/
 # Name
 fldUH8cT7KyUpg1wT: Hopkins Van Mil
-# Mission statement
-flddoGqidRIofZTI7: 'To facilitate public engagement and research that informs decision-making
-  and shapes policy on complex social and ethical issues. (Source: https://www.hopkinsvanmil.org.uk/)'
-# Main Location
+# Location
 fldjNFI2YXLQ2PapK:
 - london-united-kingdom
 ---

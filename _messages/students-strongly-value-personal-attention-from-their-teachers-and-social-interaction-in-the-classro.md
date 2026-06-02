@@ -1,0 +1,25 @@
+---
+layout: generic
+title: 'Students strongly value personal attention from their teachers and social
+  interaction in the classroom with peers. They are concerned that AI could disrupt
+  this.
+
+
+  Students prefer human teachers and human markers, even if AI might be faster or
+  fairer.'
+airtable_id: b085c81dfddcaaeb
+slug: students-strongly-value-personal-attention-from-their-teachers-and-social-interaction-in-the-classro
+# Type
+fld9WcxhWfobqkI72: Issue
+# Cases
+fldCuzVkCPc37vZiY:
+- generative-ai-in-education-have-your-say
+# Name
+fldyrLCrggwZqFZmS: 'Students strongly value personal attention from their teachers
+  and social interaction in the classroom with peers. They are concerned that AI could
+  disrupt this.
+
+
+  Students prefer human teachers and human markers, even if AI might be faster or
+  fairer.'
+---

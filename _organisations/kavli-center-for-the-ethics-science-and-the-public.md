@@ -10,10 +10,7 @@ fldHOkeRYbBEc5Qev:
 fldMPxskerPZgXyLV: https://www.kcesp.ac.uk/
 # Name
 fldUH8cT7KyUpg1wT: Kavli Center for the Ethics, Science and the Public
-# Mission statement
-flddoGqidRIofZTI7: 'To connect the public with science, ensuring that scientific research
-  and technological development align with human values and ethics. (Source: https://www.kcesp.ac.uk/)'
-# Main Location
+# Location
 fldjNFI2YXLQ2PapK:
 - cambridge-united-kingdom
 # Funding organisation for

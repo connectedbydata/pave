@@ -15,10 +15,7 @@ fldMPxskerPZgXyLV: https://www.sortitionfoundation.org/
 fldUH8cT7KyUpg1wT: Sortition Foundation
 # Lead organisation for
 fldYGUHxexgXk88fw: []
-# Mission statement
-flddoGqidRIofZTI7: 'To campaign for, design, and run citizens'' assemblies that use
-  random selection to ensure fair representation. (Source: https://www.sortitionfoundation.org/)'
-# Main Location
+# Location
 fldjNFI2YXLQ2PapK:
 - united-kingdom
 ---

@@ -10,10 +10,7 @@ fldHOkeRYbBEc5Qev:
 fldMPxskerPZgXyLV: https://acceleratescience.github.io/
 # Name
 fldUH8cT7KyUpg1wT: Accelerate Programme for Scientific Discovery
-# Mission statement
-flddoGqidRIofZTI7: 'To equip researchers with the skills and tools in AI and data
-  science needed to accelerate scientific discovery. (Source: https://acceleratescience.github.io/)'
-# Main Location
+# Location
 fldjNFI2YXLQ2PapK:
 - england-united-kingdom
 # Funding organisation for
