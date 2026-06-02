@@ -4,16 +4,19 @@ title: Mesomorphic
 airtable_id: 893aa15c012ab707
 slug: mesomorphic
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Private sector
 # Website address
-fldMPxskerPZgXyLV: https://mesomorphic.co.uk/
+website-address: https://mesomorphic.co.uk/
 # Name
-fldUH8cT7KyUpg1wT: Mesomorphic
-# Location
-fldjNFI2YXLQ2PapK:
+name: Mesomorphic
+# Mission statement
+mission-statement: 'To build beautiful, robust, and functional web applications that
+  solve real-world business problems and support digital skills. (Source: https://mesomorphic.co.uk/)'
+# Main Location
+main-location:
 - shetland-scotland-united-kingdom
 ---

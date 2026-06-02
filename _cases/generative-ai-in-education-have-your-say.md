@@ -4,29 +4,29 @@ title: Generative AI in Education - Have Your Say
 airtable_id: 3c565662d49f8ad8
 slug: generative-ai-in-education-have-your-say
 # Lead organisations
-fld05RupsUvpbg8vU:
+lead-organisations:
 - connected-by-data
 # Provide a brief description of the project
-fld0oykyuwbVPbW0H: "In September 2025 the UK Department for Education commissioned\
-  \ a distributed dialogue to capture student views on Generative AI in Education,\
-  \ as preliminary work for an International Generative AI in Education Summit in\
-  \ January 2026. \n\nUsing a 'workshop in a box' approach, over 1000 students aged\
-  \ 10 to 18 took part in short (1 or 2 hour long) classroom workshops providing their\
-  \ views through a voting platform, structured feedback, and creative feedback activities.\
-  \ \n\nThe workshop in a box resources were designed to provide a balanced view of\
-  \ benefits and problems of AI in education, and to support students to discuss and\
-  \ develop their own views.\n\nA video of students from one participating site was\
-  \ edited to reflect the balance of views expressed across participating groups,\
+provide-a-brief-description-of-the-project: "In September 2025 the UK Department for\
+  \ Education commissioned a distributed dialogue to capture student views on Generative\
+  \ AI in Education, as preliminary work for an International Generative AI in Education\
+  \ Summit in January 2026. \n\nUsing a 'workshop in a box' approach, over 1000 students\
+  \ aged 10 to 18 took part in short (1 or 2 hour long) classroom workshops providing\
+  \ their views through a voting platform, structured feedback, and creative feedback\
+  \ activities. \n\nThe workshop in a box resources were designed to provide a balanced\
+  \ view of benefits and problems of AI in education, and to support students to discuss\
+  \ and develop their own views.\n\nA video of students from one participating site\
+  \ was edited to reflect the balance of views expressed across participating groups,\
   \ and this, along with the project report, was featured at the AI in Education Summit. "
 # What limitations to the project should be noted?
-fld3PwRR35QU6D1CK: 'Early project proposals involved the idea of providing funding
-  for groups to run targeted outreach to specifically affected or excluded communities:
-  such as home educators, or children excluded from education. This wasn''t possible
-  in the available budget and time. '
+what-limitations-to-the-project-should-be-noted: 'Early project proposals involved
+  the idea of providing funding for groups to run targeted outreach to specifically
+  affected or excluded communities: such as home educators, or children excluded from
+  education. This wasn''t possible in the available budget and time. '
 # Project status
-fld3WCMM9BTILD6m8: Complete
+project-status: Complete
 # Headline findings
-fld8UK4VG4qwQf4bA: "**Students expressed detailed, nuanced and critical views on how\
+headline-findings: "**Students expressed detailed, nuanced and critical views on how\
   \ generative AI could or should be used in education**, emphasising:\n- the importance\
   \ of the existing student-teacher relationship\n- specific uses of AI to enhance\
   \ learning by:\n    - making lessons more engaging\n    - providing more personalised\
@@ -96,13 +96,13 @@ fld8UK4VG4qwQf4bA: "**Students expressed detailed, nuanced and critical views on
   \ of particular uses of AI, and to make informed individual and collective choices\
   \ about when and how they engage with it.\n\n"
 # Participants
-fldAQhKPRBSYGsJwD:
+participants:
 - generative-ai-in-education-have-your-say-school-students
 # What form of AI is the project about?
-fldEnara6Czm8ChkH:
+what-form-of-ai-is-the-project-about:
 - Generative AI
 # Messages
-fldEuGi25yjQf3asH:
+messages:
 - students-want-ai-tools-to-be-checked-for-safety-accuracy-and-fairness-before-they-are-used-in-the-cl
 - students-strongly-value-personal-attention-from-their-teachers-and-social-interaction-in-the-classro
 - students-are-concerned-about-the-mental-health-impacts-of-ai-they-do-not-want-ai-tools-to-be-involve
@@ -111,53 +111,53 @@ fldEuGi25yjQf3asH:
 - embed-a-role-for-students-in-decision-making-on-ai-ai-for-education-should-be-co-designed-with-stude
 - build-student-agency-in-a-world-of-ai-young-people-hold-a-diversity-of-attitudes-towards-ai-and-its
 # What year did the project start?
-fldKttntgUGpSigJs: 2025
+what-year-did-the-project-start: 2025
 # Funding Organisations
-fldM0ClT9Ik6FuNnJ:
+funding-organisations:
 - uk-department-for-education
 # Inclusion efforts
-fldPOu99itaN5PMaK: "School sign-ups were matched against the national database of\
+inclusion-efforts: "School sign-ups were matched against the national database of\
   \ schools (EduBase) to monitor the location, type (primary, secondary, special education)\
   \ and pupil profile (e.g. single sex; mixed; free school meals rate as indicator\
   \ of deprivation), and reviewed to check for a diversity of settings participating.\
   \ \n\n"
 # ﻿Project Title
-fldQVZReHicFlY9Yp: Generative AI in Education - Have Your Say
+project-title: Generative AI in Education - Have Your Say
 # Submitted by
-fldVXcw3fVYGdRRM9: Tim Davies
+submitted-by: Tim Davies
 # Why is this project important to include in the case book?
-fldaSwQdG23BdcH4J: "The project demonstrated the potential of a distributed dialogue\
-  \ approach to both generate national findings and to support meaningful conversations\
-  \ about AI at the class and school level.\n\nThe process of securing peer-review\
-  \ from diverse experts for the 'workshop in a box' toolkit demonstrated good practice\
-  \ in provision of balanced learning materials. \n\nThe project also demonstrated\
-  \ the potential for agile participatory practice, gathering in-depth input from\
-  \ schools across the country over a short time window. "
+why-is-this-project-important-to-include-in-the: "The project demonstrated the potential\
+  \ of a distributed dialogue approach to both generate national findings and to support\
+  \ meaningful conversations about AI at the class and school level.\n\nThe process\
+  \ of securing peer-review from diverse experts for the 'workshop in a box' toolkit\
+  \ demonstrated good practice in provision of balanced learning materials. \n\nThe\
+  \ project also demonstrated the potential for agile participatory practice, gathering\
+  \ in-depth input from schools across the country over a short time window. "
 # Project goals
-flddUvgeSB6VY4w9i:
+project-goals:
 - 'Policy: Inform a policy-making process'
 - 'Qualitative: Capture qualitative evidence on public attitudes to AI'
 - 'Empowerment: Build community power with respect to AI'
 - 'Methods: Create re-usable participation tools & methods'
 # Supporting resources
-fldeQz7UtfY8zlyhv:
+supporting-resources:
 - generative-ai-in-education-have-your-say-report
 - generative-ai-in-education-student-video
 - workshop-in-a-box-evaluation-report
 - generative-ai-in-education-workshop-in-a-box-toolkit
 # Describe the subject matter in your own words (one line)
-fldmmG9MGLAEewrOT: The use of Generative AI in Education
+describe-the-subject-matter-in-your-own-words-one: The use of Generative AI in Education
 # How was the project initiated?
-fldoCBwmPfW0Xrlpy:
+how-was-the-project-initiated:
 - Commissioned
 # What year did the project conclude?
-fldwgrONWjl5apN0a: 2025
+what-year-did-the-project-conclude: 2025
 # Which of the following resources are available for this project?
-fldx2fmatqG1K5Arm:
+which-of-the-following-resources-are-available:
 - A project report
 - A project video
 - An independent evaluation
 - A method guide or toolkit
 # Project URL
-fldzgqKbADUHBkfxO: https://connectedbydata.org/ai-in-education/
+project-url: https://connectedbydata.org/ai-in-education/
 ---

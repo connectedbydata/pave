@@ -4,17 +4,17 @@ title: London, United Kingdom
 airtable_id: 0efe2f597442d4ec
 slug: london-united-kingdom
 # Longitude
-fldCdYZ8Ay6f6ulq1: -0.1278
+longitude: -0.1278
 # Name
-fldNDwfliTbwWYd4l: London, United Kingdom
+name: London, United Kingdom
 # Cases
-fldSwP1hLiQlRaB3E: []
+cases: []
 # Latitude
-fldWtvMukYmq1IuWq: 51.5074
+latitude: 51.5074
 # Country Code
-fldy0zqeilb2NSEOB: GB
+country-code: GB
 # Organisations
-fldzvtgyrKNtzuKIL:
+organisations:
 - odyssean-institute
 - behavioural-insights-team
 - nuffield

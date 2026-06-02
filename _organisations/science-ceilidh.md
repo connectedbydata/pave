@@ -4,16 +4,20 @@ title: Science Ceilidh
 airtable_id: 23d381c46e65b939
 slug: science-ceilidh
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://www.scienceceilidh.com/
+website-address: https://www.scienceceilidh.com/
 # Name
-fldUH8cT7KyUpg1wT: Science Ceilidh
-# Location
-fldjNFI2YXLQ2PapK:
+name: Science Ceilidh
+# Mission statement
+mission-statement: 'To support communities, researchers, and artists to collaborate,
+  share learning, and build creative, inclusive, and healthy communities. (Source:
+  https://www.scienceceilidh.com/)'
+# Main Location
+main-location:
 - edinburgh-scotland-united-kingdom
 ---

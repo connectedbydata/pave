@@ -4,13 +4,16 @@ title: 'Centre for Media Technology and Democracy '
 airtable_id: 07806cdbfc71c2de
 slug: centre-for-media-technology-and-democracy
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://www.media-tech-democracy.com/
+website-address: https://www.media-tech-democracy.com/
 # Name
-fldUH8cT7KyUpg1wT: 'Centre for Media Technology and Democracy '
-# Location
-fldjNFI2YXLQ2PapK:
+name: 'Centre for Media Technology and Democracy '
+# Mission statement
+mission-statement: 'To produce public-interest research and policy guidance on the
+  impact of media and technology on democratic institutions. (Source: https://www.media-tech-democracy.com/)'
+# Main Location
+main-location:
 - montreal-canada
 ---

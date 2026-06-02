@@ -4,16 +4,19 @@ title: Mozilla Foundation
 airtable_id: c282203a5a0788cd
 slug: mozilla-foundation
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://foundation.mozilla.org/
+website-address: https://foundation.mozilla.org/
 # Name
-fldUH8cT7KyUpg1wT: Mozilla Foundation
-# Location
-fldjNFI2YXLQ2PapK:
+name: Mozilla Foundation
+# Mission statement
+mission-statement: 'To ensure that the internet is a global public resource, open
+  and accessible to all. (Source: https://foundation.mozilla.org/)'
+# Main Location
+main-location:
 - mountain-view-california-usa
 # Funding organisation for
-fldnEvULtgnrqryUQ:
+funding-organisation-for:
 - the-peoples-panel-on-ai
 ---

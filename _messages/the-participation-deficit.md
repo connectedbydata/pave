@@ -4,12 +4,12 @@ title: 'The Participation Deficit '
 airtable_id: ccca826c6fdd82b5
 slug: the-participation-deficit
 # Type
-fld9WcxhWfobqkI72: Issue
+type: Issue
 # Cases
-fldCuzVkCPc37vZiY:
+cases:
 - genzai
 # Additional Credit Line
-fldo3jzKvZqYeXvYi: Issues arising from Gen(Z)AI dialouges
+additional-credit-line: Issues arising from Gen(Z)AI dialouges
 # Name
-fldyrLCrggwZqFZmS: 'The Participation Deficit '
+name: 'The Participation Deficit '
 ---

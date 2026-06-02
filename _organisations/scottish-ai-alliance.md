@@ -4,19 +4,22 @@ title: Scottish AI Alliance
 airtable_id: 16cdbc074a55f716
 slug: scottish-ai-alliance
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Public sector
 # Website address
-fldMPxskerPZgXyLV: https://www.scottishai.com/
+website-address: https://www.scottishai.com/
 # Name
-fldUH8cT7KyUpg1wT: Scottish AI Alliance
+name: Scottish AI Alliance
 # Lead organisation for
-fldYGUHxexgXk88fw:
+lead-organisation-for:
 - exploring-childrens-rights-and-ai
-# Location
-fldjNFI2YXLQ2PapK:
+# Mission statement
+mission-statement: 'To facilitate the delivery of Scotland''s AI Strategy, ensuring
+  that AI is trustworthy, ethical, and inclusive. (Source: https://www.scottishai.com/)'
+# Main Location
+main-location:
 - edinburgh-scotland-united-kingdom
 # Funding organisation for
-fldnEvULtgnrqryUQ:
+funding-organisation-for:
 - exploring-childrens-rights-and-ai
 ---

@@ -4,15 +4,18 @@ title: Tavistock Institute of Human Relations
 airtable_id: fcf7ef5966c32b1d
 slug: tavistock-institute-of-human-relations
 # Involved organisation for
-fldE09wBfEXIawc5T: []
+involved-organisation-for: []
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://www.tavistockinstitute.org/
+website-address: https://www.tavistockinstitute.org/
 # Name
-fldUH8cT7KyUpg1wT: Tavistock Institute of Human Relations
-# Location
-fldjNFI2YXLQ2PapK:
+name: Tavistock Institute of Human Relations
+# Mission statement
+mission-statement: 'To apply social science research and consultancy to support organizational
+  development and resolve social conflicts. (Source: https://www.tavistockinstitute.org/)'
+# Main Location
+main-location:
 - london-united-kingdom
 ---

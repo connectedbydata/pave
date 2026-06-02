@@ -4,17 +4,20 @@ title: Google
 airtable_id: 480724ba195500c2
 slug: google
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Private sector
 # Website address
-fldMPxskerPZgXyLV: https://about.google/
+website-address: https://about.google/
 # Name
-fldUH8cT7KyUpg1wT: Google
+name: Google
 # Lead organisation for
-fldYGUHxexgXk88fw: []
-# Location
-fldjNFI2YXLQ2PapK:
+lead-organisation-for: []
+# Mission statement
+mission-statement: 'To organize the world''s information and make it universally accessible
+  and useful. (Source: https://about.google/)'
+# Main Location
+main-location:
 - mountain-view-california-usa
 # Funding organisation for
-fldnEvULtgnrqryUQ: []
+funding-organisation-for: []
 ---

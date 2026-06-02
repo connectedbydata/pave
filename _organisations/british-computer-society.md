@@ -4,15 +4,18 @@ title: British Computer Society
 airtable_id: 70dda42c894ed051
 slug: british-computer-society
 # Involved organisation for
-fldE09wBfEXIawc5T: []
+involved-organisation-for: []
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://www.bcs.org/
+website-address: https://www.bcs.org/
 # Name
-fldUH8cT7KyUpg1wT: British Computer Society
-# Location
-fldjNFI2YXLQ2PapK:
+name: British Computer Society
+# Mission statement
+mission-statement: 'To promote and share good practice, support computer professionals,
+  and make IT good for society. (Source: https://www.bcs.org/)'
+# Main Location
+main-location:
 - united-kingdom
 ---

@@ -9,8 +9,9 @@ layout: default
 
   <div class="post-content">
     <div class="case-fields">
+      {% assign system_keys = "layout,title,airtable_id,slug,content,dir,path,url,next,previous,excerpt,date,categories,tags,id" | split: "," %}
       {% for field in page %}
-        {% if field[0] contains "fld" %}
+        {% unless system_keys contains field[0] %}
           <div class="field-container">
             <label class="field-label">{{ field[0] }}</label>
             <div class="field-value">
@@ -25,7 +26,7 @@ layout: default
               {% endif %}
             </div>
           </div>
-        {% endif %}
+        {% endunless %}
       {% endfor %}
     </div>
   </div>

@@ -4,16 +4,19 @@ title: Kavli Center for the Ethics, Science and the Public
 airtable_id: bc6682f7f2ff6329
 slug: kavli-center-for-the-ethics-science-and-the-public
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Research
 # Website address
-fldMPxskerPZgXyLV: https://www.kcesp.ac.uk/
+website-address: https://www.kcesp.ac.uk/
 # Name
-fldUH8cT7KyUpg1wT: Kavli Center for the Ethics, Science and the Public
-# Location
-fldjNFI2YXLQ2PapK:
+name: Kavli Center for the Ethics, Science and the Public
+# Mission statement
+mission-statement: 'To connect the public with science, ensuring that scientific research
+  and technological development align with human values and ethics. (Source: https://www.kcesp.ac.uk/)'
+# Main Location
+main-location:
 - cambridge-united-kingdom
 # Funding organisation for
-fldnEvULtgnrqryUQ:
+funding-organisation-for:
 - the-peoples-panel-on-ai
 ---

@@ -4,16 +4,19 @@ title: CIFAR
 airtable_id: 629a1fc19e8dab1c
 slug: cifar
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Funder
 # Website address
-fldMPxskerPZgXyLV: https://cifar.ca/
+website-address: https://cifar.ca/
 # Name
-fldUH8cT7KyUpg1wT: CIFAR
-# Location
-fldjNFI2YXLQ2PapK:
+name: CIFAR
+# Mission statement
+mission-statement: 'To address challenges of global importance by sustaining long-term,
+  interdisciplinary research collaboration and funding. (Source: https://cifar.ca/)'
+# Main Location
+main-location:
 - canada
 # Funding organisation for
-fldnEvULtgnrqryUQ:
+funding-organisation-for:
 - genzai
 ---

@@ -4,12 +4,12 @@ title: -Online
 airtable_id: deab1c85fa4927ee
 slug: online
 # Locations
-fld0BFLjrsMUNnQAv:
+locations:
 - canada
 # Name
-fldHY0Cm0kPEMZ4Gg: -Online
+name: -Online
 # Group description
-fldHpcL2p4OYtkkvv: Online
+group-description: Online
 # How many people took part?
-fldY5TPx3FCNnQ9Fv: 1000
+how-many-people-took-part: 1000
 ---

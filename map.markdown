@@ -34,15 +34,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Data for markers
     var pointLocations = [
       {% for case in site.cases %}
-        {% for org_slug in case.fld05RupsUvpbg8vU %}
+        {% for org_slug in case.lead-organisations %}
           {% assign org = site.organisations | where: "slug", org_slug | first %}
           {% if org %}
-            {% for loc_slug in org.fldjNFI2YXLQ2PapK %}
+            {% for loc_slug in org.main-location %}
               {% assign loc = site.locations | where: "slug", loc_slug | first %}
-              {% if loc.fldWtvMukYmq1IuWq and loc.fldCdYZ8Ay6f6ulq1 %}
+              {% if loc.latitude and loc.longitude %}
               {
-                lat: {{ loc.fldWtvMukYmq1IuWq }},
-                lng: {{ loc.fldCdYZ8Ay6f6ulq1 }},
+                lat: {{ loc.latitude }},
+                lng: {{ loc.longitude }},
                 title: "{{ org.title | escape }}",
                 type: "Organisation",
                 color: "#2196F3",
@@ -53,15 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
             {% endfor %}
           {% endif %}
         {% endfor %}
-        {% for part_slug in case.fldAQhKPRBSYGsJwD %}
+        {% for part_slug in case.participants %}
           {% assign part = site.participants | where: "slug", part_slug | first %}
           {% if part %}
-            {% for loc_slug in part.fld0BFLjrsMUNnQAv %}
+            {% for loc_slug in part.locations %}
               {% assign loc = site.locations | where: "slug", loc_slug | first %}
-              {% if loc.fldWtvMukYmq1IuWq and loc.fldCdYZ8Ay6f6ulq1 %}
+              {% if loc.latitude and loc.longitude %}
               {
-                lat: {{ loc.fldWtvMukYmq1IuWq }},
-                lng: {{ loc.fldCdYZ8Ay6f6ulq1 }},
+                lat: {{ loc.latitude }},
+                lng: {{ loc.longitude }},
                 title: "{{ part.title | escape }}",
                 type: "Participants",
                 color: "#FF9800",
@@ -78,14 +78,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Aggregated data for country highlighting
     var countryData = {};
     {% for case in site.cases %}
-      {% for org_slug in case.fld05RupsUvpbg8vU %}
+      {% for org_slug in case.lead-organisations %}
         {% assign org = site.organisations | where: "slug", org_slug | first %}
         {% if org %}
-          {% for loc_slug in org.fldjNFI2YXLQ2PapK %}
+          {% for loc_slug in org.main-location %}
             {% assign loc = site.locations | where: "slug", loc_slug | first %}
-            {% if loc.fldy0zqeilb2NSEOB %}
+            {% if loc.country-code %}
               (function() {
-                var code = "{{ loc.fldy0zqeilb2NSEOB }}";
+                var code = "{{ loc.country-code }}";
                 var name = "{{ loc.title | escape }}";
                 var caseTitle = "{{ case.title | escape }}";
                 var caseSlug = "{{ case.slug }}";
@@ -101,14 +101,14 @@ document.addEventListener('DOMContentLoaded', function() {
         {% endif %}
       {% endfor %}
       
-      {% for part_slug in case.fldAQhKPRBSYGsJwD %}
+      {% for part_slug in case.participants %}
         {% assign part = site.participants | where: "slug", part_slug | first %}
         {% if part %}
-          {% for loc_slug in part.fld0BFLjrsMUNnQAv %}
+          {% for loc_slug in part.locations %}
             {% assign loc = site.locations | where: "slug", loc_slug | first %}
-            {% if loc.fldy0zqeilb2NSEOB %}
+            {% if loc.country-code %}
               (function() {
-                var code = "{{ loc.fldy0zqeilb2NSEOB }}";
+                var code = "{{ loc.country-code }}";
                 var name = "{{ loc.title | escape }}";
                 var caseTitle = "{{ case.title | escape }}";
                 var caseSlug = "{{ case.slug }}";

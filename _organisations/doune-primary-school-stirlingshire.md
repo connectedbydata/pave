@@ -4,16 +4,19 @@ title: Doune Primary School, Stirlingshire
 airtable_id: 90e3cb7ad7213787
 slug: doune-primary-school-stirlingshire
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Public sector
 # Website address
-fldMPxskerPZgXyLV: https://www.doune.stirling.sch.uk/
+website-address: https://www.doune.stirling.sch.uk/
 # Name
-fldUH8cT7KyUpg1wT: Doune Primary School, Stirlingshire
-# Location
-fldjNFI2YXLQ2PapK:
+name: Doune Primary School, Stirlingshire
+# Mission statement
+mission-statement: 'To work together to nurture happy, healthy, and successful learners
+  within a supportive school community. (Source: https://www.doune.stirling.sch.uk/)'
+# Main Location
+main-location:
 - doune-scotland-united-kingdom
 ---

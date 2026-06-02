@@ -4,15 +4,18 @@ title: Odyssean Institute
 airtable_id: 2d8a9ea00217424d
 slug: odyssean-institute
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://www.odysseaninstitute.org/
+website-address: https://www.odysseaninstitute.org/
 # Name
-fldUH8cT7KyUpg1wT: Odyssean Institute
+name: Odyssean Institute
 # Lead organisation for
-fldYGUHxexgXk88fw: []
-# Location
-fldjNFI2YXLQ2PapK:
+lead-organisation-for: []
+# Mission statement
+mission-statement: 'To research and design institutional reforms, mechanisms, and
+  tools to improve public governance and collective decision-making. (Source: https://www.odysseaninstitute.org/)'
+# Main Location
+main-location:
 - london-united-kingdom
 ---

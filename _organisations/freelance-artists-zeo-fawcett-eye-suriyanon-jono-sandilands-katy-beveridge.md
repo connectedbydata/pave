@@ -4,17 +4,19 @@ title: Freelance artists  - Zeo Fawcett, Eye Suriyanon, Jono Sandilands, Katy Be
 airtable_id: 548c04b755c5b909
 slug: freelance-artists-zeo-fawcett-eye-suriyanon-jono-sandilands-katy-beveridge
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Private sector
 # Website address
-fldMPxskerPZgXyLV: https://connectedbydata.org/
+website-address: https://connectedbydata.org/
 # Name
-fldUH8cT7KyUpg1wT: Freelance artists  - Zeo Fawcett, Eye Suriyanon, Jono Sandilands,
-  Katy Beveridge
-# Location
-fldjNFI2YXLQ2PapK:
+name: Freelance artists  - Zeo Fawcett, Eye Suriyanon, Jono Sandilands, Katy Beveridge
+# Mission statement
+mission-statement: 'To create visual art, interactive installations, and designs that
+  communicate complex societal issues and engage the public. (Source: https://connectedbydata.org/)'
+# Main Location
+main-location:
 - united-kingdom
 ---

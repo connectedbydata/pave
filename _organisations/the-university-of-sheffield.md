@@ -4,15 +4,18 @@ title: The University of Sheffield
 airtable_id: b9cae72e4461bea4
 slug: the-university-of-sheffield
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Research
 # Website address
-fldMPxskerPZgXyLV: https://www.sheffield.ac.uk/
+website-address: https://www.sheffield.ac.uk/
 # Name
-fldUH8cT7KyUpg1wT: The University of Sheffield
+name: The University of Sheffield
 # Lead organisation for
-fldYGUHxexgXk88fw: []
-# Location
-fldjNFI2YXLQ2PapK:
+lead-organisation-for: []
+# Mission statement
+mission-statement: 'To be a world-class university through excellence in research,
+  education, and partnership for global impact. (Source: https://www.sheffield.ac.uk/)'
+# Main Location
+main-location:
 - england-united-kingdom
 ---

@@ -4,15 +4,19 @@ title: BBC
 airtable_id: c658119287a50ca9
 slug: bbc
 # Involved organisation for
-fldE09wBfEXIawc5T: []
+involved-organisation-for: []
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Public sector
 # Website address
-fldMPxskerPZgXyLV: https://www.bbc.co.uk/
+website-address: https://www.bbc.co.uk/
 # Name
-fldUH8cT7KyUpg1wT: BBC
-# Location
-fldjNFI2YXLQ2PapK:
+name: BBC
+# Mission statement
+mission-statement: 'To act in the public interest, serving all audiences through the
+  provision of impartial, high-quality and distinctive output and services which inform,
+  educate and entertain. (Source: https://www.bbc.co.uk/)'
+# Main Location
+main-location:
 - united-kingdom
 ---

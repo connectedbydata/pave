@@ -4,15 +4,18 @@ title: Nuffield
 airtable_id: 7addd814267c0559
 slug: nuffield
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Funder
 # Website address
-fldMPxskerPZgXyLV: https://www.nuffieldfoundation.org/
+website-address: https://www.nuffieldfoundation.org/
 # Name
-fldUH8cT7KyUpg1wT: Nuffield
-# Location
-fldjNFI2YXLQ2PapK:
+name: Nuffield
+# Mission statement
+mission-statement: 'To improve social well-being by funding research, analysis, and
+  student opportunity in education, welfare, and justice. (Source: https://www.nuffieldfoundation.org/)'
+# Main Location
+main-location:
 - london-united-kingdom
 # Funding organisation for
-fldnEvULtgnrqryUQ: []
+funding-organisation-for: []
 ---

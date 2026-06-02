@@ -4,17 +4,17 @@ title: United Kingdom
 airtable_id: 8bfa56facdfba9e5
 slug: united-kingdom
 # Longitude
-fldCdYZ8Ay6f6ulq1: -3.436
+longitude: -3.436
 # Name
-fldNDwfliTbwWYd4l: United Kingdom
+name: United Kingdom
 # Cases
-fldSwP1hLiQlRaB3E: []
+cases: []
 # Latitude
-fldWtvMukYmq1IuWq: 55.3781
+latitude: 55.3781
 # Country Code
-fldy0zqeilb2NSEOB: GB
+country-code: GB
 # Organisations
-fldzvtgyrKNtzuKIL:
+organisations:
 - connected-by-data
 - ukri
 - bbc

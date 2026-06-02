@@ -13,16 +13,16 @@ permalink: /cases/
           <a href="{{ case.url | relative_url }}">{{ case.title | escape }}</a>
         </h2>
         <p class="case-meta" style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
-          {% if case.fldKttntgUGpSigJs %}
-            {{ case.fldKttntgUGpSigJs }}
-            {% if case.fldwgrONWjl5apN0a %} - {{ case.fldwgrONWjl5apN0a }}{% endif %}
+          {% if case.what-year-did-the-project-start %}
+            {{ case.what-year-did-the-project-start }}
+            {% if case.what-year-did-the-project-conclude %} - {{ case.what-year-did-the-project-conclude }}{% endif %}
           {% endif %}
         </p>
       </header>
 
-      {% if case.fld0oykyuwbVPbW0H %}
+      {% if case.provide-a-brief-description-of-the-project %}
         <div class="case-description">
-          {{ case.fld0oykyuwbVPbW0H | truncatewords: 50 | newline_to_br }}
+          {{ case.provide-a-brief-description-of-the-project | truncatewords: 50 | newline_to_br }}
         </div>
       {% endif %}
 

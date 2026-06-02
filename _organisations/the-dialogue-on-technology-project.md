@@ -4,16 +4,20 @@ title: The Dialogue on Technology Project
 airtable_id: 4e27e6b056386d8f
 slug: the-dialogue-on-technology-project
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Research
 # Website address
-fldMPxskerPZgXyLV: https://www.sfu.ca/dialogue/what-we-do/initiatives/dot.html
+website-address: https://www.sfu.ca/dialogue/what-we-do/initiatives/dot.html
 # Name
-fldUH8cT7KyUpg1wT: The Dialogue on Technology Project
+name: The Dialogue on Technology Project
 # Lead organisation for
-fldYGUHxexgXk88fw:
+lead-organisation-for:
 - genzai
-# Location
-fldjNFI2YXLQ2PapK:
+# Mission statement
+mission-statement: 'To foster constructive, inclusive, and multi-stakeholder dialogue
+  on the societal and ethical implications of emerging digital technologies. (Source:
+  https://www.sfu.ca/dialogue/what-we-do/initiatives/dot.html)'
+# Main Location
+main-location:
 - vancouver-canada
 ---

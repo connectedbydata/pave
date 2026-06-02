@@ -4,16 +4,19 @@ title: JHP Visuals
 airtable_id: e0eb1c71f322078a
 slug: jhp-visuals
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Private sector
 # Website address
-fldMPxskerPZgXyLV: https://www.jhpvisuals.co.uk/
+website-address: https://www.jhpvisuals.co.uk/
 # Name
-fldUH8cT7KyUpg1wT: JHP Visuals
-# Location
-fldjNFI2YXLQ2PapK:
+name: JHP Visuals
+# Mission statement
+mission-statement: 'To provide professional visual media production, videography,
+  and photography services. (Source: https://www.jhpvisuals.co.uk/)'
+# Main Location
+main-location:
 - united-kingdom
 ---

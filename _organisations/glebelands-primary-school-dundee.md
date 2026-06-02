@@ -4,16 +4,19 @@ title: Glebelands Primary School, Dundee
 airtable_id: e625a392730c8b63
 slug: glebelands-primary-school-dundee
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Public sector
 # Website address
-fldMPxskerPZgXyLV: https://www.glebelands.dundee.sch.uk/
+website-address: https://www.glebelands.dundee.sch.uk/
 # Name
-fldUH8cT7KyUpg1wT: Glebelands Primary School, Dundee
-# Location
-fldjNFI2YXLQ2PapK:
+name: Glebelands Primary School, Dundee
+# Mission statement
+mission-statement: 'To provide a safe, caring, and stimulating environment where children
+  are supported to develop their skills and reach their full potential. (Source: https://www.glebelands.dundee.sch.uk/)'
+# Main Location
+main-location:
 - dundee-scotland-united-kingdom
 ---

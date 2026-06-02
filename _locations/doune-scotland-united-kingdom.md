@@ -4,17 +4,19 @@ title: Doune, Scotland, United Kingdom
 airtable_id: bdd130c4c9fec01f
 slug: doune-scotland-united-kingdom
 # Participants
-fldAtfj6KrVsh8jHF:
-- exploring-childrens-rights-and-ai-children
+participants:
+- exploring-childrens-rights-and-ai-classroom-workshops
+- exploring-childrens-rights-and-ai-cross-school-group
+- exploring-childrens-rights-and-ai-survey
 # Longitude
-fldCdYZ8Ay6f6ulq1: -4.0532
+longitude: -4.0532
 # Name
-fldNDwfliTbwWYd4l: Doune, Scotland, United Kingdom
+name: Doune, Scotland, United Kingdom
 # Latitude
-fldWtvMukYmq1IuWq: 56.1896
+latitude: 56.1896
 # Country Code
-fldy0zqeilb2NSEOB: GB
+country-code: GB
 # Organisations
-fldzvtgyrKNtzuKIL:
+organisations:
 - doune-primary-school-stirlingshire
 ---

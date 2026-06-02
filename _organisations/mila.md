@@ -4,16 +4,19 @@ title: MILA
 airtable_id: f077d5ce1907187b
 slug: mila
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - genzai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://mila.quebec/
+website-address: https://mila.quebec/
 # Name
-fldUH8cT7KyUpg1wT: MILA
-# Location
-fldjNFI2YXLQ2PapK:
+name: MILA
+# Mission statement
+mission-statement: 'To be a global hub of scientific excellence that inspires innovation
+  and the growth of AI for the benefit of all. (Source: https://mila.quebec/)'
+# Main Location
+main-location:
 - montreal-canada
 ---
