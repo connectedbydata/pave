@@ -10,6 +10,10 @@ tblxVFG1lM7trGD5m:
       name: Editing link
       type: button
       sync: false
+    fldyTy9X5T9piyHAd:
+      name: Created
+      type: createdTime
+      sync: false
     fldrM6RRk8easAxSq:
       name: 'Workflow: Status'
       type: singleSelect
@@ -19,6 +23,8 @@ tblxVFG1lM7trGD5m:
       - Submission
       - Draft
       - Completed
+      - Rejected
+      - Duplicate
     fldjqAHoLIaL3Aw5e:
       name: Assigned to
       type: singleCollaborator
@@ -32,6 +38,9 @@ tblxVFG1lM7trGD5m:
       - Find contact details
       - Complete case study research
       - Peer-review
+      - Triage assessment
+      - Invited to submit
+      - Await submission
     fld20rG6I32pf879z:
       name: Outreach E-mail
       type: email
@@ -261,17 +270,26 @@ tblJCL1taIotM6y4Y:
       name: Website address
       type: url
       sync: true
-    fldHOkeRYbBEc5Qev:
-      name: Organisation type
-      type: multipleSelects
-      sync: true
-      choices: []
     fldjNFI2YXLQ2PapK:
-      name: Location
+      name: Main Location
       type: multipleRecordLinks
       sync: true
       options:
         linkedTableId: tblg0E17yrYVgCDOw
+    fldHOkeRYbBEc5Qev:
+      name: Organisation type
+      type: multipleSelects
+      sync: true
+      choices:
+      - Private sector
+      - Funder
+      - Public sector
+      - Non-profit
+      - Research
+    flddoGqidRIofZTI7:
+      name: Mission statement
+      type: multilineText
+      sync: true
 tblg0E17yrYVgCDOw:
   name: Locations
   primaryFieldId: fldNDwfliTbwWYd4l

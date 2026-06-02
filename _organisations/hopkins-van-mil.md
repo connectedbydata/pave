@@ -6,6 +6,17 @@ slug: hopkins-van-mil
 # Involved organisation for
 fldE09wBfEXIawc5T:
 - the-peoples-panel-on-ai
+# Organisation type
+fldHOkeRYbBEc5Qev:
+- Private sector
+# Website address
+fldMPxskerPZgXyLV: https://www.hopkinsvanmil.org.uk/
 # Name
 fldUH8cT7KyUpg1wT: Hopkins Van Mil
+# Mission statement
+flddoGqidRIofZTI7: 'To facilitate public engagement and research that informs decision-making
+  and shapes policy on complex social and ethical issues. (Source: https://www.hopkinsvanmil.org.uk/)'
+# Main Location
+fldjNFI2YXLQ2PapK:
+- london-united-kingdom
 ---

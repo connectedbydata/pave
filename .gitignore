@@ -6,3 +6,5 @@ vendor
 .env
 .ve/
 build.log
+.DS_Store
+.antigravitycli/
