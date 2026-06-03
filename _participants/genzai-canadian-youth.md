@@ -4,42 +4,42 @@ title: 'Gen(Z)AI -Canadian youth '
 airtable_id: d4c6781daf2ccd45
 slug: genzai-canadian-youth
 # Locations
-fld0BFLjrsMUNnQAv:
+locations:
 - toronto-canada
 - montreal-canada
 - vancouver-canada
 - halifax-canada
 # Recruitment method
-fld86CmkqMgbvMLP6: Demographic lottery
+recruitment-method: Demographic lottery
 # Where were participants from?
-fldA8Li5xJXokGrFY: Toronto, Ontario; Montreal, Quebec; Vancouver, British Columbia;
-  Halifax, Nova Scotia
+where-were-participants-from: Toronto, Ontario; Montreal, Quebec; Vancouver, British
+  Columbia; Halifax, Nova Scotia
 # Which of the following methods were used to engage participants?
-fldDUHAWPMbAqFNot:
+which-of-the-following-methods-were-used-to:
 - "Citizens\u2019 Assembly"
 - "Deliberative Polling\xAE"
 # On average, how many hours did each participant engage for?
-fldDs16PFhLNn1Rag: 30
+on-average-how-many-hours-did-each-participant: 30
 # Name
-fldHY0Cm0kPEMZ4Gg: 'Gen(Z)AI -Canadian youth '
+name: 'Gen(Z)AI -Canadian youth '
 # Group description
-fldHpcL2p4OYtkkvv: 'Canadian youth '
+group-description: 'Canadian youth '
 # Do any of the following apply?
-fldLU10Hiao77UniS:
+do-any-of-the-following-apply:
 - There were trained facilitators involved
 - There was a learning phase for participants
 - Materials from the learning phase have been published
 # How many people took part?
-fldY5TPx3FCNnQ9Fv: 100
+how-many-people-took-part: 100
 # Cases
-fldbvRYPZaQe2mcdT:
+cases:
 - genzai
 # Recruitment description
-fldjmbTHKUAw4M2zQ: Advertised via social media; recruited via email through student
-  and youth serving orgs; oversampled in rural and Indigenous communities
+recruitment-description: Advertised via social media; recruited via email through
+  student and youth serving orgs; oversampled in rural and Indigenous communities
 # Was there a specific target population?
-fldpvn1hM37AceKyM: Canadian youth, aged 17-23
+was-there-a-specific-target-population: Canadian youth, aged 17-23
 # Where did engagement take place?
-fldweSxXYJIXdml8C:
+where-did-engagement-take-place:
 - Hybrid
 ---

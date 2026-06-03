@@ -7,15 +7,15 @@ title: "More children should know about A.I. so they can understand what\u2019s 
 airtable_id: ef8b444b95c39445
 slug: more-children-should-know-about-ai-so-they-can-understand-whats-happening-when-they-use-it-this-will
 # Type
-fld9WcxhWfobqkI72: Recommendation
+type: Recommendation
 # Cases
-fldCuzVkCPc37vZiY:
+cases:
 - exploring-childrens-rights-and-ai
 # Additional Credit Line
-fldo3jzKvZqYeXvYi: Calls to action on Learning about A.I.
+additional-credit-line: Calls to action on Learning about A.I.
 # Name
-fldyrLCrggwZqFZmS: "More children should know about A.I. so they can understand what\u2019\
-  s happening when they use it. This will help to make sure children\u2019s rights\
-  \ are respected. The more children learn about A.I., the more they will know how\
-  \ to keep themselves safe."
+name: "More children should know about A.I. so they can understand what\u2019s happening\
+  \ when they use it. This will help to make sure children\u2019s rights are respected.\
+  \ The more children learn about A.I., the more they will know how to keep themselves\
+  \ safe."
 ---

@@ -20,14 +20,14 @@ permalink: /videos/
   {% assign all_ai_form = "" | split: "," %}
 
   {% for res in site.resources %}
-    {% if res.fldzQYhMyANM5OvJP == "Video" %}
-      {% for case_slug in res.fldtxL20ZxJG2ZdTG %}
+    {% if res.select == "Video" %}
+      {% for case_slug in res.cases %}
         {% for c in site.cases %}
           {% if c.slug == case_slug %}
-            {% for val in c.fldoCBwmPfW0Xrlpy %}
+            {% for val in c.how-was-the-project-initiated %}
               {% assign all_initiated = all_initiated | push: val %}
             {% endfor %}
-            {% for val in c.fldEnara6Czm8ChkH %}
+            {% for val in c.what-form-of-ai-is-the-project-about %}
               {% assign all_ai_form = all_ai_form | push: val %}
             {% endfor %}
           {% endif %}
@@ -83,20 +83,20 @@ permalink: /videos/
   <!-- Video Masonry List -->
   <main class="video-masonry" id="video-masonry-grid">
     {% for res in site.resources %}
-      {% if res.fldzQYhMyANM5OvJP == "Video" %}
+      {% if res.select == "Video" %}
         <!-- Retrieve case metadata for current resource -->
         {% assign res_initiated = "" | split: "," %}
         {% assign res_ai_form = "" | split: "," %}
         {% assign res_cases = "" | split: "," %}
 
-        {% for case_slug in res.fldtxL20ZxJG2ZdTG %}
+        {% for case_slug in res.cases %}
           {% for c in site.cases %}
             {% if c.slug == case_slug %}
               {% assign res_cases = res_cases | push: c.title %}
-              {% for val in c.fldoCBwmPfW0Xrlpy %}
+              {% for val in c.how-was-the-project-initiated %}
                 {% assign res_initiated = res_initiated | push: val %}
               {% endfor %}
-              {% for val in c.fldEnara6Czm8ChkH %}
+              {% for val in c.what-form-of-ai-is-the-project-about %}
                 {% assign res_ai_form = res_ai_form | push: val %}
               {% endfor %}
             {% endif %}
@@ -110,7 +110,7 @@ permalink: /videos/
         <article class="video-card" 
                  data-initiated="{{ res_initiated_uniq | join: '|' | escape }}" 
                  data-ai-form="{{ res_ai_form_uniq | join: '|' | escape }}"
-                 data-url="{{ res.fldHNs68Xt8bkJN3E | escape }}">
+                 data-url="{{ res.url | escape }}">
           
           <!-- Card Thumbnail Area -->
           <div class="video-cover-wrapper">
@@ -148,15 +148,15 @@ permalink: /videos/
             <h2 class="video-title">{{ res.title | escape }}</h2>
 
             <p class="video-description">
-              {% if res.fldx5z1qUqdM71vbo %}
-                {{ res.fldx5z1qUqdM71vbo | escape }}
+              {% if res.short-description %}
+                {{ res.short-description | escape }}
               {% else %}
                 <!-- Fallback to case description or nice default -->
                 {% assign fallback_desc = "" %}
-                {% for case_slug in res.fldtxL20ZxJG2ZdTG %}
+                {% for case_slug in res.cases %}
                   {% for c in site.cases %}
                     {% if c.slug == case_slug %}
-                      {% assign fallback_desc = c.fld0oykyuwbVPbW0H | truncatewords: 25 %}
+                      {% assign fallback_desc = c.provide-a-brief-description-of-the-project | truncatewords: 25 %}
                     {% endif %}
                   {% endfor %}
                 {% endfor %}

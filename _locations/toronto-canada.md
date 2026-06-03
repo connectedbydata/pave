@@ -4,14 +4,14 @@ title: Toronto, Canada
 airtable_id: 4eeda624c091c01f
 slug: toronto-canada
 # Participants
-fldAtfj6KrVsh8jHF:
+participants:
 - genzai-canadian-youth
 # Longitude
-fldCdYZ8Ay6f6ulq1: -79.3832
+longitude: -79.3832
 # Name
-fldNDwfliTbwWYd4l: Toronto, Canada
+name: Toronto, Canada
 # Latitude
-fldWtvMukYmq1IuWq: 43.6532
+latitude: 43.6532
 # Country Code
-fldy0zqeilb2NSEOB: CA
+country-code: CA
 ---

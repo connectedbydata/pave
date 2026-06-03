@@ -4,16 +4,19 @@ title: Oakwood Primary School, Glasgow
 airtable_id: 16effa3045abdecb
 slug: oakwood-primary-school-glasgow
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Public sector
 # Website address
-fldMPxskerPZgXyLV: https://www.oakwood-pri.glasgow.sch.uk/
+website-address: https://www.oakwood-pri.glasgow.sch.uk/
 # Name
-fldUH8cT7KyUpg1wT: Oakwood Primary School, Glasgow
-# Location
-fldjNFI2YXLQ2PapK:
+name: Oakwood Primary School, Glasgow
+# Mission statement
+mission-statement: 'To build a happy, inclusive, and nurturing school community where
+  all children are inspired to learn and achieve their goals. (Source: https://www.oakwood-pri.glasgow.sch.uk/)'
+# Main Location
+main-location:
 - glasgow-scotland-united-kingdom
 ---

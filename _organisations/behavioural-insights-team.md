@@ -4,15 +4,18 @@ title: Behavioural Insights Team
 airtable_id: 7db12815d5dad669
 slug: behavioural-insights-team
 # Involved organisation for
-fldE09wBfEXIawc5T: []
+involved-organisation-for: []
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Private sector
 # Website address
-fldMPxskerPZgXyLV: https://www.bi.team/
+website-address: https://www.bi.team/
 # Name
-fldUH8cT7KyUpg1wT: Behavioural Insights Team
-# Location
-fldjNFI2YXLQ2PapK:
+name: Behavioural Insights Team
+# Mission statement
+mission-statement: 'To generate and apply behavioural insights to inform public policy,
+  improve public services, and deliver positive social impact. (Source: https://www.bi.team/)'
+# Main Location
+main-location:
 - london-united-kingdom
 ---

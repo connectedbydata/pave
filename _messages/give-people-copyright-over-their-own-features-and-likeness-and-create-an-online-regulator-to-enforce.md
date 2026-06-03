@@ -6,14 +6,14 @@ title: Give people copyright over their own features and likeness, and create an
 airtable_id: eee1065268cf6ef4
 slug: give-people-copyright-over-their-own-features-and-likeness-and-create-an-online-regulator-to-enforce
 # Type
-fld9WcxhWfobqkI72: Recommendation
+type: Recommendation
 # Cases
-fldCuzVkCPc37vZiY:
+cases:
 - genzai
 # Additional Credit Line
-fldo3jzKvZqYeXvYi: 'Gen(Z)AI recommendations on AI & Information Integrity '
+additional-credit-line: 'Gen(Z)AI recommendations on AI & Information Integrity '
 # Name
-fldyrLCrggwZqFZmS: Give people copyright over their own features and likeness, and
-  create an online regulator to enforce the removal of non-consensual AI-generated
-  material, including Child Sexual Abuse Material (CSAM).
+name: Give people copyright over their own features and likeness, and create an online
+  regulator to enforce the removal of non-consensual AI-generated material, including
+  Child Sexual Abuse Material (CSAM).
 ---

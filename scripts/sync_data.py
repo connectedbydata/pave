@@ -122,6 +122,8 @@ def resolve_fields(data, schema_map, current_table_id, rec_id, id_to_slug, synce
         if is_record_id(value) and field_info["type"] != "multipleRecordLinks":
             continue
 
+        key_name = field_info.get("slug", field_id)
+
         # Check if it's a multiple record link
         if field_info["type"] == "multipleRecordLinks":
             linked_slugs = []
@@ -129,7 +131,7 @@ def resolve_fields(data, schema_map, current_table_id, rec_id, id_to_slug, synce
                 # ONLY include links to records that are actually being synced
                 if l_rec_id in synced_ids and l_rec_id in id_to_slug:
                     linked_slugs.append(id_to_slug[l_rec_id])
-            resolved[field_id] = linked_slugs
+            resolved[key_name] = linked_slugs
         
         # Handle attachments
         elif field_info["type"] == "multipleAttachments":
@@ -145,33 +147,38 @@ def resolve_fields(data, schema_map, current_table_id, rec_id, id_to_slug, synce
                         new_thumbnails[size] = {**thumb, "url": thumb_url}
                     new_att["thumbnails"] = new_thumbnails
                 local_attachments.append(new_att)
-            resolved[field_id] = local_attachments
+            resolved[key_name] = local_attachments
         else:
-            resolved[field_id] = value
+            resolved[key_name] = value
     return resolved
 
 def annotate_yaml(yaml_str, field_map):
     lines = yaml_str.splitlines()
     new_lines = []
+    skip_keys = {"layout", "title", "airtable_id", "slug"}
     for line in lines:
-        # Match "fldXXXX:" or "  fldXXXX:" or "- fldXXXX:" or "  - fldXXXX:"
-        match = re.search(r'^(\s*)(?:-\s+)?(fld[a-zA-Z0-9]+):', line)
+        # Match "some-key:" or "  some-key:" or "- some-key:"
+        match = re.search(r'^(\s*)(?:-\s+)?([a-zA-Z0-9_-]+):', line)
         if match:
-            indent, f_id = match.groups()
-            if f_id in field_map:
+            indent, key = match.groups()
+            if key not in skip_keys and key in field_map:
                 # Always prepend the comment on the line before
-                new_lines.append(f"{indent}# {field_map[f_id]}")
+                new_lines.append(f"{indent}# {field_map[key]}")
         new_lines.append(line)
     return "\n".join(new_lines)
 
 def main():
     schema_map = load_schema_map()
     
-    # Map all field IDs to names for comment addition
-    field_id_to_name = {}
+    # Map all field slugs and IDs to names for comment addition
+    field_slug_to_name = {}
     for t_data in schema_map.values():
         for f_id, f_info in t_data.get("fields", {}).items():
-            field_id_to_name[f_id] = f_info["name"]
+            slug = f_info.get("slug")
+            if slug:
+                field_slug_to_name[slug] = f_info["name"]
+            else:
+                field_slug_to_name[f_id] = f_info["name"]
 
     # Map names to IDs for easier fetching
     name_to_id = {table_data["name"]: t_id for t_id, table_data in schema_map.items()}
@@ -306,7 +313,7 @@ def main():
             with open(file_path, "w") as f:
                 f.write("---\n")
                 fm_yaml = yaml.dump(front_matter, sort_keys=False)
-                f.write(annotate_yaml(fm_yaml, field_id_to_name))
+                f.write(annotate_yaml(fm_yaml, field_slug_to_name))
                 f.write("\n---\n")
             sync_count += 1
         print(f"  {sync_count} records processed for {table_name}.")

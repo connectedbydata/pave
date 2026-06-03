@@ -5,27 +5,27 @@ layout: default
 <article class="post">
   <header class="post-header">
     <h1 class="post-title">{{ page.title | escape }}</h1>
-    {% if page.fldMPxskerPZgXyLV %}
-      <p><a href="{{ page.fldMPxskerPZgXyLV }}" class="btn">Visit Website</a></p>
+    {% if page.website-address %}
+      <p><a href="{{ page.website-address }}" class="btn">Visit Website</a></p>
     {% endif %}
   </header>
 
   <div class="post-content">
     
     <div class="organisation-details">
-      {% if page.fldHOkeRYbBEc5Qev %}
+      {% if page.organisation-type %}
         <div class="field-container">
           <label class="field-label">Organisation Type</label>
-          <div class="field-value">{{ page.fldHOkeRYbBEc5Qev | join: ", " }}</div>
+          <div class="field-value">{{ page.organisation-type | join: ", " }}</div>
         </div>
       {% endif %}
 
-      {% if page.fldjNFI2YXLQ2PapK %}
+      {% if page.main-location %}
         <div class="field-container">
           <label class="field-label">Locations</label>
           <div class="field-value">
             <ul>
-              {% for slug in page.fldjNFI2YXLQ2PapK %}
+              {% for slug in page.main-location %}
                 {% assign loc = site.locations | where: "slug", slug | first %}
                 <li>{{ loc.title }}</li>
               {% endfor %}
@@ -39,9 +39,9 @@ layout: default
 
     <h3>Cases Involved In</h3>
     <div class="organisation-cases">
-      {% assign lead_cases = page.fldYGUHxexgXk88fw %}
-      {% assign funded_cases = page.fldnEvULtgnrqryUQ %}
-      {% assign involved_cases = page.fldE09wBfEXIawc5T %}
+      {% assign lead_cases = page.lead-organisation-for %}
+      {% assign funded_cases = page.funding-organisation-for %}
+      {% assign involved_cases = page.involved-organisation-for %}
       
       {% assign all_case_slugs = "" | split: "," %}
       {% if lead_cases %}{% assign all_case_slugs = all_case_slugs | concat: lead_cases %}{% endif %}

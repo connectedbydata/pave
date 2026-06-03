@@ -4,15 +4,18 @@ title: DWP
 airtable_id: 655bbe43ae5b557e
 slug: dwp
 # Involved organisation for
-fldE09wBfEXIawc5T: []
+involved-organisation-for: []
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Public sector
 # Website address
-fldMPxskerPZgXyLV: https://www.gov.uk/government/organisations/department-for-work-pensions
+website-address: https://www.gov.uk/government/organisations/department-for-work-pensions
 # Name
-fldUH8cT7KyUpg1wT: DWP
-# Location
-fldjNFI2YXLQ2PapK:
+name: DWP
+# Mission statement
+mission-statement: 'To support people into work, secure their retirement, and provide
+  a safety net for those in need. (Source: https://www.gov.uk/government/organisations/department-for-work-pensions)'
+# Main Location
+main-location:
 - united-kingdom
 ---

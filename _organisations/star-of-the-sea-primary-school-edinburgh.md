@@ -4,16 +4,19 @@ title: Star of the Sea Primary School, Edinburgh
 airtable_id: fdf022b2b61d6374
 slug: star-of-the-sea-primary-school-edinburgh
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Public sector
 # Website address
-fldMPxskerPZgXyLV: https://www.starofthesea.edin.sch.uk/
+website-address: https://www.starofthesea.edin.sch.uk/
 # Name
-fldUH8cT7KyUpg1wT: Star of the Sea Primary School, Edinburgh
-# Location
-fldjNFI2YXLQ2PapK:
+name: Star of the Sea Primary School, Edinburgh
+# Mission statement
+mission-statement: 'To encourage our young people to be independent, curious, and
+  responsible learners in a nurturing Catholic community. (Source: https://www.starofthesea.edin.sch.uk/)'
+# Main Location
+main-location:
 - edinburgh-scotland-united-kingdom
 ---

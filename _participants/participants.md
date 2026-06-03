@@ -4,14 +4,14 @@ title: -Participants
 airtable_id: ee73b4f226fa2080
 slug: participants
 # Locations
-fld0BFLjrsMUNnQAv:
+locations:
 - canada
 # Recruitment method
-fld86CmkqMgbvMLP6: Peer recruitment (snowball)
+recruitment-method: Peer recruitment (snowball)
 # Name
-fldHY0Cm0kPEMZ4Gg: -Participants
+name: -Participants
 # Group description
-fldHpcL2p4OYtkkvv: Participants
+group-description: Participants
 # Recruitment description
-fldjmbTHKUAw4M2zQ: Peer to peer snowball
+recruitment-description: Peer to peer snowball
 ---

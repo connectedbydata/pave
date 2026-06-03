@@ -4,16 +4,19 @@ title: Children's Parliament
 airtable_id: 1a8dbb7451a4d76f
 slug: childrens-parliament
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Non-profit
 # Website address
-fldMPxskerPZgXyLV: https://www.childrensparliament.org.uk/
+website-address: https://www.childrensparliament.org.uk/
 # Name
-fldUH8cT7KyUpg1wT: Children's Parliament
+name: Children's Parliament
 # Lead organisation for
-fldYGUHxexgXk88fw:
+lead-organisation-for:
 - exploring-childrens-rights-and-ai
-# Location
-fldjNFI2YXLQ2PapK:
+# Mission statement
+mission-statement: 'To provide children up to 14 years old with opportunities to share
+  their views and influence policy in Scotland. (Source: https://www.childrensparliament.org.uk/)'
+# Main Location
+main-location:
 - edinburgh-scotland-united-kingdom
 ---

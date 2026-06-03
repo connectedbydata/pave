@@ -4,16 +4,19 @@ title: Walton's Trust
 airtable_id: 08986cc579a3dd6a
 slug: waltons-trust
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Funder
 # Website address
-fldMPxskerPZgXyLV: https://www.waltonstrust.org.uk/
+website-address: https://www.waltonstrust.org.uk/
 # Name
-fldUH8cT7KyUpg1wT: Walton's Trust
-# Location
-fldjNFI2YXLQ2PapK:
+name: Walton's Trust
+# Mission statement
+mission-statement: 'To fund initiatives that promote community development, social
+  inclusion, and educational opportunities. (Source: https://www.waltonstrust.org.uk/)'
+# Main Location
+main-location:
 - united-kingdom
 # Funding organisation for
-fldnEvULtgnrqryUQ:
+funding-organisation-for:
 - genzai
 ---

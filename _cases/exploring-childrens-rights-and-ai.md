@@ -4,30 +4,32 @@ title: Exploring Children's Rights and AI
 airtable_id: 5f0fd43c4a76c2b1
 slug: exploring-childrens-rights-and-ai
 # Lead organisations
-fld05RupsUvpbg8vU:
+lead-organisations:
 - scottish-ai-alliance
 - childrens-parliament
 - the-alan-turing-institute
 # Provide a brief description of the project
-fld0oykyuwbVPbW0H: "The Exploring Children\u2019s Rights and A.I project (2022-2025),\
-  \ delivered in partnership with the Scottish A.I Alliance and The Alan Turing Institute,\
-  \ was an internationally trail blazing investigation into children\u2019s views\
-  \ of A.I and its impact on their lives and rights.\n\nOver the course of the project,\
-  \ our team worked with 140 children aged 8 to 12 years from 6 schools across Scotland.\
-  \ The children were optimistic about A.I possibilities, but they had real concerns\
-  \ about the impact that A.I could have on their lives, and they shared ideas for\
-  \ what needs to change now to prevent potential future harm.\n\nThe project\u2019\
-  s outputs included films, reports, resources, and children\u2019s Calls to Action."
+provide-a-brief-description-of-the-project: "The Exploring Children\u2019s Rights\
+  \ and A.I project (2022-2025), delivered in partnership with the Scottish A.I Alliance\
+  \ and The Alan Turing Institute, was an internationally trail blazing investigation\
+  \ into children\u2019s views of A.I and its impact on their lives and rights.\n\n\
+  Over the course of the project, our team worked with 140 children aged 8 to 12 years\
+  \ from 6 schools across Scotland. The children were optimistic about A.I possibilities,\
+  \ but they had real concerns about the impact that A.I could have on their lives,\
+  \ and they shared ideas for what needs to change now to prevent potential future\
+  \ harm.\n\nThe project\u2019s outputs included films, reports, resources, and children\u2019\
+  s Calls to Action."
 # What limitations to the project should be noted?
-fld3PwRR35QU6D1CK: 'A limitation of the work is that all workshops were carried out
-  in mainstream education settings. Further work is needed to fully understand the
-  rights implications for children who are not in mainstream school settings. This
-  should include children who are educated in specialist school settings, residential
-  schools, educated at home and children who are not regularly attending school. '
+what-limitations-to-the-project-should-be-noted: 'A limitation of the work is that
+  all workshops were carried out in mainstream education settings. Further work is
+  needed to fully understand the rights implications for children who are not in mainstream
+  school settings. This should include children who are educated in specialist school
+  settings, residential schools, educated at home and children who are not regularly
+  attending school. '
 # Project status
-fld3WCMM9BTILD6m8: Complete
+project-status: Complete
 # Headline findings
-fld8UK4VG4qwQf4bA: "The children developed 12 calls to action from the key issues\
+headline-findings: "The children developed 12 calls to action from the key issues\
   \ that had been identified by participating children in relation to A.I. and children\u2019\
   s human rights. These calls to action - written by the children in their own words\
   \ - reflect the changes that participating children consider necessary for A.I.\
@@ -64,17 +66,19 @@ fld8UK4VG4qwQf4bA: "The children developed 12 calls to action from the key issue
   \ safe.\n\n1. Teachers should learn about A.I. and children\u2019s rights to support\
   \ children\u2019s learning and help to keep them safe.\n\n\n"
 # Participants
-fldAQhKPRBSYGsJwD:
-- exploring-childrens-rights-and-ai-children
+participants:
+- exploring-childrens-rights-and-ai-classroom-workshops
+- exploring-childrens-rights-and-ai-survey
+- exploring-childrens-rights-and-ai-cross-school-group
 # What form of AI is the project about?
-fldEnara6Czm8ChkH:
+what-form-of-ai-is-the-project-about:
 - AI in general
 - Current issues
 - Future issues
 - Generative AI
 - Predictive AI
 # Messages
-fldEuGi25yjQf3asH:
+messages:
 - children-have-the-right-to-be-included-to-have-a-say-and-to-be-listened-to-adults-need-to-ask-childr
 - lots-of-different-people-including-children-should-be-involved-in-ai-development-to-avoid-bias-they
 - adults-must-ensure-that-the-use-of-ai-does-not-have-a-negative-impact-on-any-childrens-rights-for-ex
@@ -88,16 +92,16 @@ fldEuGi25yjQf3asH:
 - ai-should-be-in-the-curriculum-ai-will-be-a-part-of-all-childrens-lives-so-they-need-to-learn-and-un
 - more-children-should-know-about-ai-so-they-can-understand-whats-happening-when-they-use-it-this-will
 # What year did the project start?
-fldKttntgUGpSigJs: 2022
+what-year-did-the-project-start: 2022
 # Funding Organisations
-fldM0ClT9Ik6FuNnJ:
+funding-organisations:
 - scottish-ai-alliance
 - the-alan-turing-institute
 # Additional acknowledgements
-fldNwWJty8hufq6t1: Gregory Metcalfe (Children's Parliament), Rona Blackwood (Children's
-  Parliament)
+additional-acknowledgements: Gregory Metcalfe (Children's Parliament), Rona Blackwood
+  (Children's Parliament)
 # Inclusion efforts
-fldPOu99itaN5PMaK: "We worked with a range of schools across Scotland to capture urban,\
+inclusion-efforts: "We worked with a range of schools across Scotland to capture urban,\
   \ rural and island communities.\n\nWe identified schools and children within those\
   \ communities who are both representative of the community and come from marginalised\
   \ groups including  those from minority ethnic communities, refugees and asylum\
@@ -135,103 +139,118 @@ fldPOu99itaN5PMaK: "We worked with a range of schools across Scotland to capture
   \ - had the opportunity not only to see the calls to action and resulting resources\
   \ but to experience the power of rights-based practice "
 # ﻿Project Title
-fldQVZReHicFlY9Yp: Exploring Children's Rights and AI
+project-title: Exploring Children's Rights and AI
 # Submitted by
-fldVXcw3fVYGdRRM9: Steph Wright
+submitted-by: Steph Wright
 # Why is this project important to include in the case book?
-fldaSwQdG23BdcH4J: "This project deliberately centred children and children's rights\
-  \ and applied that lens to the exploration of AI, as opposed using the lens of AI.\
-  \ Using that lens ensures that children have a say and have a right to be taken\
-  \ seriously in AI governance. It was recognised internationally as being a ground-breaking\
-  \ initiative. \n\nThe work that the children have done over three years provides\
-  \ a wealth of evidence on what children think and feel about AI and its impacts.\
-  \ \n\nThe challenge of how to operationalise the project\u2019s learnings from its\
-  \ engagement with the children remain and this is an opportunity to help drive implementation.\
-  \ \n\nEnsuring that children\u2019s voices are meaningfully represented in the A.I.\
-  \ discourse mirrors a wider structural challenge in AI governance: moving beyond\
-  \ stated commitments to participation toward sustained, influential engagement with\
-  \ affected communities. \n\nThroughout the programme, it became clear that while\
-  \ the importance of hearing from children was widely acknowledged, sustained and\
-  \ embedded mechanisms eluded us. For children in particular, power imbalances, adult-centric\
-  \ decision making, and a reluctance to commit to formal pathways into policy and\
-  \ design processes meant that their insights and influence struggle to impact outcomes\
-  \ in a durable way.  \n\nChildren\u2019s Parliament uses specific rights-based practice\
-  \ to create equitable spaces between children and adults where children feel able\
-  \ to express themselves fully and creatively. This approach allowed both for the\
-  \ complex nature of AI technologies to be explored accessibly with primary aged\
-  \ children, and for those children to speak openly about the ways in which they\
-  \ view these technologies as effecting the lives of children - both positively and\
-  \ negatively."
+why-is-this-project-important-to-include-in-the: "This project deliberately centred\
+  \ children and children's rights and applied that lens to the exploration of AI,\
+  \ as opposed using the lens of AI. Using that lens ensures that children have a\
+  \ say and have a right to be taken seriously in AI governance. It was recognised\
+  \ internationally as being a ground-breaking initiative. \n\nThe work that the children\
+  \ have done over three years provides a wealth of evidence on what children think\
+  \ and feel about AI and its impacts. \n\nThe challenge of how to operationalise\
+  \ the project\u2019s learnings from its engagement with the children remain and\
+  \ this is an opportunity to help drive implementation. \n\nEnsuring that children\u2019\
+  s voices are meaningfully represented in the A.I. discourse mirrors a wider structural\
+  \ challenge in AI governance: moving beyond stated commitments to participation\
+  \ toward sustained, influential engagement with affected communities. \n\nThroughout\
+  \ the programme, it became clear that while the importance of hearing from children\
+  \ was widely acknowledged, sustained and embedded mechanisms eluded us. For children\
+  \ in particular, power imbalances, adult-centric decision making, and a reluctance\
+  \ to commit to formal pathways into policy and design processes meant that their\
+  \ insights and influence struggle to impact outcomes in a durable way.  \n\nChildren\u2019\
+  s Parliament uses specific rights-based practice to create equitable spaces between\
+  \ children and adults where children feel able to express themselves fully and creatively.\
+  \ This approach allowed both for the complex nature of AI technologies to be explored\
+  \ accessibly with primary aged children, and for those children to speak openly\
+  \ about the ways in which they view these technologies as effecting the lives of\
+  \ children - both positively and negatively."
 # Photos and images
-fldd4B6cpBOP3n3is:
+photos-and-images:
 - id: attGzLWy30eTvdlzN
   width: 4500
   height: 3000
+  # URL
   url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN.jpg
   filename: ScotAISummit230328_10_ChildrensRight_StageD_HRes_29.jpg
   size: 4126962
+  # Type
   type: image/jpeg
   thumbnails:
     small:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN_small.jpg
       width: 54
       height: 36
     large:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN_large.jpg
       width: 768
       height: 512
     full:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN_full.jpg
       width: 3000
       height: 2000
 - id: attAAfxX8OQ4O5fBU
   width: 3600
   height: 3600
+  # URL
   url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU.jpg
   filename: ScotAISummit24_KidsAndAI_08.jpg
   size: 3193913
+  # Type
   type: image/jpeg
   thumbnails:
     small:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU_small.jpg
       width: 36
       height: 36
     large:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU_large.jpg
       width: 512
       height: 512
     full:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU_full.jpg
       width: 3000
       height: 3000
 - id: attadNkaKNSg6WjhX
   width: 3600
   height: 2400
+  # URL
   url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX.jpg
   filename: ScotAISummit24_05-ChildrenandAI_30.jpg
   size: 2853297
+  # Type
   type: image/jpeg
   thumbnails:
     small:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX_small.jpg
       width: 54
       height: 36
     large:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX_large.jpg
       width: 768
       height: 512
     full:
+      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX_full.jpg
       width: 3000
       height: 2000
 # Project goals
-flddUvgeSB6VY4w9i:
+project-goals:
 - 'Qualitative: Capture qualitative evidence on public attitudes to AI'
 - 'Policy: Inform a policy-making process'
 - 'Capacity: Build participant capacity to engage with AI'
 - 'Empowerment: Build community power with respect to AI'
 # Supporting resources
-fldeQz7UtfY8zlyhv:
+supporting-resources:
 - exploring-childrens-rights-and-ai-project-reports
 - exploring-childrens-rights-and-ai-teaching-pack
 - why-childrens-rights-matter-in-ai-a-resource-for-professionals
@@ -241,21 +260,21 @@ fldeQz7UtfY8zlyhv:
 - exploring-childrens-rights-and-ai-stage-1
 - exploring-childrens-rights-and-ai-stage-2
 # Describe the subject matter in your own words (one line)
-fldmmG9MGLAEewrOT: Exploring AI with children aged 9-11 years across Scotland through
-  the lens of children's rights
+describe-the-subject-matter-in-your-own-words-one: Exploring AI with children aged
+  9-11 years across Scotland through the lens of children's rights
 # How was the project initiated?
-fldoCBwmPfW0Xrlpy:
+how-was-the-project-initiated:
 - Commissioned
 - Co-created
 # What year did the project conclude?
-fldwgrONWjl5apN0a: 2025
+what-year-did-the-project-conclude: 2025
 # Which of the following resources are available for this project?
-fldx2fmatqG1K5Arm:
+which-of-the-following-resources-are-available:
 - A project report
 - A project video
 - A method guide or toolkit
 # Involved organisations
-fldxJ934AvP0LGna0:
+involved-organisations:
 - university-of-edinburghs-centre-for-research-in-digital-education
 - digital-skills-education
 - west-of-scotland-innovation-hub-nhs-ggc-and-university-of-glasgow
@@ -269,5 +288,5 @@ fldxJ934AvP0LGna0:
 - jhp-visuals
 - freelance-artists-zeo-fawcett-eye-suriyanon-jono-sandilands-katy-beveridge
 # Project URL
-fldzgqKbADUHBkfxO: https://www.childrensparliament.org.uk/our-work/exploring-childrens-rights-and-ai/
+project-url: https://www.childrensparliament.org.uk/our-work/exploring-childrens-rights-and-ai/
 ---

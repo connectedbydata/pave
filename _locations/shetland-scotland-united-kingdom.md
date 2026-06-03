@@ -4,18 +4,20 @@ title: Shetland, Scotland, United Kingdom
 airtable_id: 47278dfb0dfa6cee
 slug: shetland-scotland-united-kingdom
 # Participants
-fldAtfj6KrVsh8jHF:
-- exploring-childrens-rights-and-ai-children
+participants:
+- exploring-childrens-rights-and-ai-classroom-workshops
+- exploring-childrens-rights-and-ai-cross-school-group
+- exploring-childrens-rights-and-ai-survey
 # Longitude
-fldCdYZ8Ay6f6ulq1: -1.2427
+longitude: -1.2427
 # Name
-fldNDwfliTbwWYd4l: Shetland, Scotland, United Kingdom
+name: Shetland, Scotland, United Kingdom
 # Latitude
-fldWtvMukYmq1IuWq: 60.347
+latitude: 60.347
 # Country Code
-fldy0zqeilb2NSEOB: GB
+country-code: GB
 # Organisations
-fldzvtgyrKNtzuKIL:
+organisations:
 - mesomorphic
 - dunrossness-primary-school-shetland
 ---

@@ -4,27 +4,28 @@ title: 'Gen(Z)AI '
 airtable_id: 4fa0fd37fc65a96b
 slug: genzai
 # Lead organisations
-fld05RupsUvpbg8vU:
+lead-organisations:
 - the-centre-for-media-technology-and-democracy
 - the-dialogue-on-technology-project
 # Provide a brief description of the project
-fld0oykyuwbVPbW0H: "Gen(Z)AI engaged one hundred randomly selected young Canadians,\
-  \ aged seventeen to twenty-three, across four regional in-person deliberative forums\
-  \ held between November 2025 and March 2026. Each forum was convened in a different\
-  \ city and organized around a distinct policy domain identified as central to young\
-  \ people\u2019s digital lives: AI chatbots in Toronto, information integrity in\
-  \ Montreal, data privacy in Vancouver, and age assurance in Halifax. The selection\
-  \ of these four domains map the terrain where AI systems and online harm converge\
-  \ most acutely in the everyday experience of young people, the precise intersection\
-  \ that existing governance frameworks have been least equipped to address.\n\nUpon\
-  \ the completion of each regional forum, the policy recommendations produced through\
-  \ in-person deliberation were published on Make.org\u2019s civic dialogue platform:\
-  \ a bilingual, interactive tool designed to extend the deliberative reach of the\
-  \ process to young Canadians across the country."
+provide-a-brief-description-of-the-project: "Gen(Z)AI engaged one hundred randomly\
+  \ selected young Canadians, aged seventeen to twenty-three, across four regional\
+  \ in-person deliberative forums held between November 2025 and March 2026. Each\
+  \ forum was convened in a different city and organized around a distinct policy\
+  \ domain identified as central to young people\u2019s digital lives: AI chatbots\
+  \ in Toronto, information integrity in Montreal, data privacy in Vancouver, and\
+  \ age assurance in Halifax. The selection of these four domains map the terrain\
+  \ where AI systems and online harm converge most acutely in the everyday experience\
+  \ of young people, the precise intersection that existing governance frameworks\
+  \ have been least equipped to address.\n\nUpon the completion of each regional forum,\
+  \ the policy recommendations produced through in-person deliberation were published\
+  \ on Make.org\u2019s civic dialogue platform: a bilingual, interactive tool designed\
+  \ to extend the deliberative reach of the process to young Canadians across the\
+  \ country."
 # Project status
-fld3WCMM9BTILD6m8: Complete
+project-status: Complete
 # Headline findings
-fld8UK4VG4qwQf4bA: "The Gen(Z)AI forums covered four distinct policy issues, each\
+headline-findings: "The Gen(Z)AI forums covered four distinct policy issues, each\
   \ at the intersection of online harms and AI legislation: AI chatbots, information\
   \ integrity, data privacy, and age assurance. This section aggregates what we heard\
   \ from participants, organized by the cross-cutting themes that recurred across\
@@ -251,16 +252,16 @@ fld8UK4VG4qwQf4bA: "The Gen(Z)AI forums covered four distinct policy issues, eac
   \ media content be identified through digital watermarking technology; and Reducing\
   \ sycophancy and positive reinforcement in AI chatbots.\n"
 # Participants
-fldAQhKPRBSYGsJwD:
+participants:
 - genzai-canadian-youth
 - genzai-makeorg-online-platform
 # What form of AI is the project about?
-fldEnara6Czm8ChkH:
+what-form-of-ai-is-the-project-about:
 - Generative AI
 - Current issues
 - Future issues
 # Messages
-fldEuGi25yjQf3asH:
+messages:
 - mandate-that-ai-platforms-address-the-addictive-design-of-ai-chatbots-by-requiring-measures-such-as
 - mandate-accessible-flagging-capacity-for-users-require-platforms-to-regularly-report-these-instances
 - mandate-that-social-media-platforms-and-search-engines-have-explicitly-and-easy-to-navigate-opt-out
@@ -288,16 +289,16 @@ fldEuGi25yjQf3asH:
 - generational-stakes
 - the-participation-deficit
 # What year did the project start?
-fldKttntgUGpSigJs: 2025
+what-year-did-the-project-start: 2025
 # Funding Organisations
-fldM0ClT9Ik6FuNnJ:
+funding-organisations:
 - cifar
 - waltons-trust
 - the-ronald-s-roadburg-foundation
 # Additional acknowledgements
-fldNwWJty8hufq6t1: Fergus Linley-Mota
+additional-acknowledgements: Fergus Linley-Mota
 # Inclusion efforts
-fldPOu99itaN5PMaK: "Participants were recruited through a national outreach process\
+inclusion-efforts: "Participants were recruited through a national outreach process\
   \ and selected via civic lottery to reflect Canada\u2019s geographic, linguistic,\
   \ and demographic diversity. To ensure this was the case, we oversampled our recruitment\
   \ efforts in rural and Indigenous communities across Canada. Our civic lottery process\
@@ -306,69 +307,70 @@ fldPOu99itaN5PMaK: "Participants were recruited through a national outreach proc
   \ young people whose experience of AI-mediated life qualified them as experts in\
   \ the most relevant sense."
 # ﻿Project Title
-fldQVZReHicFlY9Yp: 'Gen(Z)AI '
+project-title: 'Gen(Z)AI '
 # Target group
-fldV2q24E34ccLyqd: Youth
+target-group: Youth
 # Submitted by
-fldVXcw3fVYGdRRM9: Helen Hayes
+submitted-by: Helen Hayes
 # Why is this project important to include in the case book?
-fldaSwQdG23BdcH4J: "What distinguishes Gen(Z)AI from more conventional approaches\
-  \ to policy consultation is not simply its scale or its youth focus, but its underlying\
-  \ theory of democratic legitimacy. Standard consultation models, including written\
-  \ submissions, stakeholder roundtables, and public comment periods, can be procedurally\
-  \ compliant but are often substantively thin. This is because they aggregate inputs\
-  \ without contextual understanding and invite participation without creating the\
-  \ real conditions for it. Gen(Z)AI was designed on a different premise: that deeper,\
-  \ deliberative forms of engagement - those that bring people into sustained, informed,\
-  \ and contextual exchange - can meaningfully strengthen the legitimacy of governance\
-  \ processes, particularly in domains where consultation risks becoming procedural\
-  \ or symbolic.\n\nThe \u201Clayered deliberation\u201D architecture that structures\
-  \ the project - pairing intensive in-person assembly work with large-scale digital\
-  \ engagement - represented an attempt to hold two democratic values in productive\
-  \ tension: deep deliberation and broad participation. Deliberation, which requires\
-  \ time, facilitation, shared information, and the experience of genuine and contextual\
-  \ encounter with perspectives different from one\u2019s own, cannot, in our view,\
-  \ be scaled without loss. But deliberation that remains confined to a small group\
-  \ also carries its own legitimacy deficit. By sequencing the two (grounding the\
-  \ digital engagement phase in recommendations produced through rigorous in-person\
-  \ dialogue), Gen(Z)AI sought to extend democratic reach without sacrificing democratic\
-  \ depth.\n\nThis architecture also represents a direct challenge to what might be\
-  \ called the techno-solutionist reduction of democratic participation - or, more\
-  \ simply, the assumption that engagement can be adequately captured through clicks,\
-  \ digital rankings, and algorithmic aggregation. The in-person participants of Gen(Z)AI\
-  \ built understanding, navigated disagreement, and arrived at consensus through\
-  \ a process that required them to take genuine interest in one another, and to engage\
-  \ each other in real, shared presence. The recommendations that follow are the product\
-  \ of that process and it is precisely that provenance that gives them their claim\
-  \ to democratic authority. "
+why-is-this-project-important-to-include-in-the: "What distinguishes Gen(Z)AI from\
+  \ more conventional approaches to policy consultation is not simply its scale or\
+  \ its youth focus, but its underlying theory of democratic legitimacy. Standard\
+  \ consultation models, including written submissions, stakeholder roundtables, and\
+  \ public comment periods, can be procedurally compliant but are often substantively\
+  \ thin. This is because they aggregate inputs without contextual understanding and\
+  \ invite participation without creating the real conditions for it. Gen(Z)AI was\
+  \ designed on a different premise: that deeper, deliberative forms of engagement\
+  \ - those that bring people into sustained, informed, and contextual exchange -\
+  \ can meaningfully strengthen the legitimacy of governance processes, particularly\
+  \ in domains where consultation risks becoming procedural or symbolic.\n\nThe \u201C\
+  layered deliberation\u201D architecture that structures the project - pairing intensive\
+  \ in-person assembly work with large-scale digital engagement - represented an attempt\
+  \ to hold two democratic values in productive tension: deep deliberation and broad\
+  \ participation. Deliberation, which requires time, facilitation, shared information,\
+  \ and the experience of genuine and contextual encounter with perspectives different\
+  \ from one\u2019s own, cannot, in our view, be scaled without loss. But deliberation\
+  \ that remains confined to a small group also carries its own legitimacy deficit.\
+  \ By sequencing the two (grounding the digital engagement phase in recommendations\
+  \ produced through rigorous in-person dialogue), Gen(Z)AI sought to extend democratic\
+  \ reach without sacrificing democratic depth.\n\nThis architecture also represents\
+  \ a direct challenge to what might be called the techno-solutionist reduction of\
+  \ democratic participation - or, more simply, the assumption that engagement can\
+  \ be adequately captured through clicks, digital rankings, and algorithmic aggregation.\
+  \ The in-person participants of Gen(Z)AI built understanding, navigated disagreement,\
+  \ and arrived at consensus through a process that required them to take genuine\
+  \ interest in one another, and to engage each other in real, shared presence. The\
+  \ recommendations that follow are the product of that process and it is precisely\
+  \ that provenance that gives them their claim to democratic authority. "
 # Project goals
-flddUvgeSB6VY4w9i:
+project-goals:
 - 'Methods: Create re-usable participation tools & methods'
 - 'Qualitative: Capture qualitative evidence on public attitudes to AI'
 - 'Policy: Inform a policy-making process'
 - 'Empowerment: Build community power with respect to AI'
 - 'Evaluate: Check the quality of evidence or engagement processes'
 # Supporting resources
-fldeQz7UtfY8zlyhv:
+supporting-resources:
 - genzai-final-report
 - genzai-mini-documentary
 - makeorg-gen-z-ai-platform
 # Describe the subject matter in your own words (one line)
-fldmmG9MGLAEewrOT: 'AI Chatbots; Information Integrity; Data Privacy; Age Assurance '
+describe-the-subject-matter-in-your-own-words-one: 'AI Chatbots; Information Integrity;
+  Data Privacy; Age Assurance '
 # How was the project initiated?
-fldoCBwmPfW0Xrlpy:
+how-was-the-project-initiated:
 - Academic research
 - Other
 # What year did the project conclude?
-fldwgrONWjl5apN0a: 2026
+what-year-did-the-project-conclude: 2026
 # Which of the following resources are available for this project?
-fldx2fmatqG1K5Arm:
+which-of-the-following-resources-are-available:
 - A project report
 - A project video
 - A research poster
 # Involved organisations
-fldxJ934AvP0LGna0:
+involved-organisations:
 - mila
 # Project URL
-fldzgqKbADUHBkfxO: https://www.sfu.ca/dialogue/what-we-do/initiatives/dot/gen-z-ai.html
+project-url: https://www.sfu.ca/dialogue/what-we-do/initiatives/dot/gen-z-ai.html
 ---

@@ -4,18 +4,20 @@ title: Edinburgh, Scotland, United Kingdom
 airtable_id: b097a39c0bf982e4
 slug: edinburgh-scotland-united-kingdom
 # Participants
-fldAtfj6KrVsh8jHF:
-- exploring-childrens-rights-and-ai-children
+participants:
+- exploring-childrens-rights-and-ai-classroom-workshops
+- exploring-childrens-rights-and-ai-cross-school-group
+- exploring-childrens-rights-and-ai-survey
 # Longitude
-fldCdYZ8Ay6f6ulq1: -3.1883
+longitude: -3.1883
 # Name
-fldNDwfliTbwWYd4l: Edinburgh, Scotland, United Kingdom
+name: Edinburgh, Scotland, United Kingdom
 # Latitude
-fldWtvMukYmq1IuWq: 55.9533
+latitude: 55.9533
 # Country Code
-fldy0zqeilb2NSEOB: GB
+country-code: GB
 # Organisations
-fldzvtgyrKNtzuKIL:
+organisations:
 - science-ceilidh
 - scottish-ai-alliance
 - university-of-edinburghs-centre-for-research-in-digital-education

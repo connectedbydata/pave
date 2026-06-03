@@ -4,16 +4,19 @@ title: Digital Skills Education
 airtable_id: 0cc0b24a373170b2
 slug: digital-skills-education
 # Involved organisation for
-fldE09wBfEXIawc5T:
+involved-organisation-for:
 - exploring-childrens-rights-and-ai
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Private sector
 # Website address
-fldMPxskerPZgXyLV: https://digitalskillseducation.com/
+website-address: https://digitalskillseducation.com/
 # Name
-fldUH8cT7KyUpg1wT: Digital Skills Education
-# Location
-fldjNFI2YXLQ2PapK:
+name: Digital Skills Education
+# Mission statement
+mission-statement: 'To deliver engaging and accessible digital skills training that
+  empowers people and businesses to succeed in a digital world. (Source: https://digitalskillseducation.com/)'
+# Main Location
+main-location:
 - edinburgh-scotland-united-kingdom
 ---

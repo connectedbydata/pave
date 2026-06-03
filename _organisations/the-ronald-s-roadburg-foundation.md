@@ -4,16 +4,20 @@ title: The Ronald S. Roadburg Foundation
 airtable_id: ee5f06173f73afea
 slug: the-ronald-s-roadburg-foundation
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Funder
 # Website address
-fldMPxskerPZgXyLV: https://roadburg.org/
+website-address: https://roadburg.org/
 # Name
-fldUH8cT7KyUpg1wT: The Ronald S. Roadburg Foundation
-# Location
-fldjNFI2YXLQ2PapK:
+name: The Ronald S. Roadburg Foundation
+# Mission statement
+mission-statement: 'To fund and support charitable organizations that strengthen communities,
+  promote social justice, and assist vulnerable populations in Canada and Israel.
+  (Source: https://roadburg.org/)'
+# Main Location
+main-location:
 - vancouver-canada
 # Funding organisation for
-fldnEvULtgnrqryUQ:
+funding-organisation-for:
 - genzai
 ---

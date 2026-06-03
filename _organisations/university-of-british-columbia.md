@@ -4,15 +4,18 @@ title: University of British Columbia
 airtable_id: 3399bec8e8b47cce
 slug: university-of-british-columbia
 # Involved organisation for
-fldE09wBfEXIawc5T: []
+involved-organisation-for: []
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Research
 # Website address
-fldMPxskerPZgXyLV: https://www.ubc.ca/
+website-address: https://www.ubc.ca/
 # Name
-fldUH8cT7KyUpg1wT: University of British Columbia
-# Location
-fldjNFI2YXLQ2PapK:
+name: University of British Columbia
+# Mission statement
+mission-statement: 'To pursue excellence in research, learning, and engagement to
+  foster global citizenship and advance a sustainable society. (Source: https://www.ubc.ca/)'
+# Main Location
+main-location:
 - vancouver-canada
 ---

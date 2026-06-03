@@ -5,13 +5,13 @@ title: "A.I. should support, not replace, teachers. Teachers understand children
 airtable_id: f670a06d9b5faa9e
 slug: ai-should-support-not-replace-teachers-teachers-understand-childrens-feelings-and-children-think-thi
 # Type
-fld9WcxhWfobqkI72: Recommendation
+type: Recommendation
 # Cases
-fldCuzVkCPc37vZiY:
+cases:
 - exploring-childrens-rights-and-ai
 # Additional Credit Line
-fldo3jzKvZqYeXvYi: Calls to action on A.I. in Education
+additional-credit-line: Calls to action on A.I. in Education
 # Name
-fldyrLCrggwZqFZmS: "A.I. should support, not replace, teachers. Teachers understand\
-  \ children\u2019s feelings and children think this is really important."
+name: "A.I. should support, not replace, teachers. Teachers understand children\u2019\
+  s feelings and children think this is really important."
 ---

@@ -23,8 +23,8 @@ layout: default
       <!-- Title & Subtitle Section -->
       <header class="case-header-main">
         <h1 class="case-page-title">{{ page.title | escape }}</h1>
-        {% if page.fldmmG9MGLAEewrOT %}
-        <p class="case-page-subtitle">{{ page.fldmmG9MGLAEewrOT | escape }}</p>
+        {% if page.describe-the-subject-matter-in-your-own-words-one %}
+        <p class="case-page-subtitle">{{ page.describe-the-subject-matter-in-your-own-words-one | escape }}</p>
         {% endif %}
       </header>
 
@@ -32,8 +32,8 @@ layout: default
       <div class="case-hero-wrapper" style="position: relative;">
         {% assign hero_image = "" %}
         {% assign hero_alt = "" %}
-        {% if page.fldd4B6cpBOP3n3is and page.fldd4B6cpBOP3n3is.size > 0 %}
-        {% for attachment in page.fldd4B6cpBOP3n3is %}
+        {% if page.photos-and-images and page.photos-and-images.size > 0 %}
+        {% for attachment in page.photos-and-images %}
         {% if attachment.type contains "image" and hero_image == "" %}
         {% assign hero_image = attachment.url %}
         {% assign hero_alt = attachment.filename %}
@@ -51,8 +51,8 @@ layout: default
 
         <!-- Premium Key Messages Carousel Overlay -->
         {% assign carousel_messages = "" | split: "" %}
-        {% if page.fldEuGi25yjQf3asH %}
-        {% for slug in page.fldEuGi25yjQf3asH %}
+        {% if page.messages %}
+        {% for slug in page.messages %}
         {% assign item = site.messages | where: "slug", slug | first %}
         {% if item %}
         {% assign carousel_messages = carousel_messages | push: item %}
@@ -70,15 +70,15 @@ layout: default
               {% for item in carousel_messages %}
               <div class="carousel-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}">
                 <div class="carousel-slide-content">
-                  <span class="carousel-type-badge type-{{ item.fld9WcxhWfobqkI72 | downcase }}">{{
-                    item.fld9WcxhWfobqkI72 }}</span>
-                  {% if item.fld9WcxhWfobqkI72 == "Quote" %}
+                  <span class="carousel-type-badge type-{{ item.type | downcase }}">{{
+                    item.type }}</span>
+                  {% if item.type == "Quote" %}
                   <p class="carousel-slide-text quote-text">“{{ item.title }}”</p>
                   {% else %}
                   <p class="carousel-slide-text">{{ item.title }}</p>
                   {% endif %}
-                  {% if item.fldo3jzKvZqYeXvYi %}
-                  <span class="carousel-slide-credit">{{ item.fldo3jzKvZqYeXvYi }}</span>
+                  {% if item.additional-credit-line %}
+                  <span class="carousel-slide-credit">{{ item.additional-credit-line }}</span>
                   {% endif %}
                 </div>
               </div>
@@ -112,21 +112,21 @@ layout: default
           <button class="tab-btn active" role="tab" aria-selected="true" data-target="tab-about">About the
             Project</button>
 
-          {% if page.fldaSwQdG23BdcH4J %}
+          {% if page.why-is-this-project-important-to-include-in-the %}
           <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-importance">Why It Matters</button>
           {% endif %}
 
-          {% if page.fldAQhKPRBSYGsJwD or page.fldB1TUH1buE9uaFP %}
+          {% if page.participants or page.participation-locations %}
           <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-participants">Who
             Participated</button>
           {% endif %}
 
-          {% if page.fldPOu99itaN5PMaK %}
+          {% if page.inclusion-efforts %}
           <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-inclusion">Inclusion
             Efforts</button>
           {% endif %}
 
-          {% if page.fld3PwRR35QU6D1CK %}
+          {% if page.what-limitations-to-the-project-should-be-noted %}
           <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-limitations">Limitations</button>
           {% endif %}
 
@@ -139,9 +139,9 @@ layout: default
           <!-- Tab 1: About the Project -->
           <div class="tab-content-panel active" id="tab-about" role="tabpanel">
             <div class="tab-rich-content">
-              {{ page.fld0oykyuwbVPbW0H | markdownify }}
+              {{ page.provide-a-brief-description-of-the-project | markdownify }}
 
-              {% if page.flddUvgeSB6VY4w9i %}
+              {% if page.project-goals %}
               <div class="tab-project-goals"
                 style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed rgba(226, 232, 240, 0.8);">
                 <span class="goals-prefix-label"
@@ -149,7 +149,7 @@ layout: default
                   goals:</span>
                 <div class="goals-inline-pills"
                   style="display: inline-flex; flex-wrap: wrap; gap: 0.5rem; margin-left: 0.5rem; vertical-align: middle;">
-                  {% for goal in page.flddUvgeSB6VY4w9i %}
+                  {% for goal in page.project-goals %}
                   <span class="pill-badge goal-pill"
                     style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: inline-block;">{{
                     goal }}</span>
@@ -161,22 +161,22 @@ layout: default
           </div>
 
           <!-- Tab 2: Why It Matters (Importance) -->
-          {% if page.fldaSwQdG23BdcH4J %}
+          {% if page.why-is-this-project-important-to-include-in-the %}
           <div class="tab-content-panel" id="tab-importance" role="tabpanel">
             <div class="tab-rich-content">
-              {{ page.fldaSwQdG23BdcH4J | markdownify }}
+              {{ page.why-is-this-project-important-to-include-in-the | markdownify }}
             </div>
           </div>
           {% endif %}
 
           <!-- Tab 3: Who Participated -->
-          {% if page.fldAQhKPRBSYGsJwD or page.fldB1TUH1buE9uaFP %}
+          {% if page.participants or page.participation-locations %}
           <div class="tab-content-panel" id="tab-participants" role="tabpanel">
-            {% if page.fldAQhKPRBSYGsJwD %}
+            {% if page.participants %}
             <div class="cohorts-tabs-display">
               <h4 class="cohorts-title">Participant Cohorts</h4>
               <div class="cohorts-grid">
-                {% for slug in page.fldAQhKPRBSYGsJwD %}
+                {% for slug in page.participants %}
                 {% assign item = site.participants | where: "slug", slug | first %}
                 {% include participant_cohort_card.html %}
                 {% endfor %}
@@ -184,29 +184,29 @@ layout: default
             </div>
             {% endif %}
 
-            {% if page.fldB1TUH1buE9uaFP %}
+            {% if page.participation-locations %}
             <div class="participation-settings-block">
               <h4>Engagement Settings</h4>
-              <p class="settings-desc">{{ page.fldB1TUH1buE9uaFP }}</p>
+              <p class="settings-desc">{{ page.participation-locations }}</p>
             </div>
             {% endif %}
           </div>
           {% endif %}
 
           <!-- Tab 4: Inclusion Efforts -->
-          {% if page.fldPOu99itaN5PMaK %}
+          {% if page.inclusion-efforts %}
           <div class="tab-content-panel" id="tab-inclusion" role="tabpanel">
             <div class="tab-rich-content">
-              {{ page.fldPOu99itaN5PMaK | markdownify }}
+              {{ page.inclusion-efforts | markdownify }}
             </div>
           </div>
           {% endif %}
 
           <!-- Tab 5: Limitations -->
-          {% if page.fld3PwRR35QU6D1CK %}
+          {% if page.what-limitations-to-the-project-should-be-noted %}
           <div class="tab-content-panel" id="tab-limitations" role="tabpanel">
             <div class="tab-rich-content">
-              {{ page.fld3PwRR35QU6D1CK | markdownify }}
+              {{ page.what-limitations-to-the-project-should-be-noted | markdownify }}
             </div>
           </div>
           {% endif %}
@@ -217,10 +217,10 @@ layout: default
           {% assign issue_items = "" | split: "" %}
           {% assign quote_items = "" | split: "" %}
 
-          {% for slug in page.fldEuGi25yjQf3asH %}
+          {% for slug in page.messages %}
             {% assign item = site.messages | where: "slug", slug | first %}
             {% if item %}
-              {% assign type_lower = item.fld9WcxhWfobqkI72 | downcase %}
+              {% assign type_lower = item.type | downcase %}
               {% if type_lower == "recommendation" %}
                 {% assign rec_items = rec_items | push: item %}
               {% elsif type_lower == "issue" %}
@@ -276,8 +276,8 @@ layout: default
                         <div class="message-item type-recommendation-item">
                           <span class="message-type-badge type-recommendation">Recommendation</span>
                           <p class="message-title">{{ item.title }}</p>
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                          {% if item.additional-credit-line %}
+                          <div class="message-credit">Credit: {{ item.additional-credit-line }}</div>
                           {% endif %}
                         </div>
                         {% endfor %}
@@ -294,8 +294,8 @@ layout: default
                         <div class="message-item type-issue-item">
                           <span class="message-type-badge type-issue">Issue</span>
                           <p class="message-title">{{ item.title }}</p>
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          <div class="message-credit">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                          {% if item.additional-credit-line %}
+                          <div class="message-credit">Credit: {{ item.additional-credit-line }}</div>
                           {% endif %}
                         </div>
                         {% endfor %}
@@ -314,8 +314,8 @@ layout: default
                           <blockquote style="margin: 0; font-style: italic; font-size: 1.05rem; color: #475569; border: none; padding: 0; line-height: 1.5;">
                             “{{ item.title }}”
                           </blockquote>
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          <div class="message-credit" style="margin-top: 0.5rem;">Credit: {{ item.fldo3jzKvZqYeXvYi }}</div>
+                          {% if item.additional-credit-line %}
+                          <div class="message-credit" style="margin-top: 0.5rem;">Credit: {{ item.additional-credit-line }}</div>
                           {% endif %}
                         </div>
                         {% endfor %}
@@ -341,18 +341,18 @@ layout: default
                       {% for item in carousel_messages %}
                       <tr>
                         <td>
-                          <span class="message-type-badge type-{{ item.fld9WcxhWfobqkI72 | downcase }}" style="margin: 0; display: inline-block;">{{ item.fld9WcxhWfobqkI72 }}</span>
+                          <span class="message-type-badge type-{{ item.type | downcase }}" style="margin: 0; display: inline-block;">{{ item.type }}</span>
                         </td>
                         <td style="font-weight: 500; color: #1e293b;">
-                          {% if item.fld9WcxhWfobqkI72 == "Quote" %}
+                          {% if item.type == "Quote" %}
                           <span style="font-style: italic; color: #475569;">“{{ item.title }}”</span>
                           {% else %}
                           {{ item.title }}
                           {% endif %}
                         </td>
                         <td style="font-size: 0.8rem; font-weight: 500; color: #64748b;">
-                          {% if item.fldo3jzKvZqYeXvYi %}
-                          {{ item.fldo3jzKvZqYeXvYi }}
+                          {% if item.additional-credit-line %}
+                          {{ item.additional-credit-line }}
                           {% else %}
                           <span style="color: #cbd5e1; font-style: italic;">N/A</span>
                           {% endif %}
@@ -382,25 +382,25 @@ layout: default
         <div id="case-mini-map" class="case-mini-map" aria-label="Project Engagement Map"></div>
 
         <!-- Timeline -->
-        {% if page.fldKttntgUGpSigJs or page.fldwgrONWjl5apN0a %}
+        {% if page.what-year-did-the-project-start or page.what-year-did-the-project-conclude %}
         <div class="sidebar-field">
           <span class="sidebar-label">Timeline</span>
           <span class="sidebar-value">
-            {{ page.fldKttntgUGpSigJs }}
-            {% if page.fldwgrONWjl5apN0a %}
-            &ndash; {{ page.fldwgrONWjl5apN0a }}
+            {{ page.what-year-did-the-project-start }}
+            {% if page.what-year-did-the-project-conclude %}
+            &ndash; {{ page.what-year-did-the-project-conclude }}
             {% endif %}
           </span>
         </div>
         {% endif %}
 
         <!-- Geographic scope -->
-        {% if page.fldq3vKeaKBBdOY6a %}
+        {% if page.geographic-scope %}
         <div class="sidebar-field">
           <span class="sidebar-label">Geographic Scope</span>
           <span class="sidebar-value">
             <ul>
-              {% for slug in page.fldq3vKeaKBBdOY6a %}
+              {% for slug in page.geographic-scope %}
               {% assign item = site.locations | where: "slug", slug | first %}
               <li>{{ item.title }}</li>
               {% endfor %}
@@ -410,28 +410,28 @@ layout: default
         {% endif %}
 
         <!-- Target Group -->
-        {% if page.fldV2q24E34ccLyqd %}
+        {% if page.target-group %}
         <div class="sidebar-field">
           <span class="sidebar-label">Target Group</span>
-          <span class="sidebar-value">{{ page.fldV2q24E34ccLyqd }}</span>
+          <span class="sidebar-value">{{ page.target-group }}</span>
         </div>
         {% endif %}
 
         <!-- Project URL -->
-        {% if page.fldzgqKbADUHBkfxO %}
+        {% if page.project-url %}
         <div class="sidebar-field">
           <span class="sidebar-label">Project Link</span>
-          <span class="sidebar-value"><a href="{{ page.fldzgqKbADUHBkfxO }}" target="_blank"
+          <span class="sidebar-value"><a href="{{ page.project-url }}" target="_blank"
               rel="noopener noreferrer">Visit Project Site &rarr;</a></span>
         </div>
         {% endif %}
 
         <!-- AI Focus -->
-        {% if page.fldEnara6Czm8ChkH %}
+        {% if page.what-form-of-ai-is-the-project-about %}
         <div class="sidebar-field">
           <span class="sidebar-label">AI Focus</span>
           <span class="sidebar-value" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem;">
-            {% for ai_form in page.fldEnara6Czm8ChkH %}
+            {% for ai_form in page.what-form-of-ai-is-the-project-about %}
             <span class="pill-badge ai-pill"
               style="font-size: 0.7rem; padding: 0.2rem 0.5rem; border-color: #bfdbfe; background: #eff6ff; color: #1e40af;"
               title="AI Focus">{{ ai_form }}</span>
@@ -442,11 +442,11 @@ layout: default
 
         <!-- Methods Used -->
         {% assign unique_methods = "" | split: "" %}
-        {% if page.fldAQhKPRBSYGsJwD %}
-        {% for part_slug in page.fldAQhKPRBSYGsJwD %}
+        {% if page.participants %}
+        {% for part_slug in page.participants %}
         {% assign part = site.participants | where: "slug", part_slug | first %}
-        {% if part and part.fldDUHAWPMbAqFNot %}
-        {% for method in part.fldDUHAWPMbAqFNot %}
+        {% if part and part.which-of-the-following-methods-were-used-to %}
+        {% for method in part.which-of-the-following-methods-were-used-to %}
         {% unless unique_methods contains method %}
         {% assign unique_methods = unique_methods | push: method %}
         {% endunless %}
@@ -469,20 +469,20 @@ layout: default
         {% endif %}
 
         <!-- Assigned To -->
-        {% if page.fldjqAHoLIaL3Aw5e %}
+        {% if page.assigned-to %}
         <div class="sidebar-field">
           <span class="sidebar-label">Assigned To</span>
-          <span class="sidebar-value">{{ page.fldjqAHoLIaL3Aw5e.name }}</span>
+          <span class="sidebar-value">{{ page.assigned-to.name }}</span>
         </div>
         {% endif %}
       </div>
 
       <!-- CARD 2: Supporting Resources & Media (Moved Up) -->
-      {% if page.fldeQz7UtfY8zlyhv or page.fldd4B6cpBOP3n3is %}
+      {% if page.supporting-resources or page.photos-and-images %}
       <!-- Intelligently filter attachments to exclude the first image which is used as the hero -->
       {% assign image_found = false %}
       {% assign additional_attachments = "" | split: "," %}
-      {% for att in page.fldd4B6cpBOP3n3is %}
+      {% for att in page.photos-and-images %}
       {% if att.type contains "image" %}
       {% if image_found == false %}
       {% assign image_found = true %}
@@ -494,25 +494,25 @@ layout: default
       {% endif %}
       {% endfor %}
 
-      {% if page.fldeQz7UtfY8zlyhv or additional_attachments.size > 0 %}
+      {% if page.supporting-resources or additional_attachments.size > 0 %}
       <div class="sidebar-card resources-card">
         <h3>Resources &amp; Media</h3>
 
         <!-- Supporting links -->
-        {% if page.fldeQz7UtfY8zlyhv %}
+        {% if page.supporting-resources %}
         <div class="sidebar-field">
           <span class="sidebar-label">Case Library</span>
           <span class="sidebar-value">
             <ul class="resource-links-list">
-              {% for slug in page.fldeQz7UtfY8zlyhv %}
+              {% for slug in page.supporting-resources %}
               {% assign item = site.resources | where: "slug", slug | first %}
               <li>
-                <a href="{{ item.fldHNs68Xt8bkJN3E }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
-                {% if item.fldzQYhMyANM5OvJP %}
-                <span class="inline-res-badge">{{ item.fldzQYhMyANM5OvJP }}</span>
+                <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                {% if item.select %}
+                <span class="inline-res-badge">{{ item.select }}</span>
                 {% endif %}
-                {% if item.fldx5z1qUqdM71vbo %}
-                <span class="res-sub-desc">{{ item.fldx5z1qUqdM71vbo }}</span>
+                {% if item.short-description %}
+                <span class="res-sub-desc">{{ item.short-description }}</span>
                 {% endif %}
               </li>
               {% endfor %}
@@ -551,22 +551,22 @@ layout: default
       {% endif %}
 
       <!-- CARD 3: Who was involved? -->
-      {% if page.fld05RupsUvpbg8vU or page.fldxJ934AvP0LGna0 or page.fldM0ClT9Ik6FuNnJ or page.fldoCBwmPfW0Xrlpy %}
+      {% if page.lead-organisations or page.involved-organisations or page.funding-organisations or page.how-was-the-project-initiated %}
       <div class="sidebar-card organisations-card">
         <h3>Who was involved?</h3>
 
         <!-- Lead Org -->
-        {% if page.fld05RupsUvpbg8vU %}
+        {% if page.lead-organisations %}
         <div class="sidebar-field">
           <span class="sidebar-label">Lead Organisations</span>
           <span class="sidebar-value">
             <ul>
-              {% for slug in page.fld05RupsUvpbg8vU %}
+              {% for slug in page.lead-organisations %}
               {% assign item = site.organisations | where: "slug", slug | first %}
               <li>
                 <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
-                {% if item.fldMPxskerPZgXyLV %}
-                <a href="{{ item.fldMPxskerPZgXyLV }}" target="_blank" rel="noopener noreferrer"
+                {% if item.website-address %}
+                <a href="{{ item.website-address }}" target="_blank" rel="noopener noreferrer"
                   class="org-ext-link">🔗</a>
                 {% endif %}
               </li>
@@ -577,17 +577,17 @@ layout: default
         {% endif %}
 
         <!-- Involved Org -->
-        {% if page.fldxJ934AvP0LGna0 %}
+        {% if page.involved-organisations %}
         <div class="sidebar-field">
           <span class="sidebar-label">Involved</span>
           <span class="sidebar-value">
             <ul>
-              {% for slug in page.fldxJ934AvP0LGna0 %}
+              {% for slug in page.involved-organisations %}
               {% assign item = site.organisations | where: "slug", slug | first %}
               <li>
                 <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
-                {% if item.fldMPxskerPZgXyLV %}
-                <a href="{{ item.fldMPxskerPZgXyLV }}" target="_blank" rel="noopener noreferrer"
+                {% if item.website-address %}
+                <a href="{{ item.website-address }}" target="_blank" rel="noopener noreferrer"
                   class="org-ext-link">🔗</a>
                 {% endif %}
               </li>
@@ -598,17 +598,17 @@ layout: default
         {% endif %}
 
         <!-- Funding Org -->
-        {% if page.fldM0ClT9Ik6FuNnJ %}
+        {% if page.funding-organisations %}
         <div class="sidebar-field">
           <span class="sidebar-label">Funded By</span>
           <span class="sidebar-value">
             <ul>
-              {% for slug in page.fldM0ClT9Ik6FuNnJ %}
+              {% for slug in page.funding-organisations %}
               {% assign item = site.organisations | where: "slug", slug | first %}
               <li>
                 <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
-                {% if item.fldMPxskerPZgXyLV %}
-                <a href="{{ item.fldMPxskerPZgXyLV }}" target="_blank" rel="noopener noreferrer"
+                {% if item.website-address %}
+                <a href="{{ item.website-address }}" target="_blank" rel="noopener noreferrer"
                   class="org-ext-link">🔗</a>
                 {% endif %}
               </li>
@@ -619,11 +619,11 @@ layout: default
         {% endif %}
 
         <!-- Initiation Method (Moved Here) -->
-        {% if page.fldoCBwmPfW0Xrlpy %}
+        {% if page.how-was-the-project-initiated %}
         <div
-          class="sidebar-field {% if page.fld05RupsUvpbg8vU or page.fldxJ934AvP0LGna0 or page.fldM0ClT9Ik6FuNnJ %}border-top-divider{% endif %}">
+          class="sidebar-field {% if page.lead-organisations or page.involved-organisations or page.funding-organisations %}border-top-divider{% endif %}">
           <span class="sidebar-label">Initiation Method</span>
-          <span class="sidebar-value">{{ page.fldoCBwmPfW0Xrlpy | join: ", " }}</span>
+          <span class="sidebar-value">{{ page.how-was-the-project-initiated | join: ", " }}</span>
         </div>
         {% endif %}
       </div>
@@ -631,23 +631,23 @@ layout: default
 
 
       <!-- CARD 5: Credits (New Combined Card) -->
-      {% if page.fldVXcw3fVYGdRRM9 or page.fldNwWJty8hufq6t1 %}
+      {% if page.submitted-by or page.additional-acknowledgements %}
       <div class="sidebar-card credits-card">
         <h3>Credits</h3>
 
         <!-- Submitted By -->
-        {% if page.fldVXcw3fVYGdRRM9 %}
+        {% if page.submitted-by %}
         <div class="sidebar-field">
           <span class="sidebar-label">Submitted By</span>
-          <span class="sidebar-value">{{ page.fldVXcw3fVYGdRRM9 }}</span>
+          <span class="sidebar-value">{{ page.submitted-by }}</span>
         </div>
         {% endif %}
 
         <!-- Acknowledgements -->
-        {% if page.fldNwWJty8hufq6t1 %}
-        <div class="sidebar-field {% if page.fldVXcw3fVYGdRRM9 %}border-top-divider{% endif %}">
+        {% if page.additional-acknowledgements %}
+        <div class="sidebar-field {% if page.submitted-by %}border-top-divider{% endif %}">
           <span class="sidebar-label">Acknowledgements</span>
-          <span class="sidebar-value desc-text">{{ page.fldNwWJty8hufq6t1 }}</span>
+          <span class="sidebar-value desc-text">{{ page.additional-acknowledgements }}</span>
         </div>
         {% endif %}
       </div>

@@ -4,16 +4,19 @@ title: Accelerate Programme for Scientific Discovery
 airtable_id: 202f091e4c6a00bf
 slug: accelerate-programme-for-scientific-discovery
 # Organisation type
-fldHOkeRYbBEc5Qev:
+organisation-type:
 - Research
 # Website address
-fldMPxskerPZgXyLV: https://acceleratescience.github.io/
+website-address: https://acceleratescience.github.io/
 # Name
-fldUH8cT7KyUpg1wT: Accelerate Programme for Scientific Discovery
-# Location
-fldjNFI2YXLQ2PapK:
+name: Accelerate Programme for Scientific Discovery
+# Mission statement
+mission-statement: 'To equip researchers with the skills and tools in AI and data
+  science needed to accelerate scientific discovery. (Source: https://acceleratescience.github.io/)'
+# Main Location
+main-location:
 - england-united-kingdom
 # Funding organisation for
-fldnEvULtgnrqryUQ:
+funding-organisation-for:
 - the-peoples-panel-on-ai
 ---
