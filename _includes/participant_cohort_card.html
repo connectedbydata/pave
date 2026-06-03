@@ -1,57 +1,57 @@
 <div class="cohort-item-box">
-  <h5>{{ item.fldHpcL2p4OYtkkvv }}</h5> <!--Cohort name-->
-
+  <h5>{{ item.group-description }}</h5> <!--Cohort name-->
+ 
   <div class="cohort-stats">
-    {% if item.fld86CmkqMgbvMLP6 %}
+    {% if item.recruitment-method %}
     <div class="cohort-stat">
       <span class="stat-label">Recruitment method</span>
-      <span class="stat-val">{{ item.fld86CmkqMgbvMLP6 }}</span>
+      <span class="stat-val">{{ item.recruitment-method }}</span>
     </div>
     {% endif %}
-
-    {% if item.fldY5TPx3FCNnQ9Fv %}
+ 
+    {% if item.how-many-people-took-part %}
     <div class="cohort-stat">
       <span class="stat-label">Group size</span>
-      <span class="stat-val">{{ item.fldY5TPx3FCNnQ9Fv }} people</span>
+      <span class="stat-val">{{ item.how-many-people-took-part }} people</span>
     </div>
     {% endif %}
-
-    {% if item.fldpvn1hM37AceKyM %}
+ 
+    {% if item.was-there-a-specific-target-population %}
     <div class="cohort-stat">
       <span class="stat-label">Target Population</span>
-      <span class="stat-val">{{ item.fldpvn1hM37AceKyM }}</span>
+      <span class="stat-val">{{ item.was-there-a-specific-target-population }}</span>
     </div>
     {% endif %}
-
-    {% if item.fldDUHAWPMbAqFNot %}
+ 
+    {% if item.which-of-the-following-methods-were-used-to %}
     <div class="cohort-stat">
       <span class="stat-label">Engagement Methods Used</span>
       <span class="stat-val">
-        {% for method in item.fldDUHAWPMbAqFNot %}
+        {% for method in item.which-of-the-following-methods-were-used-to %}
         <span class="stat-list-item">{{ method }}</span>
         {% endfor %}
       </span>
     </div>
     {% endif %}
-
-    {% if item.fldweSxXYJIXdml8C %}
+ 
+    {% if item.where-did-engagement-take-place %}
     <div class="cohort-stat">
       <span class="stat-label">Engagement Setting</span>
-      <span class="stat-val">{{ item.fldweSxXYJIXdml8C | join: ", " }}</span>
+      <span class="stat-val">{{ item.where-did-engagement-take-place | join: ", " }}</span>
     </div>
     {% endif %}
-
-    {% if item.fldDs16PFhLNn1Rag %}
+ 
+    {% if item.on-average-how-many-hours-did-each-participant %}
     <div class="cohort-stat">
       <span class="stat-label">Average Engagement</span>
-      <span class="stat-val">{{ item.fldDs16PFhLNn1Rag }} hours</span>
+      <span class="stat-val">{{ item.on-average-how-many-hours-did-each-participant }} hours</span>
     </div>
     {% endif %}
-
+ 
     {% assign has_locs = false %}
     {% assign loc_titles = "" | split: "" %}
-    {% if item.fld0BFLjrsMUNnQAv %}
-    {% for loc_slug in item.fld0BFLjrsMUNnQAv %}
+    {% if item.locations %}
+    {% for loc_slug in item.locations %}
     {% assign loc_obj = site.locations | where: "slug", loc_slug | first %}
     {% if loc_obj %}
     {% assign loc_titles = loc_titles | push: loc_obj.title %}
@@ -59,7 +59,7 @@
     {% endif %}
     {% endfor %}
     {% endif %}
-
+ 
     {% if has_locs %}
     <div class="cohort-stat">
       <span class="stat-label">Locations</span>
@@ -70,12 +70,12 @@
       </span>
     </div>
     {% else %}
-    {% if item.fldA8Li5xJXokGrFY %}
+    {% if item.where-were-participants-from %}
     <div class="cohort-stat">
       <span class="stat-label">Locations</span>
       <span class="stat-val">
-        {% if item.fldA8Li5xJXokGrFY contains ";" %}
-        {% assign split_locs = item.fldA8Li5xJXokGrFY | split: ";" %}
+        {% if item.where-were-participants-from contains ";" %}
+        {% assign split_locs = item.where-were-participants-from | split: ";" %}
         {% for sloc in split_locs %}
         {% assign trimmed_loc = sloc | strip %}
         {% if trimmed_loc != "" %}
@@ -83,7 +83,7 @@
         {% endif %}
         {% endfor %}
         {% else %}
-        <span class="stat-list-item">{{ item.fldA8Li5xJXokGrFY }}</span>
+        <span class="stat-list-item">{{ item.where-were-participants-from }}</span>
         {% endif %}
       </span>
     </div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ page.title }}{% endblock %} | Public AI Voice and Engagement Case Book (Draft Preview)</title>
+  <link rel="stylesheet" href="/pave/assets/main.css">
+  
+  <!-- Import Modern Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Import Leaflet Mapping Library for Case Mini Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+  <div class="preview-banner" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #92400e; padding: 0.75rem 1rem; text-align: center; font-size: 0.9rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; border-bottom: 1px solid #fde68a; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+    <span style="font-size: 1.1rem; line-height: 1;">⚠️</span>
+    <span>This is a case study preview. The current URL is for use by case study contributors only and should not be circulated. Refresh data if expected images are not displayed.</span>
+  </div>
+  <header class="site-header" role="banner">
+    <div class="wrapper" style="display: flex; justify-content: space-between; align-items: center;">
+      <a class="site-title" rel="author" href="#">Public AI Voice and Engagement Case Book <span style="font-size: 0.8rem; background: #fee2e2; color: #991b1b; padding: 0.15rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; font-weight: 600;">DRAFT PREVIEW</span></a>
+      {% if record_id %}
+      <a href="/refresh/{{ record_id }}" style="font-size: 0.85rem; background: #0284c7; color: #fff; padding: 0.35rem 0.75rem; border-radius: 6px; font-weight: 600; text-decoration: none; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s;" onmouseover="this.style.background='#0369a1'" onmouseout="this.style.background='#0284c7'">🔄 Refresh Data</a>
+      {% endif %}
+    </div>
+  </header>
+  <main class="page-content" aria-label="Content">
+    <div class="wrapper">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</body>
+</html>

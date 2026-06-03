@@ -1,0 +1,2100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article class="case-study-page">
+  <div class="case-layout-grid">
+
+    <!-- LEFT COLUMN: Main Narrative & Content (3/4 Width) -->
+    <main class="case-main-column">
+      <!-- Title & Subtitle Section -->
+      <header class="case-header-main">
+        <h1 class="case-page-title">{{ page.title | escape }}</h1>
+        {% if page['describe-the-subject-matter-in-your-own-words-one'] %}
+        <p class="case-page-subtitle">{{ page['describe-the-subject-matter-in-your-own-words-one'] | escape }}</p>
+        {% endif %}
+      </header>
+
+      <!-- Bold Hero Image Area with Carousel Overlay -->
+      <div class="case-hero-wrapper" style="position: relative;">
+        {% set ns = namespace(hero_image="", hero_alt="") %}
+        {% if page['photos-and-images'] and (page['photos-and-images'] | length) > 0 %}
+          {% for attachment in page['photos-and-images'] %}
+            {% if "image" in attachment.type and ns.hero_image == "" %}
+              {% set ns.hero_image = attachment.url %}
+              {% set ns.hero_alt = attachment.filename %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if ns.hero_image != "" %}
+        <div class="case-hero-image" style="background-image: url('{{ ns.hero_image }}');" role="img"
+          aria-label="{{ ns.hero_alt | escape }}"></div>
+        {% else %}
+        <!-- Curated gradient color block default -->
+        <div class="case-hero-image default-gradient-hero"></div>
+        {% endif %}
+
+        <!-- Premium Key Messages Carousel Overlay -->
+        {% set carousel_messages = [] %}
+        {% if page.messages %}
+          {% for slug in page.messages %}
+            {% set item = site.messages.get(slug) %}
+            {% if item %}
+              {% do carousel_messages.append(item) %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if (carousel_messages | length) > 0 %}
+        <div class="hero-carousel-overlay">
+          <button class="carousel-nav-btn prev-btn" aria-label="Previous slide"
+            onclick="event.stopPropagation()">‹</button>
+
+          <div class="carousel-slides-container">
+            <div class="carousel-slides-track">
+              {% for item in carousel_messages %}
+              <div class="carousel-slide {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}">
+                <div class="carousel-slide-content">
+                  <span class="carousel-type-badge type-{{ item.type | downcase }}">{{ item.type }}</span>
+                  {% if item.type == "Quote" %}
+                  <p class="carousel-slide-text quote-text">“{{ item.title }}”</p>
+                  {% else %}
+                  <p class="carousel-slide-text">{{ item.title }}</p>
+                  {% endif %}
+                  {% if item['additional-credit-line'] %}
+                  <span class="carousel-slide-credit">{{ item['additional-credit-line'] }}</span>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <button class="carousel-nav-btn next-btn" aria-label="Next slide" onclick="event.stopPropagation()">›</button>
+
+          <!-- Dot Indicators with Fast Forward Toggle -->
+          <div class="carousel-indicators-wrapper"
+            style="position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.75rem; z-index: 30;">
+            <div class="carousel-indicators" style="display: flex; gap: 0.5rem; position: static; transform: none;">
+              {% for item in carousel_messages %}
+              <button class="carousel-dot {% if loop.first %}active{% endif %}" data-slide-to="{{ loop.index0 }}"
+                aria-label="Slide {{ loop.index }}"></button>
+              {% endfor %}
+            </div>
+
+            <button class="carousel-ff-toggle" aria-label="Toggle Fast Playback" title="Fast Forward (Toggle Speed)">
+              <span class="ff-icon">⏩</span>
+            </button>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Premium Case Tabs Section (About, Importance, Participants, Inclusion) -->
+      <section class="case-tabs-section">
+        <div class="tab-buttons-container" role="tablist">
+          <button class="tab-btn active" role="tab" aria-selected="true" data-target="tab-about">About the Project</button>
+
+          {% if page['why-is-this-project-important-to-include-in-the'] %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-importance">Why It Matters</button>
+          {% endif %}
+
+          {% if page.participants or page['participation-locations'] %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-participants">Who Participated</button>
+          {% endif %}
+
+          {% if page['inclusion-efforts'] %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-inclusion">Inclusion Efforts</button>
+          {% endif %}
+
+          {% if page['what-limitations-to-the-project-should-be-noted'] %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-limitations">Limitations</button>
+          {% endif %}
+
+          {% if (carousel_messages | length) > 0 %}
+          <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-what-was-said">What was said</button>
+          {% endif %}
+        </div>
+
+        <div class="tab-contents-container">
+          <!-- Tab 1: About the Project -->
+          <div class="tab-content-panel active" id="tab-about" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page['provide-a-brief-description-of-the-project'] | markdownify }}
+
+              {% if page['project-goals'] %}
+              <div class="tab-project-goals"
+                style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed rgba(226, 232, 240, 0.8);">
+                <span class="goals-prefix-label"
+                  style="font-weight: 700; color: #0f172a; font-size: 0.95rem; font-family: 'Outfit', sans-serif;">Project goals:</span>
+                <div class="goals-inline-pills"
+                  style="display: inline-flex; flex-wrap: wrap; gap: 0.5rem; margin-left: 0.5rem; vertical-align: middle;">
+                  {% for goal in page['project-goals'] %}
+                  <span class="pill-badge goal-pill"
+                    style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 9999px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: inline-block;">{{ goal }}</span>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Tab 2: Why It Matters (Importance) -->
+          {% if page['why-is-this-project-important-to-include-in-the'] %}
+          <div class="tab-content-panel" id="tab-importance" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page['why-is-this-project-important-to-include-in-the'] | markdownify }}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Tab 3: Who Participated -->
+          {% if page.participants or page['participation-locations'] %}
+          <div class="tab-content-panel" id="tab-participants" role="tabpanel">
+            {% if page.participants %}
+            <div class="cohorts-tabs-display">
+              <h4 class="cohorts-title">Participant Cohorts</h4>
+              <div class="cohorts-grid">
+                {% for slug in page.participants %}
+                  {% set item = site.participants.get(slug) %}
+                  {% if item %}
+                  <div class="cohort-item-box">
+                    <h5>{{ item['group-description'] }}</h5>
+                    <div class="cohort-stats">
+                      {% if item['recruitment-method'] %}
+                      <div class="cohort-stat">
+                        <span class="stat-label">Recruitment method</span>
+                        <span class="stat-val">{{ item['recruitment-method'] }}</span>
+                      </div>
+                      {% endif %}
+
+                      {% if item['how-many-people-took-part'] %}
+                      <div class="cohort-stat">
+                        <span class="stat-label">Group size</span>
+                        <span class="stat-val">{{ item['how-many-people-took-part'] }} people</span>
+                      </div>
+                      {% endif %}
+
+                      {% if item['was-there-a-specific-target-population'] %}
+                      <div class="cohort-stat">
+                        <span class="stat-label">Target Population</span>
+                        <span class="stat-val">{{ item['was-there-a-specific-target-population'] }}</span>
+                      </div>
+                      {% endif %}
+
+                      {% if item['which-of-the-following-methods-were-used-to'] %}
+                      <div class="cohort-stat">
+                        <span class="stat-label">Engagement Methods Used</span>
+                        <span class="stat-val">
+                          {% for method in item['which-of-the-following-methods-were-used-to'] %}
+                          <span class="stat-list-item">{{ method }}</span>
+                          {% endfor %}
+                        </span>
+                      </div>
+                      {% endif %}
+
+                      {% if item['where-did-engagement-take-place'] %}
+                      <div class="cohort-stat">
+                        <span class="stat-label">Engagement Setting</span>
+                        <span class="stat-val">{{ item['where-did-engagement-take-place'] | join(", ") }}</span>
+                      </div>
+                      {% endif %}
+
+                      {% if item['on-average-how-many-hours-did-each-participant'] %}
+                      <div class="cohort-stat">
+                        <span class="stat-label">Average Engagement</span>
+                        <span class="stat-val">{{ item['on-average-how-many-hours-did-each-participant'] }} hours</span>
+                      </div>
+                      {% endif %}
+
+                      {% set has_locs = namespace(val=false) %}
+                      {% set loc_titles = [] %}
+                      {% if item.locations %}
+                        {% for loc_slug in item.locations %}
+                          {% set loc_obj = site.locations.get(loc_slug) %}
+                          {% if loc_obj %}
+                            {% do loc_titles.append(loc_obj.title) %}
+                            {% set has_locs.val = true %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+
+                      {% if has_locs.val %}
+                      <div class="cohort-stat">
+                        <span class="stat-label">Locations</span>
+                        <span class="stat-val">
+                          {% for loc_title in loc_titles %}
+                          <span class="stat-list-item">{{ loc_title }}</span>
+                          {% endfor %}
+                        </span>
+                      </div>
+                      {% else %}
+                        {% if item['where-were-participants-from'] %}
+                        <div class="cohort-stat">
+                          <span class="stat-label">Locations</span>
+                          <span class="stat-val">
+                            {% if ";" in item['where-were-participants-from'] %}
+                              {% set split_locs = item['where-were-participants-from'].split(";") %}
+                              {% for sloc in split_locs %}
+                                {% set trimmed_loc = sloc.strip() %}
+                                {% if trimmed_loc != "" %}
+                                <span class="stat-list-item">{{ trimmed_loc }}</span>
+                                {% endif %}
+                              {% endfor %}
+                            {% else %}
+                            <span class="stat-list-item">{{ item['where-were-participants-from'] }}</span>
+                            {% endif %}
+                          </span>
+                        </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            {% if page['participation-locations'] %}
+            <div class="participation-settings-block">
+              <h4>Engagement Settings</h4>
+              <p class="settings-desc">{{ page['participation-locations'] }}</p>
+            </div>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <!-- Tab 4: Inclusion Efforts -->
+          {% if page['inclusion-efforts'] %}
+          <div class="tab-content-panel" id="tab-inclusion" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page['inclusion-efforts'] | markdownify }}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Tab 5: Limitations -->
+          {% if page['what-limitations-to-the-project-should-be-noted'] %}
+          <div class="tab-content-panel" id="tab-limitations" role="tabpanel">
+            <div class="tab-rich-content">
+              {{ page['what-limitations-to-the-project-should-be-noted'] | markdownify }}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Tab 6: What was said -->
+          {% if (carousel_messages | length) > 0 %}
+          {% set rec_items = [] %}
+          {% set issue_items = [] %}
+          {% set quote_items = [] %}
+
+          {% for slug in page.messages %}
+            {% set item = site.messages.get(slug) %}
+            {% if item %}
+              {% set type_lower = item.type | downcase %}
+              {% if type_lower == "recommendation" %}
+                {% do rec_items.append(item) %}
+              {% elif type_lower == "issue" %}
+                {% do issue_items.append(item) %}
+              {% elif type_lower == "quote" %}
+                {% do quote_items.append(item) %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          <div class="tab-content-panel" id="tab-what-was-said" role="tabpanel">
+            <div class="tab-rich-content">
+              
+              <!-- Tab Header & View Switcher -->
+              <div class="what-was-said-header">
+                <h4 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: #0f172a;">Key Messages &amp; Outputs</h4>
+                <div class="view-switcher-container">
+                  <button class="view-switch-btn active" data-view="categorized">
+                    <span>📑</span> Categorized View
+                  </button>
+                  <button class="view-switch-btn" data-view="table">
+                    <span>📊</span> Table View
+                  </button>
+                </div>
+              </div>
+
+              <!-- VIEW 1: Categorized Sub-Tabs View -->
+              <div id="wws-categorized-view">
+                <div class="message-tabs-container">
+                  <div class="msg-tab-buttons" role="tablist">
+                    {% set active_set = namespace(val=false) %}
+                    {% if (rec_items | length) > 0 %}
+                      <button class="msg-tab-btn active" role="tab" aria-selected="true" data-target="msg-rec-panel">Recommendations ({{ rec_items | length }})</button>
+                      {% set active_set.val = true %}
+                    {% endif %}
+                    {% if (issue_items | length) > 0 %}
+                      <button class="msg-tab-btn {% if not active_set.val %}active{% endif %}" role="tab" aria-selected="{% if not active_set.val %}true{% else %}false{% endif %}" data-target="msg-issue-panel">Issues ({{ issue_items | length }})</button>
+                      {% set active_set.val = true %}
+                    {% endif %}
+                    {% if (quote_items | length) > 0 %}
+                      <button class="msg-tab-btn {% if not active_set.val %}active{% endif %}" role="tab" aria-selected="{% if not active_set.val %}true{% else %}false{% endif %}" data-target="msg-quote-panel">Quotes ({{ quote_items | length }})</button>
+                    {% endif %}
+                  </div>
+
+                  <div class="msg-tab-contents">
+                    {% set active_set.val = false %}
+                    
+                    <!-- Recommendations Panel -->
+                    {% if (rec_items | length) > 0 %}
+                    <div class="msg-tab-panel active" id="msg-rec-panel" role="tabpanel">
+                      <div class="messages-list">
+                        {% for item in rec_items %}
+                        <div class="message-item type-recommendation-item">
+                          <span class="message-type-badge type-recommendation">Recommendation</span>
+                          <p class="message-title">{{ item.title }}</p>
+                          {% if item['additional-credit-line'] %}
+                          <div class="message-credit">Credit: {{ item['additional-credit-line'] }}</div>
+                          {% endif %}
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% set active_set.val = true %}
+                    {% endif %}
+
+                    <!-- Issues Panel -->
+                    {% if (issue_items | length) > 0 %}
+                    <div class="msg-tab-panel {% if not active_set.val %}active{% endif %}" id="msg-issue-panel" role="tabpanel">
+                      <div class="messages-list">
+                        {% for item in issue_items %}
+                        <div class="message-item type-issue-item">
+                          <span class="message-type-badge type-issue">Issue</span>
+                          <p class="message-title">{{ item.title }}</p>
+                          {% if item['additional-credit-line'] %}
+                          <div class="message-credit">Credit: {{ item['additional-credit-line'] }}</div>
+                          {% endif %}
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% set active_set.val = true %}
+                    {% endif %}
+
+                    <!-- Quotes Panel -->
+                    {% if (quote_items | length) > 0 %}
+                    <div class="msg-tab-panel {% if not active_set.val %}active{% endif %}" id="msg-quote-panel" role="tabpanel">
+                      <div class="messages-list">
+                        {% for item in quote_items %}
+                        <div class="message-item type-quote-item">
+                          <span class="message-type-badge type-quote">Quote</span>
+                          <blockquote style="margin: 0; font-style: italic; font-size: 1.05rem; color: #475569; border: none; padding: 0; line-height: 1.5;">
+                            “{{ item.title }}”
+                          </blockquote>
+                          {% if item['additional-credit-line'] %}
+                          <div class="message-credit" style="margin-top: 0.5rem;">Credit: {{ item['additional-credit-line'] }}</div>
+                          {% endif %}
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- VIEW 2: Table View -->
+              <div id="wws-table-view" style="display: none;">
+                <div class="table-container" style="overflow-x: auto; border-radius: 12px; border: 1px solid rgba(226, 232, 240, 0.8);">
+                  <table class="what-was-said-table">
+                    <thead>
+                      <tr>
+                        <th style="width: 140px;">Type</th>
+                        <th>Details</th>
+                        <th style="width: 220px;">Credit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in carousel_messages %}
+                      <tr>
+                        <td>
+                          <span class="message-type-badge type-{{ item.type | downcase }}" style="margin: 0; display: inline-block;">{{ item.type }}</span>
+                        </td>
+                        <td style="font-weight: 500; color: #1e293b;">
+                          {% if item.type == "Quote" %}
+                          <span style="font-style: italic; color: #475569;">“{{ item.title }}”</span>
+                          {% else %}
+                          {{ item.title }}
+                          {% endif %}
+                        </td>
+                        <td style="font-size: 0.8rem; font-weight: 500; color: #64748b;">
+                          {% if item['additional-credit-line'] %}
+                          {{ item['additional-credit-line'] }}
+                          {% else %}
+                          <span style="color: #cbd5e1; font-style: italic;">N/A</span>
+                          {% endif %}
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+    </main>
+
+    <!-- RIGHT COLUMN: Sidebar Metadata & Context (1/4 Width) -->
+    <aside class="case-sidebar-column">
+
+      <!-- CARD 1: Quick Facts -->
+      <div class="sidebar-card facts-card">
+        <h3>Quick Facts</h3>
+
+        <!-- Premium Case Mini Map -->
+        <div id="case-mini-map" class="case-mini-map" aria-label="Project Engagement Map"></div>
+
+        <!-- Timeline -->
+        {% if page['what-year-did-the-project-start'] or page['what-year-did-the-project-conclude'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Timeline</span>
+          <span class="sidebar-value">
+            {{ page['what-year-did-the-project-start'] }}
+            {% if page['what-year-did-the-project-conclude'] %}
+            &ndash; {{ page['what-year-did-the-project-conclude'] }}
+            {% endif %}
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Geographic scope -->
+        {% if page['geographic-scope'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Geographic Scope</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page['geographic-scope'] %}
+                {% set item = site.locations.get(slug) %}
+                {% if item %}
+                <li>{{ item.title }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Target Group -->
+        {% if page['target-group'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Target Group</span>
+          <span class="sidebar-value">{{ page['target-group'] }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Project URL -->
+        {% if page['project-url'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Project Link</span>
+          <span class="sidebar-value"><a href="{{ page['project-url'] }}" target="_blank"
+              rel="noopener noreferrer">Visit Project Site &rarr;</a></span>
+        </div>
+        {% endif %}
+
+        <!-- AI Focus -->
+        {% if page['what-form-of-ai-is-the-project-about'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">AI Focus</span>
+          <span class="sidebar-value" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem;">
+            {% for ai_form in page['what-form-of-ai-is-the-project-about'] %}
+            <span class="pill-badge ai-pill"
+              style="font-size: 0.7rem; padding: 0.2rem 0.5rem; border-color: #bfdbfe; background: #eff6ff; color: #1e40af;"
+              title="AI Focus">{{ ai_form }}</span>
+            {% endfor %}
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Methods Used -->
+        {% set unique_methods = [] %}
+        {% if page.participants %}
+          {% for part_slug in page.participants %}
+            {% set part = site.participants.get(part_slug) %}
+            {% if part and part['which-of-the-following-methods-were-used-to'] %}
+              {% for method in part['which-of-the-following-methods-were-used-to'] %}
+                {% if method not in unique_methods %}
+                  {% do unique_methods.append(method) %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if (unique_methods | length) > 0 %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Methods Used</span>
+          <span class="sidebar-value" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem;">
+            {% for method in unique_methods %}
+            <span class="pill-badge method-pill"
+              style="font-size: 0.7rem; padding: 0.2rem 0.5rem; border-color: #fed7aa; background: #fff7ed; color: #c2410c;"
+              title="Method">{{ method }}</span>
+            {% endfor %}
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Assigned To -->
+        {% if page['assigned-to'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Assigned To</span>
+          <span class="sidebar-value">{{ page['assigned-to'].name }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- CARD 2: Supporting Resources & Media (Moved Up) -->
+      {% if page['supporting-resources'] or page['photos-and-images'] %}
+      {% set img_found = namespace(val=false) %}
+      {% set additional_attachments = [] %}
+      {% if page['photos-and-images'] %}
+        {% for att in page['photos-and-images'] %}
+          {% if "image" in att.type %}
+            {% if not img_found.val %}
+              {% set img_found.val = true %}
+            {% else %}
+              {% do additional_attachments.append(att) %}
+            {% endif %}
+          {% else %}
+            {% do additional_attachments.append(att) %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% if page['supporting-resources'] or (additional_attachments | length) > 0 %}
+      <div class="sidebar-card resources-card">
+        <h3>Resources &amp; Media</h3>
+
+        <!-- Supporting links -->
+        {% if page['supporting-resources'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Case Library</span>
+          <span class="sidebar-value">
+            <ul class="resource-links-list">
+              {% for slug in page['supporting-resources'] %}
+                {% set item = site.resources.get(slug) %}
+                {% if item %}
+                <li>
+                  <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                  {% if item.select %}
+                  <span class="inline-res-badge">{{ item.select }}</span>
+                  {% endif %}
+                  {% if item['short-description'] %}
+                  <span class="res-sub-desc">{{ item['short-description'] }}</span>
+                  {% endif %}
+                </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Remaining attachments gallery -->
+        {% if (additional_attachments | length) > 0 %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Additional Media</span>
+          <div class="sidebar-value">
+            <div class="sidebar-attachments-grid">
+              {% for attachment in additional_attachments %}
+              <div class="sidebar-attachment-item">
+                {% if "image" in attachment.type %}
+                <a href="{{ attachment.url }}" target="_blank" title="{{ attachment.filename }}">
+                  <img src="{{ attachment.url }}" alt="{{ attachment.filename }}"
+                    class="attachment-thumbnail">
+                </a>
+                {% else %}
+                <a href="{{ attachment.url }}" target="_blank" class="attachment-file-link">
+                  <span class="file-icon-badge">📄</span>
+                  <span class="file-label-text">{{ attachment.filename }}</span>
+                </a>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <!-- CARD 3: Who was involved? -->
+      {% if page['lead-organisations'] or page['involved-organisations'] or page['funding-organisations'] or page['how-was-the-project-initiated'] %}
+      <div class="sidebar-card organisations-card">
+        <h3>Who was involved?</h3>
+
+        <!-- Lead Org -->
+        {% if page['lead-organisations'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Lead Organisations</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page['lead-organisations'] %}
+                {% set item = site.organisations.get(slug) %}
+                {% if item %}
+                <li>
+                  <a href="#">{{ item.title }}</a>
+                  {% if item['website-address'] %}
+                  <a href="{{ item['website-address'] }}" target="_blank" rel="noopener noreferrer"
+                    class="org-ext-link">🔗</a>
+                  {% endif %}
+                </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Involved Org -->
+        {% if page['involved-organisations'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Involved</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page['involved-organisations'] %}
+                {% set item = site.organisations.get(slug) %}
+                {% if item %}
+                <li>
+                  <a href="#">{{ item.title }}</a>
+                  {% if item['website-address'] %}
+                  <a href="{{ item['website-address'] }}" target="_blank" rel="noopener noreferrer"
+                    class="org-ext-link">🔗</a>
+                  {% endif %}
+                </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Funding Org -->
+        {% if page['funding-organisations'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Funded By</span>
+          <span class="sidebar-value">
+            <ul>
+              {% for slug in page['funding-organisations'] %}
+                {% set item = site.organisations.get(slug) %}
+                {% if item %}
+                <li>
+                  <a href="#">{{ item.title }}</a>
+                  {% if item['website-address'] %}
+                  <a href="{{ item['website-address'] }}" target="_blank" rel="noopener noreferrer"
+                    class="org-ext-link">🔗</a>
+                  {% endif %}
+                </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </span>
+        </div>
+        {% endif %}
+
+        <!-- Initiation Method (Moved Here) -->
+        {% if page['how-was-the-project-initiated'] %}
+        <div
+          class="sidebar-field {% if page['lead-organisations'] or page['involved-organisations'] or page['funding-organisations'] %}border-top-divider{% endif %}">
+          <span class="sidebar-label">Initiation Method</span>
+          <span class="sidebar-value">{{ page['how-was-the-project-initiated'] | join(", ") }}</span>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <!-- CARD 5: Credits (New Combined Card) -->
+      {% if page['submitted-by'] or page['additional-acknowledgements'] %}
+      <div class="sidebar-card credits-card">
+        <h3>Credits</h3>
+
+        <!-- Submitted By -->
+        {% if page['submitted-by'] %}
+        <div class="sidebar-field">
+          <span class="sidebar-label">Submitted By</span>
+          <span class="sidebar-value">{{ page['submitted-by'] }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Acknowledgements -->
+        {% if page['additional-acknowledgements'] %}
+        <div class="sidebar-field {% if page['submitted-by'] %}border-top-divider{% endif %}">
+          <span class="sidebar-label">Acknowledgements</span>
+          <span class="sidebar-value desc-text">{{ page['additional-acknowledgements'] }}</span>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+    </aside>
+  </div>
+</article>
+
+<style>
+  /* Reset wrapper width dynamically on case pages for Wide Screen aesthetics */
+  body {
+    background-color: #f8fafc;
+  }
+
+  .site-header .wrapper,
+  .site-footer .wrapper,
+  .page-content .wrapper {
+    max-width: 1360px !important;
+    transition: max-width 0.3s ease;
+  }
+
+  /* Grid Columns layout mapping */
+  .case-study-page {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #1e293b;
+    padding-block: 1rem 3rem;
+  }
+
+  .case-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 992px) {
+    .case-layout-grid {
+      grid-template-columns: 3fr 1fr;
+      /* 3/4 and 1/4 split */
+      align-items: start;
+    }
+  }
+
+  /* Case Header Main Section */
+  .case-header-main {
+    margin-block-end: 2rem;
+  }
+
+  .case-page-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.15;
+    color: #0f172a;
+  }
+
+  .case-page-subtitle {
+    font-size: 1.15rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  /* Bold Hero Image Area with Carousel Overlay */
+  .case-hero-wrapper {
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08), 0 2px 8px rgba(148, 163, 184, 0.04);
+    margin-block-end: 2rem;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    background: #0f172a;
+  }
+
+  .case-hero-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .default-gradient-hero {
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+  }
+
+  /* Premium Hero Carousel Overlay Styles */
+  .hero-carousel-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.5) 60%, rgba(15, 23, 42, 0.15) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 4rem;
+    color: #ffffff;
+    z-index: 20;
+    transition: background 0.3s ease;
+  }
+
+  .carousel-slides-container {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    margin-inline: 1.5rem;
+    overflow: hidden;
+  }
+
+  .carousel-slides-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+  }
+
+  .carousel-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    padding-inline: 1rem;
+    transition: opacity 0.4s ease;
+    opacity: 0.65;
+  }
+
+  .carousel-slide.active {
+    opacity: 1;
+  }
+
+  .carousel-slide-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .carousel-type-badge {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .carousel-type-badge.type-recommendation {
+    border-color: rgba(34, 197, 94, 0.4);
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+  }
+
+  .carousel-type-badge.type-issue {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+  }
+
+  .carousel-type-badge.type-quote {
+    border-color: rgba(168, 85, 247, 0.4);
+    background: rgba(168, 85, 247, 0.15);
+    color: #d8b4fe;
+  }
+
+  .carousel-slide-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.22rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin: 0;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .carousel-slide-text.quote-text {
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .carousel-slide-credit {
+    font-size: 0.775rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .carousel-nav-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 1.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    user-select: none;
+    z-index: 30;
+  }
+
+  .carousel-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+  }
+
+  .carousel-indicators {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 30;
+  }
+
+  .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s ease;
+  }
+
+  .carousel-dot.active {
+    background: #ffffff;
+    width: 18px;
+    border-radius: 9999px;
+  }
+
+  .carousel-ff-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 0.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0;
+    user-select: none;
+    z-index: 35;
+  }
+
+  .carousel-ff-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+  }
+
+  .carousel-ff-toggle.active {
+    background: #4f46e5;
+    border-color: #6366f1;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+    animation: ffPulse 2s infinite;
+  }
+
+  @keyframes ffPulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+    }
+
+    70% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 6px rgba(99, 102, 241, 0);
+    }
+
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-carousel-overlay {
+      padding: 1rem 1.5rem;
+    }
+
+    .carousel-slide-text {
+      font-size: 0.95rem;
+    }
+
+    .carousel-nav-btn {
+      width: 2.25rem;
+      height: 2.25rem;
+      font-size: 1.2rem;
+    }
+  }
+
+  .case-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block-end: 2rem;
+  }
+
+  .pill-badge {
+    font-size: 0.775rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .pill-badge:hover {
+    transform: translateY(-1px);
+  }
+
+  .goal-pill {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+  }
+
+  .goal-pill:hover {
+    background: #dcfce7;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+  }
+
+  .ai-pill {
+    background: #eff6ff;
+    color: #1e40af;
+    border-color: #bfdbfe;
+  }
+
+  .ai-pill:hover {
+    background: #dbeafe;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  }
+
+  /* 6. Premium Tabbed Switcher container */
+  .case-tabs-section {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(148, 163, 184, 0.02);
+    margin-block-end: 2.5rem;
+  }
+
+  .tab-buttons-container {
+    display: flex;
+    background: #f8fafc;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .tab-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.925rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    user-select: none;
+  }
+
+  .tab-btn:hover {
+    color: #0f172a;
+    background: rgba(226, 232, 240, 0.3);
+  }
+
+  .tab-btn.active {
+    color: #4f46e5;
+    border-bottom-color: #4f46e5;
+    background: #ffffff;
+  }
+
+  .tab-contents-container {
+    padding: 2rem;
+  }
+
+  .tab-content-panel {
+    display: none;
+    animation: tabFadeIn 0.35s ease;
+  }
+
+  .tab-content-panel.active {
+    display: block;
+  }
+
+  /* What was said table styling */
+  .what-was-said-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    background: #ffffff;
+  }
+
+  .what-was-said-table th {
+    background: #f8fafc;
+    padding: 0.95rem 1.25rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: #64748b;
+    font-size: 0.725rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    text-align: left;
+  }
+
+  .what-was-said-table td {
+    padding: 1.15rem 1.25rem;
+    vertical-align: middle;
+    line-height: 1.5;
+    color: #1e293b;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+    text-align: left;
+  }
+
+  .what-was-said-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .what-was-said-table tbody tr {
+    transition: background 0.2s ease;
+  }
+
+  .what-was-said-table tbody tr:hover {
+    background: rgba(248, 250, 252, 0.5);
+  }
+
+  /* View Switcher toggle style inside 'What was said' tab */
+  .what-was-said-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border-bottom: 1px dashed rgba(226, 232, 240, 0.8);
+    padding-bottom: 1rem;
+  }
+
+  .view-switcher-container {
+    display: inline-flex;
+    background: #f1f5f9;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .view-switch-btn {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.775rem;
+    font-weight: 600;
+    padding: 0.4rem 0.95rem;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    background: transparent;
+    color: #64748b;
+    user-select: none;
+  }
+
+  .view-switch-btn:hover {
+    color: #0f172a;
+    background: rgba(226, 232, 240, 0.4);
+  }
+
+  .view-switch-btn.active {
+    background: #ffffff;
+    color: #4f46e5;
+    box-shadow: 0 2px 8px rgba(148, 163, 184, 0.15);
+  }
+
+  @keyframes tabFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .tab-rich-content {
+    font-size: 1.025rem;
+    line-height: 1.65;
+    color: #334155;
+  }
+
+  .tab-rich-content p {
+    margin-bottom: 1.25rem;
+  }
+
+  .tab-rich-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Participants tab layout */
+  .cohorts-tabs-display {
+    margin-bottom: 1.5rem;
+  }
+
+  .cohorts-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+
+  .cohorts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 1200px) {
+    .cohorts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .cohort-item-box {
+    background: #f8fafc;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    transition: all 0.25s ease;
+  }
+
+  .cohort-item-box:hover {
+    border-color: rgba(99, 102, 241, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(148, 163, 184, 0.05);
+  }
+
+  .cohort-item-box h5 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #0f172a;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    padding-bottom: 0.5rem;
+  }
+
+  .cohort-desc {
+    font-size: 0.875rem;
+    color: #475569;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .cohort-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgba(226, 232, 240, 0.6);
+  }
+
+  .cohort-stat {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    padding-block: 0.4rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+    align-items: start;
+  }
+
+  .cohort-stat:last-child {
+    border-bottom: none;
+  }
+
+  .cohort-stat .stat-label {
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .cohort-stat .stat-val {
+    color: #1e293b;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .stat-list-item {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-list-item:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 576px) {
+    .cohort-stat {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+      padding-block: 0.3rem;
+    }
+
+    .cohort-stat .stat-val {
+      text-align: left;
+    }
+  }
+
+  .participation-settings-block {
+    background: rgba(99, 102, 241, 0.04);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+
+  .participation-settings-block h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #4f46e5;
+  }
+
+  .settings-desc {
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* 7. Narrative and detailed blocks section styling */
+  .narrative-block-section {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(148, 163, 184, 0.02);
+    margin-block-end: 2.5rem;
+    position: relative;
+  }
+
+  .block-badge {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .narrative-block-section h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    color: #0f172a;
+  }
+
+  .narrative-rich-content {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #334155;
+  }
+
+  .narrative-rich-content p {
+    margin-bottom: 1.25rem;
+  }
+
+  .narrative-rich-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .narrative-rich-content ul,
+  .narrative-rich-content ol {
+    padding-left: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .narrative-rich-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .secondary-narrative {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .narrative-sub-block h2 {
+    font-size: 1.35rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .narrative-content {
+    font-size: 0.975rem;
+    line-height: 1.6;
+    color: #475569;
+  }
+
+  /* 8. Recommendations Messages style */
+  .recommendations-block {
+    border-left: 4px solid #4f46e5;
+  }
+
+  .messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .message-item {
+    background: #f8fafc;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .message-item.type-recommendation-item {
+    border-left: 4px solid #22c55e;
+  }
+
+  .message-item.type-issue-item {
+    border-left: 4px solid #ef4444;
+  }
+
+  .message-item.type-quote-item {
+    border-left: 4px solid #a855f7;
+  }
+
+  /* Message Tabs Switcher Styling */
+  .msg-tab-buttons {
+    display: flex;
+    gap: 0.25rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    padding-bottom: 0px;
+    margin-bottom: 1.5rem;
+  }
+
+  .msg-tab-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.6rem 1.15rem;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+
+  .msg-tab-btn:hover {
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.03);
+  }
+
+  .msg-tab-btn.active {
+    color: #4f46e5;
+    border-bottom: 2px solid #4f46e5;
+  }
+
+  .msg-tab-panel {
+    display: none;
+    animation: tabFadeIn 0.3s ease;
+  }
+
+  .msg-tab-panel.active {
+    display: block;
+  }
+
+  .message-item:hover {
+    border-color: rgba(79, 70, 229, 0.2);
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.04);
+  }
+
+  .message-type-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .message-type-badge.type-recommendation {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+
+  .message-type-badge.type-quote {
+    background: #faf5ff;
+    color: #6b21a8;
+    border: 1px solid #e9d5ff;
+  }
+
+  .message-type-badge.type-issue {
+    background: #fff5f5;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+  }
+
+  .message-title {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .message-credit {
+    font-size: 0.775rem;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  /* 9. Sidebar facts Column Layout */
+  .case-sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar-card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(148, 163, 184, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .sidebar-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    margin: 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .sidebar-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .sidebar-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sidebar-value {
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .sidebar-value ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar-value li {
+    position: relative;
+    padding-left: 0.75rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .sidebar-value li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+    font-weight: 700;
+  }
+
+  .sidebar-value li:last-child {
+    margin-bottom: 0;
+  }
+
+  .sidebar-value a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .sidebar-value a:hover {
+    color: #6366f1;
+    text-decoration: underline;
+  }
+
+  .border-top-divider {
+    border-top: 1px solid rgba(226, 232, 240, 0.7);
+    padding-top: 0.75rem;
+  }
+
+  /* Specific status badges */
+  .status-badge {
+    display: inline-block;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .badge-complete {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+
+  .badge-in-progress {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+  }
+
+  .badge-planned {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+  }
+
+  .org-ext-link {
+    font-size: 0.7rem;
+    margin-left: 0.2rem;
+    display: inline-block;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .org-ext-link:hover {
+    opacity: 1;
+  }
+
+  .text-muted {
+    color: #64748b;
+    display: block;
+  }
+
+  .desc-text {
+    font-size: 0.85rem;
+    color: #475569;
+  }
+
+  /* Sidebar Resources Links list styling */
+  .resource-links-list li {
+    margin-bottom: 0.6rem !important;
+  }
+
+  .inline-res-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+  }
+
+  .res-sub-desc {
+    display: block;
+    font-size: 0.725rem;
+    color: #94a3b8;
+    margin-top: 0.15rem;
+    line-height: 1.35;
+  }
+
+  /* Sidebar attachments grid */
+  .sidebar-attachments-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .sidebar-attachment-item {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .sidebar-attachment-item:hover {
+    border-color: rgba(79, 70, 229, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .attachment-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .attachment-file-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .file-icon-badge {
+    font-size: 1.25rem;
+  }
+
+  .file-label-text {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #64748b;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.2;
+  }
+
+  /* Specific mini map height override for widescreen layout */
+  .case-mini-map {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    margin-bottom: 0.25rem;
+    background: #f1f5f9;
+    z-index: 10;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Tabs switcher
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-content-panel');
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        tabButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const activePanel = document.getElementById(targetId);
+        if (activePanel) activePanel.classList.add('active');
+      });
+    });
+
+    // Sub-Tabs Switcher for messages
+    const msgTabButtons = document.querySelectorAll('.msg-tab-btn');
+    const msgTabPanels = document.querySelectorAll('.msg-tab-panel');
+
+    msgTabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        msgTabButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        msgTabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const activePanel = document.getElementById(targetId);
+        if (activePanel) activePanel.classList.add('active');
+      });
+    });
+
+    // View Switcher logic (Categorized vs Table View in 'What was said' tab)
+    const viewSwitchBtns = document.querySelectorAll('.view-switch-btn');
+    const categorizedView = document.getElementById('wws-categorized-view');
+    const tableView = document.getElementById('wws-table-view');
+
+    viewSwitchBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const view = btn.dataset.view;
+        viewSwitchBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (view === 'categorized') {
+          if (categorizedView) categorizedView.style.display = 'block';
+          if (tableView) tableView.style.display = 'none';
+        } else {
+          if (categorizedView) categorizedView.style.display = 'none';
+          if (tableView) tableView.style.display = 'block';
+        }
+      });
+    });
+
+    // Key Messages Carousel logic
+    const track = document.querySelector('.carousel-slides-track');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const ffToggle = document.querySelector('.carousel-ff-toggle');
+
+    if (slides.length > 0 && track) {
+      let currentIndex = 0;
+      let autoplayTimer = null;
+      let isFastMode = false;
+      const defaultDelay = 8000;
+      const fastDelay = 3000;
+
+      function getDelay() {
+        return isFastMode ? fastDelay : defaultDelay;
+      }
+
+      function showSlide(index) {
+        if (index < 0) currentIndex = slides.length - 1;
+        else if (index >= slides.length) currentIndex = 0;
+        else currentIndex = index;
+
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+        slides.forEach((slide, idx) => {
+          slide.classList.toggle('active', idx === currentIndex);
+        });
+
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === currentIndex);
+        });
+      }
+
+      function nextSlide() {
+        showSlide(currentIndex + 1);
+        resetAutoplay();
+      }
+
+      function prevSlide() {
+        showSlide(currentIndex - 1);
+        resetAutoplay();
+      }
+
+      function startAutoplay() {
+        if (!autoplayTimer) {
+          autoplayTimer = setInterval(nextSlide, getDelay());
+        }
+      }
+
+      function resetAutoplay() {
+        if (autoplayTimer) {
+          clearInterval(autoplayTimer);
+          autoplayTimer = null;
+        }
+        startAutoplay();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+      if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+      dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+          showSlide(idx);
+          resetAutoplay();
+        });
+      });
+
+      if (ffToggle) {
+        ffToggle.addEventListener('click', () => {
+          isFastMode = !isFastMode;
+          ffToggle.classList.toggle('active', isFastMode);
+          resetAutoplay();
+        });
+      }
+
+      startAutoplay();
+    }
+
+    // Mini Map Loader using direct cached structures
+    var mapMarkers = [
+      // Lead Organisations
+      {% if page['lead-organisations'] %}
+        {% for org_slug in page['lead-organisations'] %}
+          {% set org = site.organisations.get(org_slug) %}
+          {% if org and org['main-location'] %}
+            {% for loc_slug in org['main-location'] %}
+              {% set loc = site.locations.get(loc_slug) %}
+              {% if loc and loc.latitude and loc.longitude %}
+                {
+                  lat: {{ loc.latitude }},
+                  lng: {{ loc.longitude }},
+                  title: "{{ org.title | escape }} (Lead)",
+                  color: "#1d4ed8",
+                  radius: 7,
+                  weight: 2
+                },
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      // Involved Organisations
+      {% if page['involved-organisations'] %}
+        {% for org_slug in page['involved-organisations'] %}
+          {% set org = site.organisations.get(org_slug) %}
+          {% if org and org['main-location'] %}
+            {% for loc_slug in org['main-location'] %}
+              {% set loc = site.locations.get(loc_slug) %}
+              {% if loc and loc.latitude and loc.longitude %}
+                {
+                  lat: {{ loc.latitude }},
+                  lng: {{ loc.longitude }},
+                  title: "{{ org.title | escape }} (Involved)",
+                  color: "#64748b",
+                  radius: 4,
+                  weight: 1
+                },
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      // Participants
+      {% if page.participants %}
+        {% for part_slug in page.participants %}
+          {% set part = site.participants.get(part_slug) %}
+          {% if part and part.locations %}
+            {% for loc_slug in part.locations %}
+              {% set loc = site.locations.get(loc_slug) %}
+              {% if loc and loc.latitude and loc.longitude %}
+                {
+                  lat: {{ loc.latitude }},
+                  lng: {{ loc.longitude }},
+                  title: "{{ part.title | escape }} (Participants)",
+                  color: "#f97316",
+                  radius: 5.5,
+                  weight: 1.5
+                },
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    ];
+
+    const mapContainer = document.getElementById('case-mini-map');
+    if (mapContainer && mapMarkers.length > 0) {
+      var miniMap = L.map('case-mini-map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([20, 0], 2);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20
+      }).addTo(miniMap);
+
+      var bounds = L.latLngBounds();
+
+      mapMarkers.forEach(function (m) {
+        var marker = L.circleMarker([m.lat, m.lng], {
+          radius: m.radius,
+          fillColor: m.color,
+          color: "#ffffff",
+          weight: m.weight,
+          opacity: 1,
+          fillOpacity: 0.85
+        }).addTo(miniMap);
+
+        marker.bindPopup("<strong style='font-family:Plus Jakarta Sans, sans-serif; font-size:11px;'>" + m.title + "</strong>");
+        bounds.extend([m.lat, m.lng]);
+      });
+
+      setTimeout(function () {
+        miniMap.invalidateSize();
+        miniMap.fitBounds(bounds, { padding: [15, 15], maxZoom: 10 });
+      }, 150);
+    } else if (mapContainer) {
+      mapContainer.style.display = 'none';
+    }
+  });
+</script>
+{% endblock %}
