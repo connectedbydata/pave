@@ -1,16 +1,16 @@
 // 2. Premium Widescreen Mini Map Loader (Leaflet + CARTO basemap)
 var mapMarkers = [
   // Lead Organisations (bold blue dot)
-  {% if page.fld05RupsUvpbg8vU %}
-    {% for org_slug in page.fld05RupsUvpbg8vU %}
+  {% if page.lead-organisations %}
+    {% for org_slug in page.lead-organisations %}
       {% assign org = site.organisations | where: "slug", org_slug | first %}
       {% if org %}
-        {% for loc_slug in org.fldjNFI2YXLQ2PapK %}
+        {% for loc_slug in org.main-location %}
           {% assign loc = site.locations | where: "slug", loc_slug | first %}
-          {% if loc.fldWtvMukYmq1IuWq and loc.fldCdYZ8Ay6f6ulq1 %}
+          {% if loc.latitude and loc.longitude %}
             {
-              lat: {{ loc.fldWtvMukYmq1IuWq }},
-              lng: {{ loc.fldCdYZ8Ay6f6ulq1 }},
+              lat: {{ loc.latitude }},
+              lng: {{ loc.longitude }},
               title: "{{ org.title | escape }} (Lead)",
               color: "#1d4ed8", /* Bold blue */
               radius: 7,
@@ -23,16 +23,16 @@ var mapMarkers = [
   {% endif %}
 
   // Involved Organisations (small grey dots)
-  {% if page.fldxJ934AvP0LGna0 %}
-    {% for org_slug in page.fldxJ934AvP0LGna0 %}
+  {% if page.involved-organisations %}
+    {% for org_slug in page.involved-organisations %}
       {% assign org = site.organisations | where: "slug", org_slug | first %}
       {% if org %}
-        {% for loc_slug in org.fldjNFI2YXLQ2PapK %}
+        {% for loc_slug in org.main-location %}
           {% assign loc = site.locations | where: "slug", loc_slug | first %}
-          {% if loc.fldWtvMukYmq1IuWq and loc.fldCdYZ8Ay6f6ulq1 %}
+          {% if loc.latitude and loc.longitude %}
             {
-              lat: {{ loc.fldWtvMukYmq1IuWq }},
-              lng: {{ loc.fldCdYZ8Ay6f6ulq1 }},
+              lat: {{ loc.latitude }},
+              lng: {{ loc.longitude }},
               title: "{{ org.title | escape }} (Involved)",
               color: "#64748b", /* Grey */
               radius: 4,
@@ -45,16 +45,16 @@ var mapMarkers = [
   {% endif %}
 
   // Participants (orange dots)
-  {% if page.fldAQhKPRBSYGsJwD %}
-    {% for part_slug in page.fldAQhKPRBSYGsJwD %}
+  {% if page.participants %}
+    {% for part_slug in page.participants %}
       {% assign part = site.participants | where: "slug", part_slug | first %}
       {% if part %}
-        {% for loc_slug in part.fld0BFLjrsMUNnQAv %}
+        {% for loc_slug in part.locations %}
           {% assign loc = site.locations | where: "slug", loc_slug | first %}
-          {% if loc.fldWtvMukYmq1IuWq and loc.fldCdYZ8Ay6f6ulq1 %}
+          {% if loc.latitude and loc.longitude %}
             {
-              lat: {{ loc.fldWtvMukYmq1IuWq }},
-              lng: {{ loc.fldCdYZ8Ay6f6ulq1 }},
+              lat: {{ loc.latitude }},
+              lng: {{ loc.longitude }},
               title: "{{ part.title | escape }} (Participants)",
               color: "#f97316", /* Orange */
               radius: 5.5,

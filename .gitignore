@@ -8,3 +8,7 @@ vendor
 build.log
 .DS_Store
 .antigravitycli/
+preview_app/airtable_cache.json
+scripts/deploy.sh
+__pycache__
+
