@@ -9,8 +9,6 @@ involved-organisation-for:
 # Organisation type
 organisation-type:
 - Private sector
-# Website address
-website-address: https://connectedbydata.org/
 # Name
 name: Freelance artists  - Zeo Fawcett, Eye Suriyanon, Jono Sandilands, Katy Beveridge
 # Mission statement

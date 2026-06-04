@@ -1,7 +1,8 @@
 ---
 layout: page
-title: Video Gallery
+title: Videos
 permalink: /videos/
+menus: [header]
 ---
 
 <!-- Import Modern Premium Fonts -->

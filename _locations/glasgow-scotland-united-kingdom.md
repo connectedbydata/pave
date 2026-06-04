@@ -8,6 +8,8 @@ participants:
 - exploring-childrens-rights-and-ai-classroom-workshops
 - exploring-childrens-rights-and-ai-cross-school-group
 - exploring-childrens-rights-and-ai-survey
+- peoples-ai-stewardship-summits-summit-public-participants
+- peoples-ai-stewardship-summits-summits-stakeholder-participants
 # Longitude
 longitude: -4.2518
 # Name

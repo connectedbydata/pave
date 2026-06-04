@@ -2,6 +2,7 @@
 layout: page
 title: Cases
 permalink: /cases/
+menus: [header]
 ---
 
 <div class="cases-index">

@@ -3,6 +3,10 @@ layout: generic
 title: London, United Kingdom
 airtable_id: 0efe2f597442d4ec
 slug: london-united-kingdom
+# Participants
+participants:
+- peoples-ai-stewardship-summits-summit-public-participants
+- peoples-ai-stewardship-summits-summits-stakeholder-participants
 # Longitude
 longitude: -0.1278
 # Name
@@ -24,4 +28,6 @@ organisations:
 - hopkins-van-mil
 - involve-uk
 - tavistock-institute-of-human-relations
+- queen-mary-university-of-london
+- open-data-institute
 ---

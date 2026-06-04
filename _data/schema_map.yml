@@ -17,6 +17,11 @@ tblxVFG1lM7trGD5m:
       type: button
       sync: false
       slug: editing-link
+    fldZ0f5pRfDE7lIuk:
+      name: Open URL
+      type: button
+      sync: false
+      slug: open-url
     fldyTy9X5T9piyHAd:
       name: Created
       type: createdTime
@@ -57,6 +62,11 @@ tblxVFG1lM7trGD5m:
       type: richText
       sync: false
       slug: research-journal-notes
+    fldfZyvSc72yWg4B6:
+      name: Case Location (Internal field)
+      type: singleLineText
+      sync: false
+      slug: case-location-internal-field
     fldyT0fI25iZQRBiH:
       name: Curation decision
       type: singleSelect
@@ -279,6 +289,11 @@ tblxVFG1lM7trGD5m:
       type: multilineText
       sync: true
       slug: target-group
+    fld1frtLRXSwQfxFH:
+      name: Record ID
+      type: formula
+      sync: false
+      slug: record-id
 tblJCL1taIotM6y4Y:
   name: Organisations
   primaryFieldId: fldUH8cT7KyUpg1wT
@@ -337,6 +352,16 @@ tblJCL1taIotM6y4Y:
       type: multilineText
       sync: true
       slug: mission-statement
+    fld2xaF90kx4CF3ZG:
+      name: Logo
+      type: multipleAttachments
+      sync: false
+      slug: logo
+    fldV839jg4QLZFIG2:
+      name: Open URL
+      type: button
+      sync: false
+      slug: open-url
 tblg0E17yrYVgCDOw:
   name: Locations
   primaryFieldId: fldNDwfliTbwWYd4l
@@ -528,6 +553,7 @@ tblu6lFzOdgEQKGC4:
       - Photo or image
       - Citation
       - Other
+      - Academic paper or presentation
     fldx5z1qUqdM71vbo:
       name: Short description
       type: singleLineText
