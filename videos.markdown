@@ -1,6 +1,7 @@
 ---
-layout: page
+layout: default
 title: Videos
+show_banner: false
 permalink: /videos/
 menus: [header]
 ---
@@ -10,108 +11,91 @@ menus: [header]
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<div class="video-gallery-container">
-  <header class="gallery-header">
-    <div class="header-badge">RESOURCES</div>
-    <h1>Project Video Gallery</h1>
-  </header>
+{% assign video_count = 0 %}
+{% for res in site.resources %}
+  {% if res.select == "Video" %}
+    {% assign video_count = video_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
 
-  <!-- Liquid Compilation: Extract Unique Filter Tags Dynamically from Cases -->
-  {% assign all_initiated = "" | split: "," %}
-  {% assign all_ai_form = "" | split: "," %}
+<div class="video-gallery-container cases-index-page">
+  <div class="browse-header-row">
+    <h1 class="browse-title" id="main-cases-title">
+      <span class="cases-count-num">{{ video_count }}</span> project videos
+    </h1>
+  </div>
 
-  {% for res in site.resources %}
-    {% if res.select == "Video" %}
-      {% for case_slug in res.cases %}
-        {% for c in site.cases %}
-          {% if c.slug == case_slug %}
-            {% for val in c.how-was-the-project-initiated %}
-              {% assign all_initiated = all_initiated | push: val %}
-            {% endfor %}
-            {% for val in c.what-form-of-ai-is-the-project-about %}
-              {% assign all_ai_form = all_ai_form | push: val %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
+  {% include filters_panel.html %}
 
-  {% assign unique_initiated = all_initiated | uniq | sort %}
-  {% assign unique_ai_form = all_ai_form | uniq | sort %}
+  <!-- Status Bar -->
+  <div class="browse-status-bar">
+    <span class="cases-count-label">Showing <span class="cases-count-num">{{ video_count }}</span> videos</span>
+  </div>
 
-  <!-- Premium Filter Section -->
-  <section class="filter-section">
-    <div class="filter-header-row">
-      <div class="filter-title-group">
-        <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-        </svg>
-        <h3>Filter Gallery</h3>
-      </div>
-      <button id="clear-filters-btn" class="clear-filters-btn" aria-label="Clear all active filters" style="display: none;">
-        <span>Clear Filters</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-
-    <div class="filter-groups">
-      <!-- Filter Group 1: How Initiated -->
-      <div class="filter-group">
-        <h4>How was the project initiated?</h4>
-        <div class="toggle-container" data-facet="initiated">
-          {% for opt in unique_initiated %}
-            <button class="filter-toggle" data-val="{{ opt | escape }}">{{ opt }}</button>
-          {% endfor %}
-        </div>
-      </div>
-
-      <!-- Filter Group 2: AI Form -->
-      <div class="filter-group">
-        <h4>What form of AI is the project about?</h4>
-        <div class="toggle-container" data-facet="ai-form">
-          {% for opt in unique_ai_form %}
-            <button class="filter-toggle" data-val="{{ opt | escape }}">{{ opt }}</button>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Video Masonry List -->
-  <main class="video-masonry" id="video-masonry-grid">
+  <!-- Video Grid List -->
+  <main class="video-grid" id="video-grid">
     {% for res in site.resources %}
       {% if res.select == "Video" %}
         <!-- Retrieve case metadata for current resource -->
-        {% assign res_initiated = "" | split: "," %}
-        {% assign res_ai_form = "" | split: "," %}
-        {% assign res_cases = "" | split: "," %}
+        {% assign res_focus = "" | split: "||" %}
+        {% assign res_methods = "" | split: "||" %}
+        {% assign res_goals = "" | split: "||" %}
+        {% assign res_locations = "" | split: "||" %}
+        {% assign res_cases = "" | split: "||" %}
 
         {% for case_slug in res.cases %}
           {% for c in site.cases %}
             {% if c.slug == case_slug %}
               {% assign res_cases = res_cases | push: c.title %}
-              {% for val in c.how-was-the-project-initiated %}
-                {% assign res_initiated = res_initiated | push: val %}
-              {% endfor %}
-              {% for val in c.what-form-of-ai-is-the-project-about %}
-                {% assign res_ai_form = res_ai_form | push: val %}
-              {% endfor %}
+              <!-- Focus -->
+              {% if c.what-form-of-ai-is-the-project-about %}
+                {% for val in c.what-form-of-ai-is-the-project-about %}
+                  {% assign res_focus = res_focus | push: val %}
+                {% endfor %}
+              {% endif %}
+              <!-- Goals -->
+              {% if c.project-goals %}
+                {% for val in c.project-goals %}
+                  {% assign res_goals = res_goals | push: val %}
+                {% endfor %}
+              {% endif %}
+              <!-- Methods & Locations from participants -->
+              {% if c.participants %}
+                {% for part_slug in c.participants %}
+                  {% assign part = site.participants | where: "slug", part_slug | first %}
+                  {% if part %}
+                    {% if part.which-of-the-following-methods-were-used-to %}
+                      {% for method in part.which-of-the-following-methods-were-used-to %}
+                        {% assign res_methods = res_methods | push: method %}
+                      {% endfor %}
+                    {% endif %}
+                    {% if part.locations %}
+                      {% for loc_slug in part.locations %}
+                        {% assign loc = site.locations | where: "slug", loc_slug | first %}
+                        {% if loc and loc.country-code %}
+                          {% assign res_locations = res_locations | push: loc.country-code %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
             {% endif %}
           {% endfor %}
         {% endfor %}
 
-        {% assign res_initiated_uniq = res_initiated | uniq %}
-        {% assign res_ai_form_uniq = res_ai_form | uniq %}
+        {% assign res_focus_uniq = res_focus | uniq %}
+        {% assign res_methods_uniq = res_methods | uniq %}
+        {% assign res_goals_uniq = res_goals | uniq %}
+        {% assign res_locations_uniq = res_locations | uniq %}
         {% assign res_cases_uniq = res_cases | uniq %}
 
         <article class="video-card" 
-                 data-initiated="{{ res_initiated_uniq | join: '|' | escape }}" 
-                 data-ai-form="{{ res_ai_form_uniq | join: '|' | escape }}"
-                 data-url="{{ res.url | escape }}">
+                 data-focus="{{ res_focus_uniq | join: '||' | downcase }}" 
+                 data-methods="{{ res_methods_uniq | join: '||' | downcase }}"
+                 data-goals="{{ res_goals_uniq | join: '||' | downcase }}"
+                 data-locations="{{ res_locations_uniq | join: '||' | downcase }}"
+                 data-url="{{ res.external_url | escape }}">
           
           <!-- Card Thumbnail Area -->
           <div class="video-cover-wrapper">
@@ -169,37 +153,93 @@ menus: [header]
               {% endif %}
             </p>
 
-            <!-- Metadata tags -->
-            <div class="video-meta-tags">
-              {% if res_initiated_uniq.size > 0 %}
-                <div class="tag-row">
-                  <span class="meta-label">Initiation:</span>
-                  <div class="meta-pills">
-                    {% for init in res_initiated_uniq %}
-                      <span class="meta-pill initiated-pill">{{ init }}</span>
-                    {% endfor %}
-                  </div>
+            <!-- Specs block -->
+            <div class="card-specs">
+              {% if res_focus_uniq.size > 0 %}
+                <div class="spec-row">
+                  <span class="spec-label">Focus</span>
+                  <span class="spec-value">{{ res_focus_uniq | join: ', ' }}</span>
                 </div>
               {% endif %}
 
-              {% if res_ai_form_uniq.size > 0 %}
-                <div class="tag-row">
-                  <span class="meta-label">AI Focus:</span>
-                  <div class="meta-pills">
-                    {% for ai in res_ai_form_uniq %}
-                      <span class="meta-pill ai-pill">{{ ai }}</span>
+              {% if res_methods_uniq.size > 0 %}
+                <div class="spec-row">
+                  <span class="spec-label">Methods</span>
+                  <span class="spec-value">{{ res_methods_uniq | join: ', ' }}</span>
+                </div>
+              {% endif %}
+
+              {% if res_locations_uniq.size > 0 %}
+                <div class="spec-row">
+                  <span class="spec-label">Locations</span>
+                  <span class="spec-value">
+                    {% for code in res_locations_uniq %}
+                      {% include country_name.html code=code %}{% unless forloop.last %}, {% endunless %}
                     {% endfor %}
-                  </div>
+                  </span>
                 </div>
               {% endif %}
             </div>
+          </div>
+
+          <!-- Hidden case details content parsed on modal open -->
+          <div class="video-case-details-source" style="display: none;">
+            {% for case_slug in res.cases %}
+              {% for c in site.cases %}
+                {% if c.slug == case_slug %}
+                  <div class="modal-case-info">
+                    <span class="modal-case-badge">CASE STUDY</span>
+                    <h3 class="modal-case-title">{{ c.title | escape }}</h3>
+                    {% if c.provide-a-brief-description-of-the-project %}
+                      <p class="modal-case-desc">{{ c.provide-a-brief-description-of-the-project | strip_html | truncatewords: 50 | escape }}</p>
+                    {% endif %}
+                    <div class="modal-case-fields">
+                      {% if c.how-was-the-project-initiated %}
+                        <div class="modal-meta-item">
+                          <span class="modal-meta-label">Initiation:</span>
+                          <span class="modal-meta-val">{{ c.how-was-the-project-initiated | join: ", " }}</span>
+                        </div>
+                      {% endif %}
+                      {% if c.what-form-of-ai-is-the-project-about %}
+                        <div class="modal-meta-item">
+                          <span class="modal-meta-label">AI Focus:</span>
+                          <span class="modal-meta-val">{{ c.what-form-of-ai-is-the-project-about | join: ", " }}</span>
+                        </div>
+                      {% endif %}
+                      {% if c.geographic-scope %}
+                        <div class="modal-meta-item">
+                          <span class="modal-meta-label">Locations:</span>
+                          <span class="modal-meta-val">
+                            {% assign loc_titles = "" | split: "," %}
+                            {% for loc_slug in c.geographic-scope %}
+                              {% assign loc_item = site.locations | where: "slug", loc_slug | first %}
+                              {% if loc_item %}
+                                {% assign loc_titles = loc_titles | push: loc_item.title %}
+                              {% endif %}
+                            {% endfor %}
+                            {{ loc_titles | join: ", " }}
+                          </span>
+                        </div>
+                      {% endif %}
+                    </div>
+                    <a href="{{ c.url | relative_url }}" class="modal-view-case-btn" target="_blank">
+                      <span>View Full Case Study</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
           </div>
         </article>
       {% endif %}
     {% endfor %}
 
     <!-- Empty State -->
-    <div id="gallery-empty-state" class="gallery-empty-state" style="display: none;">
+    <div id="no-results-msg" class="no-results-message gallery-empty-state" style="display: none;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -219,8 +259,17 @@ menus: [header]
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      <div class="modal-video-wrapper">
-        <iframe id="modal-video-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="modal-split-layout">
+        <div class="modal-video-side">
+          <div class="modal-video-wrapper">
+            <iframe id="modal-video-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="modal-details-side">
+          <div id="modal-case-details-content">
+            <!-- Populated via Javascript -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -231,10 +280,19 @@ menus: [header]
 /* Variable and Premium Typography Setup */
 .video-gallery-container {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  max-width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 1.5rem 0.5rem;
   color: #1e293b;
+}
+
+@media (min-width: 1200px) {
+  .site-header .wrapper,
+  .site-footer .wrapper,
+  .page-content .wrapper {
+    max-width: 80% !important;
+    transition: max-width 0.3s ease;
+  }
 }
 
 /* Base header layout */
@@ -399,22 +457,26 @@ menus: [header]
   font-weight: 600;
 }
 
-/* CSS Multi-Column Masonry Grid */
-.video-masonry {
-  columns: 1;
-  column-gap: 1.5rem;
+/* CSS Grid for neat, uniform columns */
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
   transition: all 0.4s ease;
 }
 @media (min-width: 640px) {
-  .video-masonry {
-    columns: 2;
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Video Card Styling */
+/* Video Card Styling (Equal Height Layout) */
 .video-card {
-  break-inside: avoid;
-  margin-block-end: 1.5rem;
   background: #ffffff;
   border: 1px solid rgba(226, 232, 240, 0.9);
   border-radius: 16px;
@@ -423,6 +485,7 @@ menus: [header]
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
+  height: 100%;
   position: relative;
   opacity: 1;
   transform: scale(1);
@@ -487,15 +550,16 @@ menus: [header]
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 23, 42, 0.25);
+  background: rgba(15, 23, 42, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
 }
 .video-card:hover .play-overlay {
-  background: rgba(15, 23, 42, 0.4);
+  opacity: 1;
 }
 
 .play-btn-circle {
@@ -508,6 +572,7 @@ menus: [header]
   align-items: center;
   justify-content: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  transform: scale(0.85);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .play-svg {
@@ -544,6 +609,7 @@ menus: [header]
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  flex-grow: 1; /* Stretch to fill card height */
 }
 .video-case-link {
   display: flex;
@@ -575,49 +641,39 @@ menus: [header]
   line-height: 1.45;
   color: #475569;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 4.35em; /* Lock description space for neat grid alignment */
 }
 
-/* Metadata tag grid */
-.video-meta-tags {
+/* Specs block styled like Cases */
+.video-card .card-specs {
+  margin-top: auto; /* Push specs and description to bottom and align */
+  margin-bottom: 0.5rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid #496a40 !important;
+  border-bottom: 1px solid #496a40 !important;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(226, 232, 240, 0.6);
+  gap: 0.35rem;
 }
-.tag-row {
+.video-card .card-specs .spec-row {
   display: flex;
-  align-items: center;
+  font-size: 0.775rem !important;
+  line-height: 1.4;
   gap: 0.5rem;
 }
-.meta-label {
-  font-size: 0.7rem;
+.video-card .card-specs .spec-row .spec-label {
   font-weight: 700;
-  color: #94a3b8;
+  color: #000000 !important;
   text-transform: uppercase;
-  min-width: 60px;
+  min-width: 75px;
+  flex-shrink: 0;
 }
-.meta-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-}
-.meta-pill {
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.1rem 0.45rem;
-  border-radius: 4px;
-  background: #f1f5f9;
-  color: #334155;
-}
-.initiated-pill {
-  background: #f0fdf4;
-  color: #166534;
-}
-.ai-pill {
-  background: #eff6ff;
-  color: #1e40af;
+.video-card .card-specs .spec-row .spec-value {
+  color: #496a40 !important;
 }
 
 /* Fade animation effects */
@@ -699,10 +755,11 @@ menus: [header]
 }
 .modal-content-container {
   position: relative;
-  width: 88vw;
-  max-width: 1200px;
-  aspect-ratio: 16 / 9;
-  background: #000000;
+  width: 90vw;
+  max-width: 1400px;
+  height: 80vh;
+  max-height: 800px;
+  background: #0f172a;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
@@ -715,14 +772,150 @@ menus: [header]
   transform: scale(1);
 }
 
+/* Modal Split Screen Layout */
+.modal-split-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .modal-split-layout {
+    flex-direction: row;
+  }
+}
+
+.modal-video-side {
+  flex: 3;
+  background: #000000;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+}
+@media (min-width: 768px) {
+  .modal-video-side {
+    min-height: auto;
+  }
+}
+
 .modal-video-wrapper {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 .modal-video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+.modal-details-side {
+  flex: 1;
+  background: #0f172a;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .modal-details-side {
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Modal Details Elements Styling (Premium typography & contrast) */
+.modal-case-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.modal-case-info:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.modal-case-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #818cf8;
+  background: rgba(129, 140, 248, 0.15);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(129, 140, 248, 0.2);
+}
+.modal-case-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+  color: #ffffff;
+}
+.modal-case-desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #94a3b8;
+  margin: 0;
+}
+.modal-case-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.modal-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.modal-meta-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.modal-meta-val {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+.modal-view-case-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #4f46e5;
+  color: #ffffff !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+.modal-view-case-btn:hover {
+  background: #6366f1;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+}
+.modal-view-case-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 .modal-close-btn {
@@ -756,26 +949,23 @@ menus: [header]
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.video-card');
-  const toggles = document.querySelectorAll('.filter-toggle');
-  const clearBtn = document.getElementById('clear-filters-btn');
-  const emptyState = document.getElementById('gallery-empty-state');
-  
-  // Track active filters per facet
-  const activeFilters = {
-    initiated: new Set(),
-    'ai-form': new Set()
-  };
 
   // Get Cinema Modal Elements
   const modal = document.getElementById('video-modal');
   const modalIframe = document.getElementById('modal-video-iframe');
   const modalClose = document.getElementById('modal-close-btn');
   const modalBackdrop = document.getElementById('modal-backdrop');
+  const modalCaseDetails = document.getElementById('modal-case-details-content');
 
   // Helper: Open Modal function
-  function openVideoModal(ytId, title) {
+  function openVideoModal(ytId, title, detailsHtml) {
     modalIframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&cc_load_policy=1`;
     modalIframe.title = title;
+    
+    if (modalCaseDetails) {
+      modalCaseDetails.innerHTML = detailsHtml;
+    }
+    
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden'; // prevent background scrolling
@@ -786,6 +976,11 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
     modalIframe.src = ''; // completely halt video playback/audio
+    
+    if (modalCaseDetails) {
+      modalCaseDetails.innerHTML = '';
+    }
+    
     document.body.style.overflow = '';
   }
 
@@ -824,7 +1019,23 @@ document.addEventListener('DOMContentLoaded', () => {
       // Dynamic overlay play click opens modern cinema modal
       coverWrapper.addEventListener('click', () => {
         const title = card.querySelector('.video-title').textContent;
-        openVideoModal(ytId, title);
+        const desc = card.querySelector('.video-description').textContent.trim();
+        const detailsSource = card.querySelector('.video-case-details-source');
+        
+        let detailsHtml = '';
+        if (detailsSource && detailsSource.innerHTML.trim() !== '') {
+          detailsHtml = detailsSource.innerHTML;
+        } else {
+          detailsHtml = `
+            <div class="modal-case-info">
+              <span class="modal-case-badge">VIDEO RESOURCE</span>
+              <h3 class="modal-case-title">${title}</h3>
+              <p class="modal-case-desc">${desc}</p>
+            </div>
+          `;
+        }
+        
+        openVideoModal(ytId, title, detailsHtml);
       });
 
     } else {
@@ -866,77 +1077,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
-
-  // 2. Multi-Facet Filtering Engine
-  toggles.forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      const facet = toggle.parentElement.dataset.facet;
-      const val = toggle.dataset.val;
-
-      // Toggle value in set
-      if (activeFilters[facet].has(val)) {
-        activeFilters[facet].delete(val);
-        toggle.classList.remove('active');
-      } else {
-        activeFilters[facet].add(val);
-        toggle.classList.add('active');
-      }
-
-      applyFilters();
-    });
-  });
-
-  // Clear filters action
-  clearBtn.addEventListener('click', () => {
-    activeFilters.initiated.clear();
-    activeFilters['ai-form'].clear();
-    
-    toggles.forEach(t => t.classList.remove('active'));
-    applyFilters();
-  });
-
-  // Apply filters to cards
-  function applyFilters() {
-    let hasActiveFilters = false;
-    let visibleCount = 0;
-
-    if (activeFilters.initiated.size > 0 || activeFilters['ai-form'].size > 0) {
-      hasActiveFilters = true;
-    }
-
-    cards.forEach(card => {
-      // Parse card values (safely via getAttribute to avoid dataset subtraction errors)
-      const cardInitiated = card.getAttribute('data-initiated') ? card.getAttribute('data-initiated').split('|') : [];
-      const cardAiForm = card.getAttribute('data-ai-form') ? card.getAttribute('data-ai-form').split('|') : [];
-
-      // Check match per facet
-      let initiatedMatch = activeFilters.initiated.size === 0;
-      if (activeFilters.initiated.size > 0) {
-        initiatedMatch = cardInitiated.some(val => activeFilters.initiated.has(val));
-      }
-
-      let aiFormMatch = activeFilters['ai-form'].size === 0;
-      if (activeFilters['ai-form'].size > 0) {
-        aiFormMatch = cardAiForm.some(val => activeFilters['ai-form'].has(val));
-      }
-
-      // Facet combination: AND criteria across different facets
-      const isVisible = initiatedMatch && aiFormMatch;
-
-      if (isVisible) {
-        card.classList.remove('hidden');
-        visibleCount++;
-      } else {
-        card.classList.add('hidden');
-      }
-    });
-
-    // Toggle Clear button visibility
-    clearBtn.style.display = hasActiveFilters ? 'flex' : 'none';
-
-    // Handle Empty State
-    emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-  }
 });
 </script>
+
+{% include filters_script.html %}
 

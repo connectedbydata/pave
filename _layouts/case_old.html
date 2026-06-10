@@ -402,7 +402,7 @@ layout: default
               {% for slug in page.supporting-resources %}
               {% assign item = site.resources | where: "slug", slug | first %}
               <li>
-                <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                <a href="{{ item.external_url }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
                 {% if item.select %}
                 <span class="inline-res-badge">{{ item.select }}</span>
                 {% endif %}

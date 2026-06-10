@@ -3,14 +3,10 @@ layout: default
 ---
 
 <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title | escape }}</h1>
-    {% if page.website-address %}
-      <p><a href="{{ page.website-address }}" class="btn">Visit Website</a></p>
-    {% endif %}
-  </header>
-
   <div class="post-content">
+    {% if page.website-address %}
+      <p style="margin-bottom: 1.5rem;"><a href="{{ page.website-address }}" class="btn">Visit Website</a></p>
+    {% endif %}
     
     <div class="organisation-details">
       {% if page.organisation-type %}

@@ -563,7 +563,7 @@ tblu6lFzOdgEQKGC4:
       name: URL
       type: url
       sync: true
-      slug: url
+      slug: external_url
     fldNl6UdLiRMpQYrc:
       name: Attachments
       type: multipleAttachments

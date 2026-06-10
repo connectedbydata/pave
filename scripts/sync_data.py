@@ -41,7 +41,7 @@ ATTACHMENT_DIR = Path("assets/attachments")
 
 # Sync Settings
 FILTER_FIELD_ID = "fldrM6RRk8easAxSq"  # Default: Workflow: Status
-FILTER_VALUES = ["Completed"]           # Only sync records with these status values
+FILTER_VALUES = ["Completed","Draft","Nomination","Submission"]           # Only sync records with these status values
 
 def slugify(text):
     text = str(text).lower()
@@ -155,7 +155,7 @@ def resolve_fields(data, schema_map, current_table_id, rec_id, id_to_slug, synce
 def annotate_yaml(yaml_str, field_map):
     lines = yaml_str.splitlines()
     new_lines = []
-    skip_keys = {"layout", "title", "airtable_id", "slug"}
+    skip_keys = {"layout", "title", "airtable_id", "slug", "redirect_from"}
     for line in lines:
         # Match "some-key:" or "  some-key:" or "- some-key:"
         match = re.search(r'^(\s*)(?:-\s+)?([a-zA-Z0-9_-]+):', line)
@@ -297,17 +297,23 @@ def main():
 
             if table_name == "Cases":
                 layout = "case"
+                redirects = [f"/c/{hash_id(rec_id)}/"]
             elif table_name == "Organisations":
                 layout = "organisation"
+                redirects = None
             else:
                 layout = "generic"
+                redirects = None
+            
             front_matter = {
                 "layout": layout,
                 "title": title,
                 "airtable_id": hash_id(rec_id),
                 "slug": slug,
-                **final_data
             }
+            if redirects:
+                front_matter["redirect_from"] = redirects
+            front_matter.update(final_data)
             
             file_path = config["dir"] / f"{slug}.md"
             with open(file_path, "w") as f:

@@ -3,10 +3,8 @@ layout: default
 title: Slideshow
 permalink: /slideshow/
 menus: [header]
+show_banner: false
 ---
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <style>
   /* 1. Hide default Jekyll theme header & footer on slideshow page for immersive view */
@@ -16,7 +14,7 @@ menus: [header]
   .page-content {
     padding: 0 !important;
     margin: 0 !important;
-    background: #000 !important;
+    background: #496a40 !important;
   }
   .page-content .wrapper {
     max-width: none !important;
@@ -25,7 +23,7 @@ menus: [header]
   }
   body {
     overflow: hidden !important;
-    background-color: #000 !important;
+    background-color: #496a40 !important;
     margin: 0 !important;
   }
 
@@ -37,76 +35,82 @@ menus: [header]
     overflow: hidden;
     color: #ffffff;
     font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(135deg, #496a40 0%, #375030 100%);
   }
 
-  /* Top Banner (1/10 Height: 10vh) */
-  .top-banner {
+  /* Top Minimalist Header Overlay (Controls) */
+  .top-header-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 10vh;
-    background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline: 2rem;
+    padding: 1.5rem 2rem;
     box-sizing: border-box;
     z-index: 100;
+    pointer-events: none;
   }
 
-  .banner-left {
+  .top-header-overlay * {
+    pointer-events: auto;
+  }
+
+  /* Back Link */
+  .back-to-cases {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.2s ease;
   }
 
-  .pave-logo {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: #ffffff;
+  .back-to-cases:visited {
+    color: #ffffff !important;
   }
 
-  .banner-middle {
-    display: flex;
-    align-items: center;
-    max-width: 32%;
+  .back-to-cases:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
   }
 
-  .banner-explanation {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.3;
+  .back-to-cases svg {
+    transition: transform 0.2s ease;
   }
 
-  .banner-right {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
+  .back-to-cases:hover svg {
+    transform: translateX(-3px);
   }
 
-  /* Stacked Controls and Dropdown Selector */
-  .controls-and-selector {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.3rem;
-  }
-
-  /* Controls and Progress Bar */
-  .controls-bar {
+  /* Controls Section */
+  .right-controls {
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: none;
-    border: none;
-    padding: 0;
-    box-shadow: none;
+  }
+
+  /* Autoplay Capsule */
+  .autoplay-capsule {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.45rem 1.25rem;
+    border-radius: 9999px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff;
   }
 
   .play-pause-btn {
@@ -117,123 +121,151 @@ menus: [header]
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.25rem;
+    padding: 0.2rem;
     transition: transform 0.2s;
   }
 
   .play-pause-btn:hover {
-    transform: scale(1.12);
+    transform: scale(1.15);
   }
 
   .play-pause-btn svg {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .speed-control-group {
-    display: flex;
-    align-items: center;
+    width: 1.15rem;
+    height: 1.15rem;
   }
 
   .speed-select {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    border: none;
     color: #ffffff;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.75rem;
+    font-family: inherit;
+    font-size: 0.8rem;
     font-weight: 600;
-    padding: 0.2rem 0.4rem;
-    border-radius: 6px;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .speed-select:hover {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.35);
+    padding-right: 1.25rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
   }
 
   .speed-select option {
-    background: #0f172a;
+    background: #375030;
     color: #ffffff;
   }
 
   .progress-bar-container {
-    width: 110px;
+    width: 80px;
     height: 4px;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 9999px;
+    border-radius: 2px;
     overflow: hidden;
   }
 
   .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background: #6366f1;
-    border-radius: 9999px;
+    background: #ffffff;
+    border-radius: 2px;
   }
 
   .slide-counter {
     font-family: 'Outfit', sans-serif;
     font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
-    min-width: 50px;
+    min-width: 45px;
     text-align: center;
   }
 
-  /* Case selector styles */
-  .case-select-group {
+  /* Case Selector Capsule */
+  .case-select-capsule {
     display: flex;
     align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.45rem 1.25rem;
+    border-radius: 9999px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .case-select {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: transparent;
+    border: none;
     color: #ffffff;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.725rem;
+    font-family: inherit;
+    font-size: 0.8rem;
     font-weight: 600;
-    padding: 0.15rem 0.4rem;
-    border-radius: 5px;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
-    max-width: 280px;
+    padding-right: 1.5rem;
+    max-width: 250px;
     text-overflow: ellipsis;
-  }
-
-  .case-select:hover {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.35);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
   }
 
   .case-select option {
-    background: #0f172a;
+    background: #375030;
     color: #ffffff;
   }
 
-  /* Exit Button style */
-  .exit-btn {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #ffffff;
+  /* Static/Fixed Header Info & Logo (Stays static unless changing) */
+  .fixed-top-header {
+    position: absolute;
+    top: 6.5rem;
+    left: 4.5rem;
+    right: 4.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 90;
+    pointer-events: none;
+  }
+
+  .fixed-top-header * {
+    pointer-events: auto;
+  }
+
+  .slide-case-info {
+    max-width: 65%;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .slide-case-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .slide-case-subtitle {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .slide-pave-logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: all 0.2s;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: transparent;
   }
 
-  .exit-btn:hover {
-    background: rgba(255, 255, 255, 0.22);
-    transform: scale(1.05);
+  .slide-pave-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   /* Slides Track */
@@ -248,541 +280,388 @@ menus: [header]
     width: 100vw;
     height: 100vh;
     flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-size: cover;
-    background-position: center;
     position: relative;
     box-sizing: border-box;
+    padding: 11rem 4.5rem 5rem 4.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1;
+    overflow: hidden;
   }
 
-  .slide-overlay {
+  /* Fixed Background Layers (sit on container, never move with slides) */
+  .bg-layer {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.6) 60%, rgba(15, 23, 42, 0.75) 100%);
-    z-index: 1;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 0.7s ease;
   }
 
-  /* Defined Color Palettes for Slides without Images */
-  .bg-palette-0 { background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); }
-  .bg-palette-1 { background: linear-gradient(135deg, #064e3b 0%, #022c22 100%); }
-  .bg-palette-2 { background: linear-gradient(135deg, #0c4a6e 0%, #0f172a 100%); }
-  .bg-palette-3 { background: linear-gradient(135deg, #7c2d12 0%, #4c1d95 100%); }
-  .bg-palette-4 { background: linear-gradient(135deg, #450a0a 0%, #1e1b4b 100%); }
-  .bg-palette-5 { background: linear-gradient(135deg, #111827 0%, #374151 100%); }
-
-  /* Message content Area (aligned in the middle 65% of screen height) */
-  .slide-content-upper {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    z-index: 10;
-    padding-top: 10vh; /* Shifts text below top banner */
-    padding-bottom: 25vh; /* Shifts text above bottom details */
-  }
-
-  .message-wrapper {
-    max-width: 960px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    padding-inline: 2rem;
-    text-align: center;
-  }
-
-  .message-type-badge {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.35rem 0.85rem;
-    border-radius: 9999px;
-  }
-
-  .message-type-badge.type-issue {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
-  }
-
-  .message-type-badge.type-recommendation {
-    background: rgba(34, 197, 94, 0.15);
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    color: #86efac;
-  }
-
-  .message-type-badge.type-quote {
-    background: rgba(168, 85, 247, 0.15);
-    border: 1px solid rgba(168, 85, 247, 0.3);
-    color: #d8b4fe;
-  }
-
-  .message-text {
-    font-family: 'Outfit', sans-serif;
-    font-size: 2.35rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: #ffffff;
-    margin: 0;
-    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
-  }
-
-  .message-text.quote-text {
-    font-style: italic;
-    font-weight: 500;
-  }
-
-  .message-credit {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 0;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-
-  /* 3. Fixed Bottom Case Details Container (25vh) */
-  .fixed-details-container {
+  .bg-layer-halftone {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: -60vw;
+    right: -60vw;
+    top: auto;
+    left: auto;
     width: 100vw;
-    height: 25vh;
-    z-index: 90;
-    box-sizing: border-box;
-    padding: 0 2rem 2rem 2rem;
+    height: 100vw;
+    background-image: url('{{ "/assets/images/halftone-circle.png" | relative_url }}');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: inherit;
   }
 
-  .case-details-panel {
-    position: absolute;
-    inset: 0 2rem 2rem 2rem;
-    display: grid;
-    /* Three-column layout: 1/2 Column (Other Info), 1/4 Column (Participants), 1/4 Column (Map) */
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 2rem;
-    padding: 1.25rem 2rem;
-    border-radius: 24px;
-    box-sizing: border-box;
-  }
-
-  /* Glassmorphism Panel styles */
-  .glass-container-dark {
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-  }
-
-  @supports not (backdrop-filter: blur(1px)) {
-    .glass-container-dark {
-      background: rgba(15, 23, 42, 0.95);
-    }
-  }
-
-  /* Column 1: Other Info (First 1/2 Column: 50% Width) */
-  .details-left {
+  /* Main Quote Content Area */
+  .slide-quote-content {
+    flex: 1;
+    min-height: 60vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-y: auto;
-    scrollbar-width: none;
-    padding-right: 0.5rem;
-  }
-  .details-left::-webkit-scrollbar {
-    display: none;
+    align-items: flex-start;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 5;
+    padding-bottom: 4rem;
   }
 
-  .project-title {
+  .quote-header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .quote-icon-open {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.3rem;
+    font-size: clamp(3rem, 6vh, 5rem);
+    color: #8fa68b;
+    line-height: 1;
     font-weight: 700;
-    color: #ffffff;
-    margin: 0 0 0.2rem 0;
   }
 
-  .project-subtitle {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 0 0 0.75rem 0;
-    line-height: 1.35;
+  .quote-type {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.4rem, 2.5vh, 2rem);
+    font-weight: 700;
+    color: #8fa68b;
+    letter-spacing: 0.02em;
   }
 
-  .methods-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-
-  .method-tag {
-    font-size: 0.68rem;
+  .quote-body {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2rem, 4.5vh, 4rem);
     font-weight: 600;
+    line-height: 1.45;
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 0.2rem 0.5rem;
-    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    text-align: left;
   }
 
-  /* Column 2: Participant Info (Middle 1/4 Column: 25% Width) */
-  .details-middle {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    padding-left: 1.5rem;
-    overflow-y: auto;
-    scrollbar-width: none;
-    padding-right: 0.5rem;
-  }
-  .details-middle::-webkit-scrollbar {
-    display: none;
-  }
-
-  .recruitment-methods-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-bottom: 0.45rem;
-  }
-
-  .recruitment-tag {
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #a5b4fc;
-    background: rgba(165, 180, 252, 0.1);
-    border: 1px solid rgba(165, 180, 252, 0.25);
-    padding: 0.15rem 0.45rem;
-    border-radius: 4px;
-  }
-
-  .stat-line {
+  .quote-footer {
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.88rem;
-    line-height: 1.35;
   }
 
-  .stat-line.deliberation-info {
-    margin-top: 0.35rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .stat-icon {
-    font-size: 1.15rem;
+  .quote-icon-close {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.5rem, 5vh, 4rem);
+    color: #8fa68b;
     line-height: 1;
-    margin-top: 0.05rem;
+    font-weight: 700;
+    margin-top: 0.15rem;
   }
 
-  .stat-text strong {
-    color: #cbd5e1;
+  .quote-credit {
+    font-size: clamp(0.9rem, 1.8vh, 1.2rem);
+    font-weight: 500;
+    color: #8fa68b;
+    line-height: 1.4;
   }
 
-  .apply-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-top: 0.35rem;
-  }
-
-  .apply-tag {
-    font-size: 0.62rem;
-    font-weight: 600;
-    color: #86efac;
-    background: rgba(134, 239, 172, 0.15);
-    border: 1px solid rgba(134, 239, 172, 0.25);
-    padding: 0.15rem 0.45rem;
-    border-radius: 4px;
-  }
-
-  /* Column 3: Leaflet Mini Map (Right 1/4 Column: 25% Width) */
-  .details-right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    padding-left: 1.5rem;
-  }
-
-  .case-mini-map {
-    width: 100%;
-    height: 100%;
-    max-height: 130px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: #111827;
-  }
-
-  /* Navigation Controls */
-  .nav-control {
+  /* Slide Navigation Controls (Bottom Right) */
+  .nav-controls-container {
     position: absolute;
-    top: 36%;
-    width: 3.5rem;
-    height: 3.5rem;
+    bottom: 2.5rem;
+    right: 3rem;
+    display: flex;
+    gap: 0.75rem;
+    z-index: 100;
+  }
+
+  .nav-circle-btn {
+    width: 2.85rem;
+    height: 2.85rem;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #496a40;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.2rem;
     cursor: pointer;
-    z-index: 95;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    user-select: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .nav-control:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.35);
-    transform: scale(1.06);
+  .nav-circle-btn:hover {
+    transform: scale(1.08);
+    background-color: #f3f4f6;
   }
 
-  .prev-control { left: 2.5rem; }
-  .next-control { right: 2.5rem; }
+  .nav-circle-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 
-  /* 4. Responsive Styling */
+  /* QR Code Widget (Bottom Left) */
+  .qr-widget {
+    position: absolute;
+    bottom: 2rem;
+    left: 3rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+  }
+
+  .qr-widget.fading {
+    opacity: 0;
+  }
+
+  .qr-widget canvas {
+    border-radius: 8px;
+    display: block;
+  }
+
+  .qr-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Responsive Styling */
   @media (max-width: 992px) {
-    .case-details-panel {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      padding: 1rem 1.5rem;
-      overflow-y: auto;
+    .slide-item {
+      padding: 13rem 3rem 4rem 3rem;
     }
-    .details-middle {
-      border-left: none;
-      padding-left: 0;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    .fixed-top-header {
+      top: 6.5rem;
+      left: 3rem;
+      right: 3rem;
     }
-    .details-right {
-      border-left: none;
-      padding-left: 0;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      justify-content: flex-start;
+    .slide-case-title {
+      font-size: 1.8rem;
     }
-    .case-mini-map {
-      max-height: 90px;
-    }
-    .fixed-details-container {
-      height: 42vh;
-      padding: 0 1.5rem 1.5rem 1.5rem;
-    }
-    .case-details-panel {
-      inset: 0 1.5rem 1.5rem 1.5rem;
-    }
-    .slide-content-upper {
-      padding-bottom: 42vh;
-    }
-    .message-text {
-      font-size: 1.85rem;
+    .quote-body {
+      font-size: 1.75rem;
     }
   }
 
   @media (max-width: 768px) {
-    .top-banner {
-      height: 15vh;
+    .top-header-overlay {
+      padding: 1rem;
       flex-direction: column;
-      justify-content: center;
-      gap: 0.35rem;
-      padding-inline: 1rem;
-      padding-block: 0.5rem;
+      align-items: stretch;
+      gap: 0.75rem;
     }
-    .banner-explanation {
-      display: none; /* Hide explanation on phone screens to fit controls bar */
-    }
-    .banner-right {
-      width: 100%;
+    .right-controls {
       justify-content: space-between;
+      width: 100%;
+    }
+    .autoplay-capsule {
+      flex: 1;
+      justify-content: space-between;
+      padding: 0.35rem 0.85rem;
       gap: 0.5rem;
     }
-    .controls-and-selector {
-      margin-right: 0;
-      flex: 1;
-      justify-content: space-between;
-      gap: 0.3rem;
-      width: 100%;
+    .progress-bar-container {
+      width: 60px;
     }
-    .controls-bar {
-      width: 100%;
-      justify-content: space-between;
-    }
-    .case-select-group {
-      width: 100%;
+    .case-select-capsule {
+      padding: 0.35rem 0.85rem;
     }
     .case-select {
-      width: 100%;
       max-width: none;
+      width: 100%;
     }
-    .progress-bar-container {
-      width: auto;
-      flex: 1;
-    }
-    .exit-btn {
-      width: 1.75rem;
-      height: 1.75rem;
+    .back-to-cases {
+      align-self: flex-start;
+      padding: 0.4rem 1rem;
       font-size: 0.8rem;
     }
-    .slide-content-upper {
-      padding-top: 16vh;
-      padding-bottom: 42vh;
-      padding-inline: 1rem;
+    .fixed-top-header {
+      top: 10rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      flex-direction: column-reverse;
+      gap: 0.75rem;
     }
-    .message-text {
+    .slide-item {
+      padding: 18rem 1.5rem 6rem 1.5rem;
+    }
+    .slide-case-title {
       font-size: 1.45rem;
     }
-    .fixed-details-container {
-      height: 40vh;
-      padding: 0 0.75rem 0.75rem 0.75rem;
+    .slide-case-subtitle {
+      font-size: 0.85rem;
     }
-    .case-details-panel {
-      inset: 0 0.75rem 0.75rem 0.75rem;
-      padding: 0.75rem 1.25rem;
-      border-radius: 18px;
-    }
-    .project-title {
-      font-size: 1.15rem;
-    }
-    .stat-line {
-      font-size: 0.8rem;
-    }
-    .nav-control {
-      top: 28%;
+    .slide-pave-logo {
       width: 2.75rem;
       height: 2.75rem;
-      font-size: 1.6rem;
+      align-self: flex-end;
     }
-    .prev-control { left: 0.5rem; }
-    .next-control { right: 0.5rem; }
-    .details-right {
-      display: none; /* Hide map on small viewports */
+    .quote-type {
+      font-size: 1.35rem;
+    }
+    .quote-icon-open {
+      font-size: 2.6rem;
+    }
+    .quote-body {
+      font-size: 1.35rem;
+      line-height: 1.45;
+    }
+    .quote-icon-close {
+      font-size: 2.2rem;
+    }
+    .quote-credit {
+      font-size: 0.88rem;
+    }
+    .bg-layer-halftone {
+      width: 120vw;
+      height: 120vw;
+      bottom: -72vw;
+      right: -72vw;
+    }
+    .nav-controls-container {
+      bottom: 1.5rem;
+      right: 1.5rem;
+    }
+    .nav-circle-btn {
+      width: 2.5rem;
+      height: 2.5rem;
     }
   }
 </style>
 
 <div class="slideshow-container" id="slideshow-container">
-  <!-- Top Banner (1/10 height: 10vh) -->
-  <div class="top-banner">
-    <div class="banner-left">
-      <span class="pave-logo">PAVE: Towards a Citizens Track on AI</span>
-    </div>
-    <div class="banner-middle">
-      <span class="banner-explanation">Findings from participatory public engagement across the world</span>
-    </div>
-    <div class="banner-right">
-      <!-- Stacked Controls and Dropdown Selector -->
-      <div class="controls-and-selector">
-        <!-- Controls Bar -->
-        <div class="controls-bar">
-          <button class="play-pause-btn" id="play-pause-btn" aria-label="Pause Autoplay">
-            <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-            </svg>
-            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-          </button>
+  <!-- Top Minimalist Header Overlay -->
+  <div class="top-header-overlay">
+    <!-- Back to Cases -->
+    <a href="{{ '/' | relative_url }}" class="back-to-cases" title="Back to Case Studies">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>All Cases</span>
+    </a>
 
-          <!-- Autoplay Speed Selector -->
-          <div class="speed-control-group">
-            <select id="speed-select" class="speed-select" aria-label="Autoplay Speed">
-              <option value="14000">Slow (14s)</option>
-              <option value="10000">Fast (10s)</option>
-              <option value="7000" selected>Fastest (7s)</option>
-            </select>
-          </div>
+    <!-- Controls capsule & case selector -->
+    <div class="right-controls">
+      <!-- Autoplay capsule -->
+      <div class="autoplay-capsule">
+        <button class="play-pause-btn" id="play-pause-btn" aria-label="Pause Autoplay">
+          <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+          <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
 
-          <div class="progress-bar-container">
-            <div class="progress-bar-fill" id="progress-bar-fill"></div>
-          </div>
-          <div class="slide-counter" id="slide-counter">1 / 1</div>
+        <select id="speed-select" class="speed-select" aria-label="Autoplay Speed">
+          <option value="14000">Slow (14s)</option>
+          <option value="10000">Medium (10s)</option>
+          <option value="7000" selected>Fast (7s)</option>
+        </select>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
         </div>
 
-        <!-- Case Selection Dropdown (Under controls) -->
-        <div class="case-select-group">
-          <select id="case-select" class="case-select" aria-label="Select Case Study">
-            {% assign opt_case_index = 0 %}
-            {% for case in site.cases %}
-              {% if case.messages %}
-                <option value="{{ opt_case_index }}">{{ case.title | escape }}</option>
-                {% assign opt_case_index = opt_case_index | plus: 1 %}
-              {% endif %}
-            {% endfor %}
-          </select>
-        </div>
+        <div class="slide-counter" id="slide-counter">1 / 1</div>
       </div>
 
-      <!-- Exit Button -->
-      <a href="{{ '/' | relative_url }}" class="exit-btn" title="Exit Slideshow">✕</a>
+      <!-- Case Selection Capsule -->
+      <div class="case-select-capsule">
+        <select id="case-select" class="case-select" aria-label="Select Case Study">
+          {% assign opt_case_index = 0 %}
+          {% for case in site.cases %}
+            {% if case.messages %}
+              <option value="{{ opt_case_index }}">{{ case.title | escape }}</option>
+              {% assign opt_case_index = opt_case_index | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
     </div>
+  </div>
+
+  <!-- Fixed Top Header (Static Case Title/Subtitle & PAVE Logo) -->
+  <div class="fixed-top-header">
+    <div class="slide-case-info" id="fixed-case-info">
+      <h2 class="slide-case-title" id="fixed-case-title"></h2>
+      <p class="slide-case-subtitle" id="fixed-case-subtitle"></p>
+    </div>
+    <div class="slide-pave-logo">
+      <img src="{{ '/assets/images/adobe_component_6.png' | relative_url }}" alt="PAVE Logo">
+    </div>
+  </div>
+
+  <!-- Fixed Background Layers (A/B for cross-fade, never move with slides) -->
+  <div class="bg-layer" id="bg-layer-a" style="opacity: 0.28;">
+    <div class="bg-layer-halftone"></div>
+  </div>
+  <div class="bg-layer" id="bg-layer-b" style="opacity: 0;">
+    <div class="bg-layer-halftone"></div>
   </div>
 
   <!-- Slides Track -->
   <div class="slides-track" id="slides-track">
     {% assign slide_index = 0 %}
     {% assign case_index = 0 %}
-    {% assign color_index = 0 %}
     
     {% for case in site.cases %}
       {% if case.messages %}
         {% for message_slug in case.messages %}
           {% assign message = site.messages | where: "slug", message_slug | first %}
           {% if message %}
-            
-            <!-- Slide Background Selection -->
-            {% assign has_photo = false %}
-            {% if case.photos-and-images and case.photos-and-images.size > 0 %}
-              {% assign photo_url = case.photos-and-images.first.url | relative_url %}
-              {% assign has_photo = true %}
-            {% else %}
-              {% assign palette_class = "bg-palette-" | append: color_index %}
-              {% assign color_index = color_index | plus: 1 %}
-              {% if color_index > 5 %}
-                {% assign color_index = 0 %}
-              {% endif %}
-            {% endif %}
 
-            <div class="slide-item {% if has_photo %}has-photo-bg{% else %}{{ palette_class }}{% endif %}" 
-                 {% if has_photo %}style="background-image: url('{{ photo_url }}');"{% endif %}
+            <div class="slide-item" 
                  data-slide-index="{{ slide_index }}"
-                 data-case-index="{{ case_index }}">
-              
-              <!-- Dark Overlay for images -->
-              {% if has_photo %}
-              <div class="slide-overlay"></div>
-              {% endif %}
+                 data-case-index="{{ case_index }}"
+                 data-case-title="{{ case.title | escape }} ({{case.what-year-did-the-project-start}} - {{case.what-year-did-the-project-conclude}})"
+                 data-case-subtitle="Participatory engagement about {{ case.describe-the-subject-matter-in-your-own-words-one | escape }}"
+                 data-case-url="{{ '/c/' | append: case.airtable_id | append: '/' | absolute_url }}">
 
-              <!-- Upper 3/4: Message content -->
-              <div class="slide-content-upper">
-                <div class="message-wrapper">
-                  <span class="message-type-badge type-{{ message.type | downcase }}">{{ message.type }}</span>
-                  
-                  {% if message.type == "Quote" %}
-                  <blockquote class="message-text quote-text">“{{ message.title }}”</blockquote>
-                  {% else %}
-                  <p class="message-text">{{ message.title }}</p>
-                  {% endif %}
-                  
-                  {% if message.additional-credit-line %}
-                  <p class="message-credit">{{ message.additional-credit-line }}</p>
-                  {% endif %}
+              <!-- Center: Quote / Recommendation Body -->
+              <div class="slide-quote-content">
+                <div class="quote-header">
+                  <span class="quote-icon-open">“</span>
+                  <span class="quote-type">{{ message.type }}</span>
                 </div>
+                <div class="quote-body">
+                  {{ message.title }}
+                </div>
+                {% if message.additional-credit-line %}
+                  <div class="quote-footer">
+                    <span class="quote-icon-close">”</span>
+                    <span class="quote-credit">{{ message.additional-credit-line }}</span>
+                  </div>
+                {% endif %}
               </div>
             </div>
+
             {% assign slide_index = slide_index | plus: 1 %}
           {% endif %}
         {% endfor %}
@@ -791,262 +670,31 @@ menus: [header]
     {% endfor %}
   </div>
 
-  <!-- Fixed Case Details Container (positioned fixed at the bottom 25vh) -->
-  <div class="fixed-details-container">
-    {% assign inner_case_index = 0 %}
-    {% for case in site.cases %}
-      {% if case.messages %}
-        
-        <!-- Pre-calculate Stats & Tags in Liquid -->
-        {% assign total_participants = 0 %}
-        {% assign has_deliberation = false %}
-        {% assign deliberating_people = 0 %}
-        {% assign deliberating_hours = 0 %}
-        {% assign do_apply_list = "" | split: "" %}
-        {% assign recruitment_methods = "" | split: "" %}
-        
-        {% if case.participants %}
-          {% for part_slug in case.participants %}
-            {% assign participant = site.participants | where: "slug", part_slug | first %}
-            {% if participant %}
-              {% if participant.how-many-people-took-part %}
-                {% assign num = participant.how-many-people-took-part | plus: 0 %}
-                {% assign total_participants = total_participants | plus: num %}
-              {% endif %}
-              
-              {% if participant.recruitment-method %}
-                {% unless recruitment_methods contains participant.recruitment-method %}
-                  {% assign recruitment_methods = recruitment_methods | push: participant.recruitment-method %}
-                {% endunless %}
-              {% endif %}
-              
-              {% assign is_delib = false %}
-              {% for method in participant.which-of-the-following-methods-were-used-to %}
-                {% if method == 'Deliberation' %}
-                  {% assign is_delib = true %}
-                {% endif %}
-              {% endfor %}
-              {% if is_delib %}
-                {% assign has_deliberation = true %}
-                {% assign p_count = participant.how-many-people-took-part | plus: 0 %}
-                {% assign deliberating_people = deliberating_people | plus: p_count %}
-                {% assign p_hours = participant.on-average-how-many-hours-did-each-participant | plus: 0 %}
-                {% assign deliberating_hours = deliberating_hours | plus: p_hours %}
-              {% endif %}
-              
-              {% if participant.do-any-of-the-following-apply %}
-                {% for item in participant.do-any-of-the-following-apply %}
-                  {% unless do_apply_list contains item %}
-                    {% assign do_apply_list = do_apply_list | push: item %}
-                  {% endunless %}
-                {% endfor %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-
-        {% assign unique_methods = "" | split: "" %}
-        {% if case.participants %}
-          {% for part_slug in case.participants %}
-            {% assign part = site.participants | where: "slug", part_slug | first %}
-            {% if part and part.which-of-the-following-methods-were-used-to %}
-              {% for method in part.which-of-the-following-methods-were-used-to %}
-                {% unless unique_methods contains method %}
-                  {% assign unique_methods = unique_methods | push: method %}
-                {% endunless %}
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-
-        <div class="case-details-panel glass-container-dark" id="case-panel-{{ inner_case_index }}" style="opacity: 0; pointer-events: none; transition: opacity 0.4s ease;">
-          
-          <!-- Column 1: Other Info (First 1/2 Column: 50% Width) -->
-          <div class="details-left">
-            <h2 class="project-title">{{ case.title | escape }}</h2>
-            <p class="project-subtitle">Participatory engagement about {{ case.describe-the-subject-matter-in-your-own-words-one | escape }}</p>
-            
-            <!-- Engagement method tags -->
-            {% if unique_methods.size > 0 %}
-            <div class="methods-tags">
-              {% for method in unique_methods %}
-                <span class="method-tag">{{ method }}</span>
-              {% endfor %}
-            </div>
-            {% endif %}
-          </div>
-          
-          <!-- Column 2: Participant Info (Middle 1/4 Column: 25% Width) -->
-          <div class="details-middle">
-            <!-- Recruitment methods tags (above Overall NNN people took part) -->
-            {% if recruitment_methods.size > 0 %}
-            <div class="recruitment-methods-tags">
-              {% for rm in recruitment_methods %}
-                <span class="recruitment-tag">{{ rm }}</span>
-              {% endfor %}
-            </div>
-            {% endif %}
-
-            <div class="stat-line overall-participants">
-              <span class="stat-icon">👥</span>
-              <span class="stat-text">Overall <strong>{{ total_participants }}</strong> people took part.</span>
-            </div>
-
-            <!-- Deliberation stats and do-any-of-the-following-apply tags -->
-            {% if has_deliberation %}
-              <div class="stat-line deliberation-info">
-                <span class="stat-icon">💭</span>
-                <span class="stat-text"><strong>{{ deliberating_people }}</strong> people deliberated over <strong>{{ deliberating_hours }}</strong> hours to produce these findings.</span>
-              </div>
-              {% if do_apply_list.size > 0 %}
-                <div class="apply-tags">
-                  {% for item in do_apply_list %}
-                    <span class="apply-tag">{{ item }}</span>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            {% endif %}
-          </div>
-          
-          <!-- Column 3: Leaflet Mini Map (Right 1/4 Column: 25% Width) -->
-          <div class="details-right">
-            <div id="case-mini-map-{{ inner_case_index }}" class="case-mini-map"></div>
-          </div>
-        </div>
-        
-        {% assign inner_case_index = inner_case_index | plus: 1 %}
-      {% endif %}
-    {% endfor %}
+  <!-- QR Code Widget (Bottom Left) -->
+  <div class="qr-widget" id="qr-widget">
+    <div id="qr-code"></div>
+    <span class="qr-label">Scan to view case</span>
   </div>
 
-  <!-- Next / Prev Controls -->
-  <button class="nav-control prev-control" id="prev-btn" aria-label="Previous slide">‹</button>
-  <button class="nav-control next-control" id="next-btn" aria-label="Next slide">›</button>
+  <!-- Navigation Controls (Bottom Right) -->
+  <div class="nav-controls-container">
+    <button class="nav-circle-btn" id="prev-btn" aria-label="Previous slide">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </button>
+    <button class="nav-circle-btn" id="next-btn" aria-label="Next slide">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
+  </div>
 </div>
 
-<!-- Leaflet Dynamic Maps Scripts Block -->
-{% assign inner_case_index = 0 %}
-{% for case in site.cases %}
-  {% if case.messages %}
-    <script>
-      (function() {
-        // Collect coordinates and titles for this case's map markers
-        var markers = [
-          // Lead Organisations
-          {% if case.lead-organisations %}
-            {% for org_slug in case.lead-organisations %}
-              {% assign org = site.organisations | where: "slug", org_slug | first %}
-              {% if org %}
-                {% for loc_slug in org.main-location %}
-                  {% assign loc = site.locations | where: "slug", loc_slug | first %}
-                  {% if loc.latitude and loc.longitude %}
-                    {
-                      lat: {{ loc.latitude }},
-                      lng: {{ loc.longitude }},
-                      title: "{{ org.title | escape }} (Lead)",
-                      color: "#1d4ed8",
-                      radius: 7,
-                      weight: 2
-                    },
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-
-          // Involved Organisations
-          {% if case.involved-organisations %}
-            {% for org_slug in case.involved-organisations %}
-              {% assign org = site.organisations | where: "slug", org_slug | first %}
-              {% if org %}
-                {% for loc_slug in org.main-location %}
-                  {% assign loc = site.locations | where: "slug", loc_slug | first %}
-                  {% if loc.latitude and loc.longitude %}
-                    {
-                      lat: {{ loc.latitude }},
-                      lng: {{ loc.longitude }},
-                      title: "{{ org.title | escape }} (Involved)",
-                      color: "#64748b",
-                      radius: 4,
-                      weight: 1
-                    },
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-
-          // Participants
-          {% if case.participants %}
-            {% for part_slug in case.participants %}
-              {% assign part = site.participants | where: "slug", part_slug | first %}
-              {% if part %}
-                {% for loc_slug in part.locations %}
-                  {% assign loc = site.locations | where: "slug", loc_slug | first %}
-                  {% if loc.latitude and loc.longitude %}
-                    {
-                      lat: {{ loc.latitude }},
-                      lng: {{ loc.longitude }},
-                      title: "{{ part.title | escape }} (Participants)",
-                      color: "#f97316",
-                      radius: 5.5,
-                      weight: 1.5
-                    },
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        ];
-
-        window.addEventListener('load', () => {
-          const mapEl = document.getElementById('case-mini-map-{{ inner_case_index }}');
-          if (mapEl && markers.length > 0) {
-            var map = L.map('case-mini-map-{{ inner_case_index }}', {
-              zoomControl: false,
-              attributionControl: false
-            }).setView([20, 0], 2);
-
-            // Light theme CARTO basemap tiles
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-              maxZoom: 20
-            }).addTo(map);
-
-            var bounds = L.latLngBounds();
-
-            markers.forEach(function (m) {
-              var marker = L.circleMarker([m.lat, m.lng], {
-                radius: m.radius,
-                fillColor: m.color,
-                color: "#ffffff",
-                weight: m.weight,
-                opacity: 1,
-                fillOpacity: 0.85
-              }).addTo(map);
-
-              marker.bindPopup("<strong style='font-family:Plus Jakarta Sans, sans-serif; font-size:11px;'>" + m.title + "</strong>");
-              bounds.extend([m.lat, m.lng]);
-            });
-
-            // Adjust size and bounds center
-            setTimeout(function () {
-              map.invalidateSize();
-              map.fitBounds(bounds, { padding: [15, 15], maxZoom: 10 });
-            }, 200);
-
-            // Cache map reference to allow dynamic resize triggers
-            if (!window.caseMaps) window.caseMaps = {};
-            window.caseMaps[{{ inner_case_index }}] = map;
-          } else if (mapEl) {
-            // Remove maps frame if empty
-            mapEl.parentNode.style.display = 'none';
-          }
-        });
-      })();
-    </script>
-    {% assign inner_case_index = inner_case_index | plus: 1 %}
-  {% endif %}
-{% endfor %}
+<!-- QR Code Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <!-- Slideshow Logic Engine -->
 <script>
@@ -1068,42 +716,67 @@ document.addEventListener('DOMContentLoaded', () => {
   if (totalSlides === 0) return;
 
   let currentIndex = 0;
-  let slideDuration = parseInt(speedSelect.value); // Read value from speedSelect
+  let slideDuration = parseInt(speedSelect.value);
   let lastTime = 0;
   let progress = 0;
   let animationFrameId = null;
   let isPlaying = true;
-  let activeCaseIndex = -1;
+  let currentCaseIndex = -1;
+
+  // Background cross-fade layer references
+  const bgLayerA = document.getElementById('bg-layer-a');
+  const bgLayerB = document.getElementById('bg-layer-b');
+  let activeBgLayer = 'a'; // 'a' starts visible
+
+  // Cross-fade between fixed background layers on case change
+  function crossFadeBackground() {
+    // Both layers show the same halftone image right now.
+    // If per-case background images are added via data-bg on slides,
+    // set the inactive layer's image here before fading.
+    const incoming = activeBgLayer === 'a' ? bgLayerB : bgLayerA;
+    const outgoing = activeBgLayer === 'a' ? bgLayerA : bgLayerB;
+
+    incoming.style.opacity = '0.28';
+    outgoing.style.opacity = '0';
+    activeBgLayer = activeBgLayer === 'a' ? 'b' : 'a';
+  }
 
   // Initialize Counter display
   slideCounter.innerText = `1 / ${totalSlides}`;
 
-  function updateCasePanel(caseIndex) {
+  // QR Code widget
+  const qrWidget = document.getElementById('qr-widget');
+  const qrCodeEl = document.getElementById('qr-code');
+  let qrInstance = null;
+  let qrCurrentUrl = null;
+
+  function updateQRCode(url) {
+    if (!url || url === qrCurrentUrl) return;
+    qrCurrentUrl = url;
+
+    // Fade out
+    qrWidget.classList.add('fading');
+    setTimeout(() => {
+      // Clear previous QR
+      qrCodeEl.innerHTML = '';
+      qrInstance = new QRCode(qrCodeEl, {
+        text: url,
+        width: 128,
+        height: 128,
+        colorDark: '#ffffff',
+        colorLight: 'rgba(0,0,0,0)',
+        correctLevel: QRCode.CorrectLevel.L
+      });
+      // Fade back in
+      qrWidget.classList.remove('fading');
+    }, 300);
+  }
+
+  function updateCaseSelect(caseIndex) {
     // Sync the case dropdown value
     if (caseSelect) {
       caseSelect.value = caseIndex;
     }
-
-    if (activeCaseIndex === caseIndex) return; // Case didn't change, panel stays completely fixed!
-    activeCaseIndex = caseIndex;
-
-    const panels = document.querySelectorAll('.case-details-panel');
-    panels.forEach((panel, idx) => {
-      if (idx === caseIndex) {
-        panel.style.opacity = '1';
-        panel.style.pointerEvents = 'auto';
-        
-        // Trigger invalidateSize to draw leaflet map perfectly
-        if (window.caseMaps && window.caseMaps[caseIndex]) {
-          setTimeout(() => {
-            window.caseMaps[caseIndex].invalidateSize();
-          }, 80);
-        }
-      } else {
-        panel.style.opacity = '0';
-        panel.style.pointerEvents = 'none';
-      }
-    });
   }
 
   function goToSlide(index) {
@@ -1115,10 +788,40 @@ document.addEventListener('DOMContentLoaded', () => {
     track.style.transform = `translateX(-${currentIndex * 100}vw)`;
     slideCounter.innerText = `${currentIndex + 1} / ${totalSlides}`;
     
-    // Update case info panel (stays fixed if caseIndex is the same)
+    // Update case info elements with transitions when case changes
     const activeSlide = slides[currentIndex];
     const caseIndex = parseInt(activeSlide.dataset.caseIndex);
-    updateCasePanel(caseIndex);
+    const title = activeSlide.dataset.caseTitle;
+    const subtitle = activeSlide.dataset.caseSubtitle;
+
+    const titleEl = document.getElementById('fixed-case-title');
+    const subtitleEl = document.getElementById('fixed-case-subtitle');
+    const caseInfoEl = document.getElementById('fixed-case-info');
+
+    if (caseIndex !== currentCaseIndex) {
+      currentCaseIndex = caseIndex;
+
+      // Cross-fade the fixed background layer
+      crossFadeBackground();
+
+      // Update QR code for this case
+      updateQRCode(activeSlide.dataset.caseUrl);
+
+      // Fade out/in the case title block
+      if (caseInfoEl) {
+        caseInfoEl.style.opacity = '0';
+        setTimeout(() => {
+          if (titleEl) titleEl.textContent = title;
+          if (subtitleEl) subtitleEl.textContent = subtitle;
+          caseInfoEl.style.opacity = '1';
+        }, 150);
+      } else {
+        if (titleEl) titleEl.textContent = title;
+        if (subtitleEl) subtitleEl.textContent = subtitle;
+      }
+    }
+
+    updateCaseSelect(caseIndex);
 
     // Reset timer progress
     lastTime = performance.now();
@@ -1249,10 +952,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Initialize the first panel display
+  // Initialize the first dropdown value, fixed header content & QR code
   if (slides[0]) {
-    const initialCaseIndex = parseInt(slides[0].dataset.caseIndex);
-    updateCasePanel(initialCaseIndex);
+    const initialSlide = slides[0];
+    const initialCaseIndex = parseInt(initialSlide.dataset.caseIndex);
+    const initialTitle = initialSlide.dataset.caseTitle;
+    const initialSubtitle = initialSlide.dataset.caseSubtitle;
+
+    const titleEl = document.getElementById('fixed-case-title');
+    const subtitleEl = document.getElementById('fixed-case-subtitle');
+
+    if (titleEl) titleEl.textContent = initialTitle;
+    if (subtitleEl) subtitleEl.textContent = initialSubtitle;
+    currentCaseIndex = initialCaseIndex;
+
+    updateCaseSelect(initialCaseIndex);
+    updateQRCode(initialSlide.dataset.caseUrl);
   }
 });
 </script>

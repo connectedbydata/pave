@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {%- include head.html -%}
+
+  <body>
+
+    {%- include header.html -%}
+
+    {%- assign show_banner = false -%}
+    {%- if page.title and page.layout != "case" and page.layout != "cases" and page.layout != "home" and page.show_banner != false -%}
+      {%- assign show_banner = true -%}
+    {%- endif -%}
+
+    {%- if show_banner -%}
+    <div class="page-header-banner">
+      <div class="wrapper">
+        <h1 class="page-title">{{ page.title | escape }}</h1>
+        {%- if page.subtitle -%}
+        <p class="page-subtitle">{{ page.subtitle | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- endif -%}
+
+    <main class="page-content" aria-label="Content">
+      {%- if show_banner -%}
+      <div class="page-body-container">
+        <div class="wrapper">
+          {{ content }}
+        </div>
+      </div>
+      {%- else -%}
+      <div class="wrapper">
+        {{ content }}
+      </div>
+      {%- endif -%}
+    </main>
+
+    {%- include footer.html -%}
+
+  </body>
+
+</html>
