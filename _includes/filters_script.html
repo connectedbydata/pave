@@ -1,0 +1,264 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Filtering State
+  const activeFilters = {
+    focus: new Set(),
+    methods: new Set(),
+    goals: new Set(),
+    locations: new Set()
+  };
+
+  const cards = document.querySelectorAll('.case-card, .video-card');
+  const countLabels = document.querySelectorAll('.cases-count-num');
+  const noResultsMsg = document.getElementById('no-results-msg');
+  const activePillsList = document.getElementById('active-pills-list');
+
+  // Function to serialize active filters to URL hash
+  function updateHash() {
+    const params = new URLSearchParams();
+    Object.keys(activeFilters).forEach(category => {
+      activeFilters[category].forEach(val => {
+        params.append(category, val);
+      });
+    });
+    
+    const newHash = params.toString();
+    if (newHash) {
+      window.history.replaceState(null, '', '#' + newHash);
+    } else {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }
+
+  // Function to deserialize URL hash to active filters state
+  function applyFiltersFromHash() {
+    // Clear existing
+    Object.keys(activeFilters).forEach(category => {
+      activeFilters[category].clear();
+    });
+    const optionItems = document.querySelectorAll('.filter-option-item');
+    optionItems.forEach(item => item.classList.remove('selected'));
+
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      const params = new URLSearchParams(hash);
+      for (const [key, value] of params.entries()) {
+        if (activeFilters[key]) {
+          // Resolve exact casing from the DOM elements
+          const optItems = document.querySelectorAll(`.filter-options-list[data-filter-type="${key}"] .filter-option-item`);
+          let matchedVal = value;
+          for (const item of optItems) {
+            const dataVal = item.getAttribute('data-value');
+            if (dataVal && dataVal.toLowerCase() === value.toLowerCase()) {
+              matchedVal = dataVal;
+              item.classList.add('selected');
+              break;
+            }
+          }
+          activeFilters[key].add(matchedVal);
+        }
+      }
+    }
+
+    updatePills();
+    filterCards();
+  }
+
+  // 2. Add Event Listeners to Option Items
+  const optionItems = document.querySelectorAll('.filter-option-item');
+  optionItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const type = this.parentElement.getAttribute('data-filter-type');
+      const val = this.getAttribute('data-value');
+
+      if (activeFilters[type].has(val)) {
+        activeFilters[type].delete(val);
+        this.classList.remove('selected');
+      } else {
+        activeFilters[type].add(val);
+        this.classList.add('selected');
+      }
+
+      updatePills();
+      filterCards();
+      updateHash();
+    });
+  });
+
+  // 3. Search inputs inside columns
+  const searchInputs = document.querySelectorAll('.column-search-input');
+  searchInputs.forEach(input => {
+    input.addEventListener('input', function() {
+      const column = this.getAttribute('data-column');
+      const query = this.value.toLowerCase().trim();
+      const listItems = document.querySelectorAll(`.filter-options-list[data-filter-type="${column}"] .filter-option-item`);
+
+      listItems.forEach(item => {
+        const itemText = (item.getAttribute('data-value') + ' ' + item.textContent).toLowerCase();
+        if (itemText.includes(query)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // 4. Update Filter tag Pills Display
+  function updatePills() {
+    if (!activePillsList) return;
+    activePillsList.innerHTML = '';
+    
+    let hasFilters = false;
+
+    Object.keys(activeFilters).forEach(category => {
+      activeFilters[category].forEach(value => {
+        hasFilters = true;
+        
+        // Format display value: resolve country code to name if category is locations
+        let displayValue = value;
+        if (category === 'locations') {
+          const optElement = document.querySelector(`.filter-options-list[data-filter-type="locations"] .filter-option-item[data-value="${value}"]`);
+          if (optElement) {
+            displayValue = optElement.textContent.trim();
+          }
+        }
+
+        // Render pill
+        const pill = document.createElement('div');
+        pill.className = 'active-pill';
+        
+        // Format category label
+        let catLabel = category.charAt(0).toUpperCase() + category.slice(1);
+        if (category === 'locations') catLabel = 'Location';
+        
+        pill.innerHTML = `
+          <span><strong>${catLabel}:</strong> ${escapeHtml(displayValue)}</span>
+          <span class="pill-close" data-category="${category}" data-value="${escapeHtml(value)}">×</span>
+        `;
+        
+        // Close pill button click handler
+        pill.querySelector('.pill-close').addEventListener('click', function() {
+          const cat = this.getAttribute('data-category');
+          const val = this.getAttribute('data-value');
+          
+          activeFilters[cat].delete(val);
+          
+          // Deselect list option item
+          const optElement = document.querySelector(`.filter-options-list[data-filter-type="${cat}"] .filter-option-item[data-value="${val}"]`);
+          if (optElement) {
+            optElement.classList.remove('selected');
+          }
+          
+          updatePills();
+          filterCards();
+          updateHash();
+        });
+        
+        activePillsList.appendChild(pill);
+      });
+    });
+  }
+
+  // 5. Card Filtering Logic
+  function filterCards() {
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      let isMatch = true;
+
+      // Extract card properties
+      const cardFocus = card.getAttribute('data-focus') ? card.getAttribute('data-focus').split('||') : [];
+      const cardMethods = card.getAttribute('data-methods') ? card.getAttribute('data-methods').split('||') : [];
+      const cardGoals = card.getAttribute('data-goals') ? card.getAttribute('data-goals').split('||') : [];
+      const cardLocations = card.getAttribute('data-locations') ? card.getAttribute('data-locations').split('||') : [];
+
+      const cardData = {
+        focus: cardFocus,
+        methods: cardMethods,
+        goals: cardGoals,
+        locations: cardLocations
+      };
+
+      // Check intersection for each category
+      Object.keys(activeFilters).forEach(category => {
+        if (activeFilters[category].size > 0) {
+          let catMatch = false;
+          activeFilters[category].forEach(filterVal => {
+            const normalizedFilter = filterVal.toLowerCase();
+            // Check if card contains this filter
+            if (cardData[category] && cardData[category].some(item => item.toLowerCase() === normalizedFilter)) {
+              catMatch = true;
+            }
+          });
+          if (!catMatch) {
+            isMatch = false;
+          }
+        }
+      });
+
+      if (isMatch) {
+        if (card.classList.contains('video-card')) {
+          card.classList.remove('hidden');
+          card.style.display = '';
+        } else {
+          card.style.display = 'flex';
+        }
+        visibleCount++;
+      } else {
+        if (card.classList.contains('video-card')) {
+          card.classList.add('hidden');
+          card.style.display = 'none';
+        } else {
+          card.style.display = 'none';
+        }
+      }
+    });
+
+    // Update Counter Elements
+    countLabels.forEach(label => {
+      label.textContent = visibleCount;
+    });
+
+    // Handle No Results Message
+    if (noResultsMsg) {
+      if (visibleCount === 0) {
+        noResultsMsg.style.display = 'block';
+      } else {
+        noResultsMsg.style.display = 'none';
+      }
+    }
+  }
+
+  // Helper function to escape HTML to prevent XSS injection in search
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&#039;");
+  }
+
+  // 6. Toggle Collapse of Filters Panel
+  const toggleBtn = document.getElementById('toggle-filters-btn');
+  const filtersPanel = document.getElementById('filters-panel');
+
+  if (toggleBtn && filtersPanel) {
+    toggleBtn.addEventListener('click', function() {
+      filtersPanel.classList.toggle('collapsed');
+      this.classList.toggle('collapsed');
+      
+      const isCollapsed = filtersPanel.classList.contains('collapsed');
+      if (isCollapsed) {
+        this.setAttribute('aria-label', 'Expand filters panel');
+      } else {
+        this.setAttribute('aria-label', 'Collapse filters panel');
+      }
+    });
+  }
+
+  // 7. Initial loading and state change listeners
+  applyFiltersFromHash();
+  window.addEventListener('hashchange', applyFiltersFromHash);
+});
+</script>

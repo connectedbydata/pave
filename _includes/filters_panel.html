@@ -1,0 +1,134 @@
+{% assign focus_options = "" | split: "" %}
+{% for case in site.cases %}
+  {% if case.what-form-of-ai-is-the-project-about %}
+    {% for val in case.what-form-of-ai-is-the-project-about %}
+      {% unless focus_options contains val %}
+        {% assign focus_options = focus_options | push: val %}
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% assign focus_options = focus_options | sort %}
+
+{% assign method_options = "" | split: "" %}
+{% for part in site.participants %}
+  {% if part.which-of-the-following-methods-were-used-to %}
+    {% for val in part.which-of-the-following-methods-were-used-to %}
+      {% unless method_options contains val %}
+        {% assign method_options = method_options | push: val %}
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% assign method_options = method_options | sort %}
+
+{% assign goal_options = "" | split: "" %}
+{% for case in site.cases %}
+  {% if case.project-goals %}
+    {% for val in case.project-goals %}
+      {% unless goal_options contains val %}
+        {% assign goal_options = goal_options | push: val %}
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% assign goal_options = goal_options | sort %}
+
+{% assign location_options = "" | split: "" %}
+{% for loc in site.locations %}
+  {% if loc.country-code %}
+    {% unless location_options contains loc.country-code %}
+      {% assign location_options = location_options | push: loc.country-code %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+{% assign location_options = location_options | sort %}
+
+<!-- Filters Panel Section (outer full-width strip) -->
+<div class="filters-outer-container">
+  <div class="wrapper">
+    <div class="filters-controls">
+      <div class="filters-bar">
+        <div class="filters-label-group">
+          <h3>Filters</h3>
+          <div class="active-pills" id="active-pills-list">
+            <!-- Dynamic pills go here -->
+          </div>
+        </div>
+        <button class="toggle-filters-btn" id="toggle-filters-btn" aria-label="Collapse filters panel">
+          <svg viewBox="0 0 24 24" id="toggle-arrow-icon" style="width: 24px; height: 24px; fill: #496a40;">
+            <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="filters-columns-grid" id="filters-panel">
+        <!-- 1. Focus Column -->
+        <div class="filter-column">
+          <h4>Focus</h4>
+          <ul class="filter-options-list" data-filter-type="focus">
+            <li class="filter-search-item">
+              <div class="filter-search-box">
+                <input type="text" placeholder="Search focus..." class="column-search-input" data-column="focus">
+                <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              </div>
+            </li>
+            {% for option in focus_options %}
+              <li class="filter-option-item" data-value="{{ option | escape }}">{{ option | escape }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- 2. Methods Column -->
+        <div class="filter-column">
+          <h4>Methods</h4>
+          <ul class="filter-options-list" data-filter-type="methods">
+            <li class="filter-search-item">
+              <div class="filter-search-box">
+                <input type="text" placeholder="Search methods..." class="column-search-input" data-column="methods">
+                <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              </div>
+            </li>
+            {% for option in method_options %}
+              <li class="filter-option-item" data-value="{{ option | escape }}">{{ option | escape }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- 3. Goals Column -->
+        <div class="filter-column">
+          <h4>Goals</h4>
+          <ul class="filter-options-list" data-filter-type="goals">
+            <li class="filter-search-item">
+              <div class="filter-search-box">
+                <input type="text" placeholder="Search goals..." class="column-search-input" data-column="goals">
+                <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              </div>
+            </li>
+            {% for option in goal_options %}
+              <li class="filter-option-item" data-value="{{ option | escape }}">{{ option | escape }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- 4. Participant Location Column -->
+        <div class="filter-column">
+          <h4>Participant location</h4>
+          <ul class="filter-options-list" data-filter-type="locations">
+            <li class="filter-search-item">
+              <div class="filter-search-box">
+                <input type="text" placeholder="Search location..." class="column-search-input" data-column="locations">
+                <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              </div>
+            </li>
+            {% for code in location_options %}
+              <li class="filter-option-item" data-value="{{ code | escape }}">
+                {% include country_name.html code=code %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
