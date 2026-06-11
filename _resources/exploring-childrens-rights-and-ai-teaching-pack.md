@@ -4,7 +4,7 @@ title: "Exploring children\u2019s rights and A.I: Teaching pack"
 airtable_id: c14ca1552fb89ace
 slug: exploring-childrens-rights-and-ai-teaching-pack
 # URL
-url: https://www.childrensparliament.org.uk/childrens-rights-ai/teaching-pack/
+external_url: https://www.childrensparliament.org.uk/childrens-rights-ai/teaching-pack/
 # Cases
 cases:
 - exploring-childrens-rights-and-ai

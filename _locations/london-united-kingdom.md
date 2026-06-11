@@ -7,6 +7,8 @@ slug: london-united-kingdom
 participants:
 - peoples-ai-stewardship-summits-summit-public-participants
 - peoples-ai-stewardship-summits-summits-stakeholder-participants
+- co-designing-animated-videos-to-explain-large-language-models-and-their-use-in-healthcare-and-resear
+- co-designing-animated-videos-to-explain-large-language-models-and-their-use-in-healthcare-and-resear-1
 # Longitude
 longitude: -0.1278
 # Name

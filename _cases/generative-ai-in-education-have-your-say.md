@@ -3,6 +3,8 @@ layout: case
 title: Generative AI in Education - Have Your Say
 airtable_id: 3c565662d49f8ad8
 slug: generative-ai-in-education-have-your-say
+redirect_from:
+- /c/3c565662d49f8ad8/
 # Lead organisations
 lead-organisations:
 - connected-by-data

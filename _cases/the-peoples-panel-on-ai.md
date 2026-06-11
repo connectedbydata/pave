@@ -3,6 +3,8 @@ layout: case
 title: The People's Panel on AI
 airtable_id: c303bcac18121f43
 slug: the-peoples-panel-on-ai
+redirect_from:
+- /c/c303bcac18121f43/
 # Lead organisations
 lead-organisations:
 - connected-by-data
@@ -60,19 +62,49 @@ funding-organisations:
 - mozilla-foundation
 - kavli-center-for-the-ethics-science-and-the-public
 - accelerate-programme-for-scientific-discovery
+# Inclusion efforts
+inclusion-efforts: "The People\u2019s Panel on AI was made up of a randomly selected\
+  \ group of 11 people from across England with diverse backgrounds, experiences and\
+  \ perspectives.\n\n4,123 invitations were sent through Sortition Foundation\u2019\
+  s opt-in list,\nreaching a broad sample of people across England.\n\n490 people\
+  \ expressed Interest in taking part, completing a short question about their prior\
+  \ experience of AI\n\n12 people were selected in a stratified lottery delivering\
+  \ diversity of age, gender, region, urban/rural location, local level of deprivation\
+  \ and prior experience of AI.\n\n11 people were in the final group as one participant\
+  \ had to\ndrop out due to illness. \n\nWe set a higher target for ethnic minority\
+  \ representation because past research highlights disproportionate AI impacts on\
+  \ ethnic minorities. \n\nParticipants were paid a \xA3600 honorarium for their participation,\
+  \ and had all travel, accommodation and meal expenses covered and were offered adaptations\
+  \ to help them take part if required. "
 # ﻿Project Title
 project-title: The People's Panel on AI
 # Submitted by
 submitted-by: Tim Davies
 # Why is this project important to include in the case book?
-why-is-this-project-important-to-include-in-the: 'It explored the application of deliberative
-  citizen review methods to a global policy event. '
+why-is-this-project-important-to-include-in-the: "It explored the application of deliberative\
+  \ citizen review methods to a global policy event. \n\n\"The People\u2019s Panel\
+  \ on AI was an experiment in deliberation. While we followed common deliberation\
+  \ best practices, we also incorporated a number of innovative elements \u2013 both\n\
+  by necessity and by design.\n\nUsing the AI Fringe as our primary expert input,\
+  \ and seeking to report our outcomes during the week of the AI Safety Summit, brought\
+  \ significant energy and dynamism to the process. It was an exhausting schedule\
+  \ for both participants and facilitators, but had significant benefits.\n\n1. The\
+  \ Panel was engaged with live issues, following the same discussions that experts,\
+  \ decision shapers and makers were engaging with. We included some activities for\
+  \ the Panel to fill specific knowledge gaps; future panels should make time for\
+  \ induction and learning ahead of the deliberation.\n\n2. The Panel was visible\
+  \ in the AI Fringe. Having members of the public \u2018in the room\u2019 during\
+  \ discussions can help change the conversation. Panel members were able to enter\
+  \ into ad-hoc conversations with experts at the Fringe and Hopes & Fears Lab as\
+  \ informed interlocutors.\n\n3. We had access to experts and observers and used\
+  \ interest in the AI Safety Summit and Fringe to engage stakeholders. However, the\
+  \ timing of outputs (necessarily after the Summit), and the need to protect participants\
+  \ from intrusion early in the process, made it hard to secure media coverage.\""
 # Photos and images
 photos-and-images:
 - id: attsUpwhcIq18xBvV
   width: 5472
   height: 3648
-  # URL
   url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attsUpwhcIq18xBvV.jpg
   filename: DSC00435.jpg
   size: 3338234
@@ -80,24 +112,20 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attsUpwhcIq18xBvV_small.jpg
       width: 54
       height: 36
     large:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attsUpwhcIq18xBvV_large.jpg
       width: 768
       height: 512
     full:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attsUpwhcIq18xBvV_full.jpg
       width: 3000
       height: 2000
 - id: atteTxIOSpq0xuMy1
   width: 5472
   height: 3648
-  # URL
   url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_atteTxIOSpq0xuMy1.jpg
   filename: DSC00475.jpg
   size: 3183681
@@ -105,24 +133,20 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_atteTxIOSpq0xuMy1_small.jpg
       width: 54
       height: 36
     large:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_atteTxIOSpq0xuMy1_large.jpg
       width: 768
       height: 512
     full:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_atteTxIOSpq0xuMy1_full.jpg
       width: 3000
       height: 2000
 - id: attMHdaIAg52vMToG
   width: 5472
   height: 3648
-  # URL
   url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attMHdaIAg52vMToG.jpg
   filename: Panel-working-photo.jpg
   size: 3508661
@@ -130,24 +154,20 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attMHdaIAg52vMToG_small.jpg
       width: 54
       height: 36
     large:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attMHdaIAg52vMToG_large.jpg
       width: 768
       height: 512
     full:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attMHdaIAg52vMToG_full.jpg
       width: 3000
       height: 2000
 - id: attd6trh9Ln8ptdD6
   width: 2048
   height: 1536
-  # URL
   url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attd6trh9Ln8ptdD6.jpg
   filename: WhatsApp Image 2023-11-03 at 10.10.50_269dfd61.jpg
   size: 544073
@@ -155,24 +175,20 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attd6trh9Ln8ptdD6_small.jpg
       width: 48
       height: 36
     large:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attd6trh9Ln8ptdD6_large.jpg
       width: 683
       height: 512
     full:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attd6trh9Ln8ptdD6_full.jpg
       width: 2048
       height: 1536
 - id: attkSWujugFhHeHCM
   width: 1536
   height: 2048
-  # URL
   url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attkSWujugFhHeHCM.jpg
   filename: WhatsApp Image 2023-11-03 at 10.10.49_c1cda95d.jpg
   size: 551084
@@ -180,17 +196,14 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attkSWujugFhHeHCM_small.jpg
       width: 27
       height: 36
     large:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attkSWujugFhHeHCM_large.jpg
       width: 512
       height: 683
     full:
-      # URL
       url: /assets/attachments/c303bcac18121f43_fldd4B6cpBOP3n3is_attkSWujugFhHeHCM_full.jpg
       width: 1536
       height: 2048
@@ -201,7 +214,7 @@ project-goals:
 - 'Policy: Inform a policy-making process'
 # Supporting resources
 supporting-resources:
-- final-report
+- final-report-1
 - peoples-panel-video
 - independent-evaluation
 - detailed-findings-report
