@@ -3,6 +3,8 @@ layout: case
 title: Exploring Children's Rights and AI
 airtable_id: 5f0fd43c4a76c2b1
 slug: exploring-childrens-rights-and-ai
+redirect_from:
+- /c/5f0fd43c4a76c2b1/
 # Lead organisations
 lead-organisations:
 - scottish-ai-alliance
@@ -171,7 +173,6 @@ photos-and-images:
 - id: attGzLWy30eTvdlzN
   width: 4500
   height: 3000
-  # URL
   url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN.jpg
   filename: ScotAISummit230328_10_ChildrensRight_StageD_HRes_29.jpg
   size: 4126962
@@ -179,24 +180,20 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN_small.jpg
       width: 54
       height: 36
     large:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN_large.jpg
       width: 768
       height: 512
     full:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attGzLWy30eTvdlzN_full.jpg
       width: 3000
       height: 2000
 - id: attAAfxX8OQ4O5fBU
   width: 3600
   height: 3600
-  # URL
   url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU.jpg
   filename: ScotAISummit24_KidsAndAI_08.jpg
   size: 3193913
@@ -204,24 +201,20 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU_small.jpg
       width: 36
       height: 36
     large:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU_large.jpg
       width: 512
       height: 512
     full:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attAAfxX8OQ4O5fBU_full.jpg
       width: 3000
       height: 3000
 - id: attadNkaKNSg6WjhX
   width: 3600
   height: 2400
-  # URL
   url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX.jpg
   filename: ScotAISummit24_05-ChildrenandAI_30.jpg
   size: 2853297
@@ -229,17 +222,14 @@ photos-and-images:
   type: image/jpeg
   thumbnails:
     small:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX_small.jpg
       width: 54
       height: 36
     large:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX_large.jpg
       width: 768
       height: 512
     full:
-      # URL
       url: /assets/attachments/5f0fd43c4a76c2b1_fldd4B6cpBOP3n3is_attadNkaKNSg6WjhX_full.jpg
       width: 3000
       height: 2000

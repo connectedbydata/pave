@@ -3,12 +3,18 @@ layout: generic
 title: United Kingdom
 airtable_id: 8bfa56facdfba9e5
 slug: united-kingdom
+# Participants
+participants:
+- equity-and-inclusion-in-quantitative-surveys
+- odyssean-process-on-ai-citizen-assembly
+- participatory-harm-auditing-workbenches-and-methodologies-phawm-stakeholders-and-end-users
 # Longitude
 longitude: -3.436
 # Name
 name: United Kingdom
 # Cases
-cases: []
+cases:
+- peoples-ai-stewardship-summits
 # Latitude
 latitude: 55.3781
 # Country Code

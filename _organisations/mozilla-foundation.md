@@ -10,6 +10,8 @@ organisation-type:
 website-address: https://foundation.mozilla.org/
 # Name
 name: Mozilla Foundation
+# Lead organisation for
+lead-organisation-for: []
 # Mission statement
 mission-statement: 'To ensure that the internet is a global public resource, open
   and accessible to all. (Source: https://foundation.mozilla.org/)'
