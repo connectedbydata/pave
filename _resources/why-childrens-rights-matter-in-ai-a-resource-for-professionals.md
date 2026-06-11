@@ -4,7 +4,7 @@ title: "Why Children\u2019s Rights Matter in A.I: A Resource for Professionals"
 airtable_id: 04f468d4b07f16d1
 slug: why-childrens-rights-matter-in-ai-a-resource-for-professionals
 # URL
-url: https://www.childrensparliament.org.uk/childrens-rights-ai/resource-for-professionals/
+external_url: https://www.childrensparliament.org.uk/childrens-rights-ai/resource-for-professionals/
 # Cases
 cases:
 - exploring-childrens-rights-and-ai

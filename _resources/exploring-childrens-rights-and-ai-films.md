@@ -4,7 +4,7 @@ title: "Exploring Children\u2019s Rights and A.I: Films"
 airtable_id: f295d5d9850a4c71
 slug: exploring-childrens-rights-and-ai-films
 # URL
-url: https://www.childrensparliament.org.uk/childrens-rights-ai/films/
+external_url: https://www.childrensparliament.org.uk/childrens-rights-ai/films/
 # Cases
 cases:
 - exploring-childrens-rights-and-ai

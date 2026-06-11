@@ -3,6 +3,8 @@ layout: case
 title: 'Gen(Z)AI '
 airtable_id: 4fa0fd37fc65a96b
 slug: genzai
+redirect_from:
+- /c/4fa0fd37fc65a96b/
 # Lead organisations
 lead-organisations:
 - the-centre-for-media-technology-and-democracy

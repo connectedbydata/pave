@@ -5,10 +5,10 @@ airtable_id: 76dec868f572c017
 slug: canada
 # Participants
 participants:
-- participants
+- genzai-makeorg-online-platform
 - deliberative
 - online
-- genzai-makeorg-online-platform
+- participants
 # Longitude
 longitude: -106.3468
 # Name

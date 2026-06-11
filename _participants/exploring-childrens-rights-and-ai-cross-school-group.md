@@ -1,0 +1,65 @@
+---
+layout: generic
+title: Exploring Children's Rights and AI-Cross-school group
+airtable_id: a5b8efbc07e3971e
+slug: exploring-childrens-rights-and-ai-cross-school-group
+# Locations
+locations:
+- edinburgh-scotland-united-kingdom
+- glasgow-scotland-united-kingdom
+- doune-scotland-united-kingdom
+- shetland-scotland-united-kingdom
+- dundee-scotland-united-kingdom
+# Recruitment method
+recruitment-method: Other
+# Where were participants from?
+where-were-participants-from: Edinburgh, Glasgow, Doune, Shetland and Dundee, all
+  in Scotland
+# Which of the following methods were used to engage participants?
+which-of-the-following-methods-were-used-to:
+- Participatory Arts
+- Scenario Workshop
+- Action Research
+- Capacity Building Workshop
+- Community-Based Participatory Research
+- Peer-Research
+- Co-creation workshops
+# On average, how many hours did each participant engage for?
+on-average-how-many-hours-did-each-participant: 110
+# Name
+name: Exploring Children's Rights and AI-Cross-school group
+# Group description
+group-description: Cross-school group
+# Do any of the following apply?
+do-any-of-the-following-apply:
+- There were trained facilitators involved
+- There was a learning phase for participants
+- Materials from the learning phase have been published
+# Additional notes
+additional-notes: 'Here''s a quote from one of the children we worked with
+
+
+  "Children should have a say in how and what they learn about AI because the future
+  will be AI"'
+# How many people took part?
+how-many-people-took-part: 25
+# Cases
+cases:
+- exploring-childrens-rights-and-ai
+# Recruitment description
+recruitment-description: Identified urban, rural and Island communities 2) Identified
+  schools in these areas with children from diverse communities and who were keen
+  an able to commit to and support the project through dialogue with Local Authority
+  Heads of Service  3) We worked with whole classes in these schools for the evidence
+  gathering sessions and a smaller cohort of 25 children from across the schools for
+  the analysis and presentation work - these children were selected based on ensuring
+  diversity and interest
+# Was there a specific target population?
+was-there-a-specific-target-population: P5-P7 children across Scotland - aged 9-11
+  years
+# Where did engagement take place?
+where-did-engagement-take-place:
+- Online
+- Offline
+- Hybrid
+---

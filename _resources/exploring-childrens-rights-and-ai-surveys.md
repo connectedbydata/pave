@@ -4,7 +4,7 @@ title: "Exploring Children\u2019s Rights and A.I: Surveys"
 airtable_id: 7bbebff393ed6a7a
 slug: exploring-childrens-rights-and-ai-surveys
 # URL
-url: https://www.childrensparliament.org.uk/childrens-rights-ai/surveys/
+external_url: https://www.childrensparliament.org.uk/childrens-rights-ai/surveys/
 # Cases
 cases:
 - exploring-childrens-rights-and-ai
