@@ -23,7 +23,7 @@ layout: default
 
       <!-- Redesigned Tabs Navigation -->
       <div class="tab-buttons-container" role="tablist">
-        <button class="tab-btn active" role="tab" aria-selected="true" data-target="tab-about">About</button>
+        <button class="tab-btn active" role="tab" aria-selected="true" data-target="tab-what">What</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-who">Who</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-where">Where</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-outcomes">Outcomes</button>
@@ -35,105 +35,178 @@ layout: default
   <div class="tab-contents-container">
     <div class="wrapper">
 
-      <!-- 1. ABOUT TAB PANEL -->
-    <div class="tab-content-panel active" id="tab-about" role="tabpanel">
-      <div class="tab-two-columns">
-        <!-- Left Column: Rich Text Narrative -->
-        <div class="tab-left-col">
-          <div class="tab-rich-content">
-            {{ page.provide-a-brief-description-of-the-project | markdownify }}
+      <!-- 1. WHAT TAB PANEL -->
+      <div class="tab-content-panel active" id="tab-what" role="tabpanel">
+        <div class="tab-two-columns">
+          <!-- Left Column: Rich Text Narrative -->
+          <div class="tab-left-col">
+            <div class="tab-rich-content">
+              {{ page.provide-a-brief-description-of-the-project | markdownify }}
+            </div>
           </div>
-        </div>
 
-        <!-- Right Column: Project Facts -->
-        <div class="tab-right-col">
-          <div class="metadata-card">
-            <table class="metadata-table">
-              {% if page.what-year-did-the-project-start or page.what-year-did-the-project-conclude %}
-              <tr>
-                <td class="meta-label">When</td>
-                <td class="meta-value">
-                  {{ page.what-year-did-the-project-start }}
-                  {% if page.what-year-did-the-project-conclude %}
-                  &ndash; {{ page.what-year-did-the-project-conclude }}
-                  {% endif %}
-                </td>
-              </tr>
-              {% endif %}
+          <!-- Right Column: Project Facts -->
+          <div class="tab-right-col">
+            <div class="metadata-card">
+              <table class="metadata-table">
+                {% if page.what-year-did-the-project-start or page.what-year-did-the-project-conclude %}
+                <tr>
+                  <td class="meta-label">When</td>
+                  <td class="meta-value">
+                    {{ page.what-year-did-the-project-start }}
+                    {% if page.what-year-did-the-project-conclude %}
+                    &ndash; {{ page.what-year-did-the-project-conclude }}
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endif %}
 
-              {% if page.what-form-of-ai-is-the-project-about %}
-              <tr>
-                <td class="meta-label">Focus</td>
-                <td class="meta-value">
-                  {{ page.what-form-of-ai-is-the-project-about | join: ", " }}
-                </td>
-              </tr>
-              {% endif %}
+                {% if page.what-form-of-ai-is-the-project-about %}
+                <tr>
+                  <td class="meta-label">Focus</td>
+                  <td class="meta-value">
+                    {{ page.what-form-of-ai-is-the-project-about | join: ", " }}
+                  </td>
+                </tr>
+                {% endif %}
 
-              {% if page.project-goals %}
-              <tr>
-                <td class="meta-label">Goals</td>
-                <td class="meta-value">
-                  <ul class="meta-list">
-                    {% for goal in page.project-goals %}
-                    <li>{{ goal }}</li>
-                    {% endfor %}
-                  </ul>
-                </td>
-              </tr>
-              {% endif %}
+                {% if page.project-goals %}
+                <tr>
+                  <td class="meta-label">Goals</td>
+                  <td class="meta-value">
+                    <ul class="meta-list">
+                      {% for goal in page.project-goals %}
+                      <li>{{ goal }}</li>
+                      {% endfor %}
+                    </ul>
+                  </td>
+                </tr>
+                {% endif %}
 
-              {% assign unique_methods = "" | split: "" %}
-              {% if page.participants %}
+                {% assign unique_methods = "" | split: "" %}
+                {% if page.participants %}
                 {% for part_slug in page.participants %}
-                  {% assign part = site.participants | where: "slug", part_slug | first %}
-                  {% if part and part.which-of-the-following-methods-were-used-to %}
-                    {% for method in part.which-of-the-following-methods-were-used-to %}
-                      {% unless unique_methods contains method %}
-                        {% assign unique_methods = unique_methods | push: method %}
-                      {%   endunless %}
-                    {% endfor %}
-                  {% endif %}
+                {% assign part = site.participants | where: "slug", part_slug | first %}
+                {% if part and part.which-of-the-following-methods-were-used-to %}
+                {% for method in part.which-of-the-following-methods-were-used-to %}
+                {% unless unique_methods contains method %}
+                {% assign unique_methods = unique_methods | push: method %}
+                {% endunless %}
                 {% endfor %}
-              {% endif %}
-              {% if unique_methods.size > 0 %}
-              <tr>
-                <td class="meta-label">Methods used</td>
-                <td class="meta-value">
-                  {{ unique_methods | join: ", " }}
-                </td>
-              </tr>
-              {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% if unique_methods.size > 0 %}
+                <tr>
+                  <td class="meta-label">Methods used</td>
+                  <td class="meta-value">
+                    {{ unique_methods | join: ", " }}
+                  </td>
+                </tr>
+                {% endif %}
 
-              {% if page.how-was-the-project-initiated %}
-              <tr>
-                <td class="meta-label">Initiation method</td>
-                <td class="meta-value">
-                  {{ page.how-was-the-project-initiated | join: ", " }}
-                </td>
-              </tr>
-              {% endif %}
-            </table>
+                {% if page.how-was-the-project-initiated %}
+                <tr>
+                  <td class="meta-label">Initiation method</td>
+                  <td class="meta-value">
+                    {{ page.how-was-the-project-initiated | join: ", " }}
+                  </td>
+                </tr>
+                {% endif %}
+              </table>
 
-            {% if page.project-url %}
-            <a href="{{ page.project-url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-visit-project">
-              Visit Project website <span class="btn-icon">↗</span>
-            </a>
-            {% endif %}
+              {% if page.project-url %}
+              <a href="{{ page.project-url }}" target="_blank" rel="noopener noreferrer"
+                class="btn btn-primary btn-visit-project">
+                Visit Project website <span class="btn-icon">↗</span>
+              </a>
+              {% endif %}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- 2. WHO TAB PANEL -->
-    <div class="tab-content-panel" id="tab-who" role="tabpanel">
-      <div class="tab-two-columns">
-        <!-- Left Column: Participant Cohorts -->
-        <div class="tab-left-col">
-          <h3>Participant cohorts</h3>
-          {% if page.participants %}
-          <div class="cohorts-list">
-            {% for slug in page.participants %}
+        {% assign has_photos = false %}
+        {% if page.photos-and-images and page.photos-and-images.size > 0 %}
+        {% assign has_photos = true %}
+        {% endif %}
+
+        {% assign all_messages = "" | split: "" %}
+        {% if page.messages %}
+        {% for m_slug in page.messages %}
+        {% assign msg = site.messages | where: "slug", m_slug | first %}
+        {% if msg %}
+        {% assign all_messages = all_messages | push: msg %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        {% if has_photos or all_messages.size > 0 %}
+        <div class="case-media-section">
+          <div class="wrapper">
+
+            {% if has_photos %}
+            <!-- Image Gallery -->
+            <div class="case-gallery">
+              <div class="gallery-scroll-track" id="gallery-track">
+                {% for photo in page.photos-and-images %}
+                {% assign img_url = photo.url | relative_url %}
+                <button class="gallery-thumb-btn" data-full="{{ img_url }}" data-caption="{{ photo.filename | escape }}"
+                  aria-label="View photo: {{ photo.filename | escape }}">
+                  <img src="{{ img_url }}" alt="{{ photo.filename | escape }}" class="gallery-thumb" loading="lazy">
+                </button>
+                {% endfor %}
+              </div>
+              {% if page.photos-and-images.size > 3 %}
+              <div class="gallery-nav">
+                <button class="gallery-arrow" id="gallery-prev" aria-label="Scroll gallery left">←</button>
+                <button class="gallery-arrow" id="gallery-next" aria-label="Scroll gallery right">→</button>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+
+            {% if all_messages.size > 0 %}
+            <!-- Message Carousel -->
+            <div class="msg-carousel" id="msg-carousel">
+              <div class="msg-carousel-track" id="msg-track">
+                {% for msg in all_messages %}
+                <div class="msg-slide">
+                  <div class="msg-slide-left">
+                    <div class="msg-open-quote">&ldquo;</div>
+                    <div class="msg-type-label">{{ msg.type }}</div>
+                    <div class="msg-body">{{ msg.title }}</div>
+                    <div class="msg-close-quote">&rdquo;</div>
+                  </div>
+                  {% if msg.additional-credit-line %}
+                  <div class="msg-slide-right">
+                    <span class="msg-credit">{{ msg.additional-credit-line }}</span>
+                  </div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+              <div class="msg-carousel-nav">
+                <button class="msg-arrow" id="msg-prev" aria-label="Previous message">←</button>
+                <button class="msg-arrow" id="msg-next" aria-label="Next message">→</button>
+              </div>
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <!-- 2. WHO TAB PANEL -->
+      <div class="tab-content-panel" id="tab-who" role="tabpanel">
+        <div class="tab-two-columns">
+          <!-- Left Column: Participant Cohorts -->
+          <div class="tab-left-col">
+            <h3>Participant cohorts</h3>
+            {% if page.participants %}
+            <div class="cohorts-list">
+              {% for slug in page.participants %}
               {% assign item = site.participants | where: "slug", slug | first %}
               {% if item %}
               <div class="cohort-card">
@@ -173,13 +246,13 @@ layout: default
                   {% assign has_locs = false %}
                   {% assign loc_titles = "" | split: "" %}
                   {% if item.locations %}
-                    {% for loc_slug in item.locations %}
-                      {% assign loc_obj = site.locations | where: "slug", loc_slug | first %}
-                      {% if loc_obj %}
-                        {% assign loc_titles = loc_titles | push: loc_obj.title %}
-                        {% assign has_locs = true %}
-                      {% endif %}
-                    {% endfor %}
+                  {% for loc_slug in item.locations %}
+                  {% assign loc_obj = site.locations | where: "slug", loc_slug | first %}
+                  {% if loc_obj %}
+                  {% assign loc_titles = loc_titles | push: loc_obj.title %}
+                  {% assign has_locs = true %}
+                  {% endif %}
+                  {% endfor %}
                   {% endif %}
                   {% if has_locs %}
                   <tr>
@@ -187,243 +260,315 @@ layout: default
                     <td class="cohort-value">{{ loc_titles | join: ", " }}</td>
                   </tr>
                   {% else %}
-                    {% if item.where-were-participants-from %}
-                    <tr>
-                      <td class="cohort-label">Location</td>
-                      <td class="cohort-value">{{ item.where-were-participants-from }}</td>
-                    </tr>
-                    {% endif %}
+                  {% if item.where-were-participants-from %}
+                  <tr>
+                    <td class="cohort-label">Location</td>
+                    <td class="cohort-value">{{ item.where-were-participants-from }}</td>
+                  </tr>
+                  {% endif %}
                   {% endif %}
                 </table>
               </div>
               {% endif %}
-            {% endfor %}
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="no-data-msg">No participant cohort details available.</p>
+            {% endif %}
+
+            {% if page.inclusion-efforts %}
+            <div class="inclusion-efforts-section">
+              <h3>Inclusion efforts</h3>
+              <div class="tab-rich-content">
+                {{ page.inclusion-efforts | markdownify }}
+              </div>
+            </div>
+            {% endif %}
+
+            {% if page.what-limitations-to-the-project-should-be-noted %}
+            <div class="limitations-section">
+              <h3>Limitations</h3>
+              <div class="tab-rich-content">
+                {{ page.what-limitations-to-the-project-should-be-noted | markdownify }}
+              </div>
+            </div>
+            {% endif %}
           </div>
-          {% else %}
-          <p class="no-data-msg">No participant cohort details available.</p>
-          {% endif %}
-        </div>
 
-        <!-- Right Column: Organisers -->
-        <div class="tab-right-col">
-          <div class="organisers-card">
-            <h3>Organisers</h3>
+          <!-- Right Column: Organisers -->
+          <div class="tab-right-col">
+            <div class="organisers-card">
+              <h3>Organisers</h3>
 
-            {% if page.lead-organisations %}
-            <div class="org-group">
-              <h5>Led by</h5>
-              <ul class="org-list">
-                {% for slug in page.lead-organisations %}
+              {% if page.lead-organisations %}
+              <div class="org-group">
+                <h5>Led by</h5>
+                <ul class="org-list">
+                  {% for slug in page.lead-organisations %}
                   {% assign item = site.organisations | where: "slug", slug | first %}
                   {% if item %}
                   <li>
-                    <a href="{{ item.website-address | default: '#' }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                    <a href="{{ item.website-address | default: '#' }}" target="_blank" rel="noopener noreferrer">{{
+                      item.title }}</a>
                   </li>
                   {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-            {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
 
-            {% if page.funding-organisations %}
-            <div class="org-group">
-              <h5>Funded by</h5>
-              <ul class="org-list">
-                {% for slug in page.funding-organisations %}
+              {% if page.funding-organisations %}
+              <div class="org-group">
+                <h5>Funded by</h5>
+                <ul class="org-list">
+                  {% for slug in page.funding-organisations %}
                   {% assign item = site.organisations | where: "slug", slug | first %}
                   {% if item %}
                   <li>
-                    <a href="{{ item.website-address | default: '#' }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                    <a href="{{ item.website-address | default: '#' }}" target="_blank" rel="noopener noreferrer">{{
+                      item.title }}</a>
                   </li>
                   {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-            {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
 
-            {% if page.involved-organisations %}
-            <div class="org-group">
-              <h5>Also involved</h5>
-              <ul class="org-list">
-                {% for slug in page.involved-organisations %}
+              {% if page.involved-organisations %}
+              <div class="org-group">
+                <h5>Also involved</h5>
+                <ul class="org-list">
+                  {% for slug in page.involved-organisations %}
                   {% assign item = site.organisations | where: "slug", slug | first %}
                   {% if item %}
                   <li>
-                    <a href="{{ item.website-address | default: '#' }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                    <a href="{{ item.website-address | default: '#' }}" target="_blank" rel="noopener noreferrer">{{
+                      item.title }}</a>
                   </li>
                   {% endif %}
-                {% endfor %}
-              </ul>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
             </div>
-            {% endif %}
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 3. WHERE TAB PANEL -->
-    <div class="tab-content-panel" id="tab-where" role="tabpanel">
-      <div class="tab-two-columns">
-        <!-- Left Column: Locations Lists -->
-        <div class="tab-left-col">
-          <div class="locations-summary-card">
-            <h3>Locations</h3>
+      <!-- 3. WHERE TAB PANEL -->
+      <div class="tab-content-panel" id="tab-where" role="tabpanel">
+        <div class="tab-two-columns">
+          <!-- Left Column: Locations Lists -->
+          <div class="tab-left-col">
+            <div class="locations-summary-card">
+              <h3>Locations</h3>
 
-            <div class="locations-section">
-              <h5>Participant locations</h5>
-              <ul class="locations-bullet-list">
-                {% assign displayed_locs = "" | split: "" %}
-                {% if page.participants %}
+              <div class="locations-section">
+                <h5>Participant locations</h5>
+                <ul class="locations-bullet-list">
+                  {% assign displayed_locs = "" | split: "" %}
+                  {% if page.participants %}
                   {% for part_slug in page.participants %}
-                    {% assign part = site.participants | where: "slug", part_slug | first %}
-                    {% if part and part.locations %}
-                      {% for loc_slug in part.locations %}
-                        {% assign loc = site.locations | where: "slug", loc_slug | first %}
-                        {% if loc %}
-                          {% unless displayed_locs contains loc.title %}
-                            {% assign displayed_locs = displayed_locs | push: loc.title %}
-                            <li>{{ loc.title }}</li>
-                          {% endunless %}
-                        {% endif %}
-                      {% endfor %}
-                    {% endif %}
+                  {% assign part = site.participants | where: "slug", part_slug | first %}
+                  {% if part and part.locations %}
+                  {% for loc_slug in part.locations %}
+                  {% assign loc = site.locations | where: "slug", loc_slug | first %}
+                  {% if loc %}
+                  {% unless displayed_locs contains loc.title %}
+                  {% assign displayed_locs = displayed_locs | push: loc.title %}
+                  <li>{{ loc.title }}</li>
+                  {% endunless %}
+                  {% endif %}
                   {% endfor %}
-                {% endif %}
-                {% if displayed_locs.size == 0 %}
+                  {% endif %}
+                  {% endfor %}
+                  {% endif %}
+                  {% if displayed_locs.size == 0 %}
                   <li>No participant locations specified.</li>
-                {% endif %}
-              </ul>
-            </div>
+                  {% endif %}
+                </ul>
+              </div>
 
-            <div class="locations-section">
-              <h5>Organiser locations</h5>
-              <ul class="locations-bullet-list">
-                {% assign displayed_org_locs = "" | split: "" %}
-                {% assign org_slugs = "" | split: "" %}
-                {% if page.lead-organisations %}
+              <div class="locations-section">
+                <h5>Organiser locations</h5>
+                <ul class="locations-bullet-list">
+                  {% assign displayed_org_locs = "" | split: "" %}
+                  {% assign org_slugs = "" | split: "" %}
+                  {% if page.lead-organisations %}
                   {% for o in page.lead-organisations %}
-                    {% assign org_slugs = org_slugs | push: o %}
+                  {% assign org_slugs = org_slugs | push: o %}
                   {% endfor %}
-                {% endif %}
-                {% if page.involved-organisations %}
+                  {% endif %}
+                  {% if page.involved-organisations %}
                   {% for o in page.involved-organisations %}
-                    {% assign org_slugs = org_slugs | push: o %}
+                  {% assign org_slugs = org_slugs | push: o %}
                   {% endfor %}
-                {% endif %}
-                {% if page.funding-organisations %}
+                  {% endif %}
+                  {% if page.funding-organisations %}
                   {% for o in page.funding-organisations %}
-                    {% assign org_slugs = org_slugs | push: o %}
+                  {% assign org_slugs = org_slugs | push: o %}
                   {% endfor %}
-                {% endif %}
+                  {% endif %}
 
-                {% for o_slug in org_slugs %}
+                  {% for o_slug in org_slugs %}
                   {% assign o = site.organisations | where: "slug", o_slug | first %}
                   {% if o and o.main-location %}
-                    {% for l_slug in o.main-location %}
-                      {% assign loc = site.locations | where: "slug", l_slug | first %}
-                      {% if loc %}
-                        {% unless displayed_org_locs contains loc.title %}
-                          {% assign displayed_org_locs = displayed_org_locs | push: loc.title %}
-                          <li>{{ loc.title }}</li>
-                        {% endunless %}
-                      {% endif %}
-                    {% endfor %}
+                  {% for l_slug in o.main-location %}
+                  {% assign loc = site.locations | where: "slug", l_slug | first %}
+                  {% if loc %}
+                  {% unless displayed_org_locs contains loc.title %}
+                  {% assign displayed_org_locs = displayed_org_locs | push: loc.title %}
+                  <li>{{ loc.title }}</li>
+                  {% endunless %}
                   {% endif %}
-                {% endfor %}
-                {% if displayed_org_locs.size == 0 %}
+                  {% endfor %}
+                  {% endif %}
+                  {% endfor %}
+                  {% if displayed_org_locs.size == 0 %}
                   <li>No organiser locations specified.</li>
-                {% endif %}
-              </ul>
+                  {% endif %}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Right Column: Leaflet Map -->
-        <div class="tab-right-col map-column">
-          <div id="case-mini-map" class="case-mini-map" aria-label="Project Engagement Map" style="height: 480px; width: 100%; border-radius: 12px; border: 1px solid rgba(73, 106, 64, 0.15);"></div>
+          <!-- Right Column: Leaflet Map -->
+          <div class="tab-right-col map-column">
+            <div id="case-mini-map" class="case-mini-map" aria-label="Project Engagement Map"
+              style="height: 480px; width: 100%; border-radius: 12px; border: 1px solid rgba(73, 106, 64, 0.15);"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 4. OUTCOMES TAB PANEL -->
-    <div class="tab-content-panel" id="tab-outcomes" role="tabpanel">
-      <div class="tab-two-columns">
-        <!-- Left Column: Recommendations list -->
-        <div class="tab-left-col">
-          <h3>Recommendations</h3>
+      <!-- 4. OUTCOMES TAB PANEL -->
+      <div class="tab-content-panel" id="tab-outcomes" role="tabpanel">
+        <div class="tab-two-columns">
+          <!-- Left Column: Recommendations list -->
+          <div class="tab-left-col">
+            <h3>Recommendations</h3>
 
-          {% assign recs = "" | split: "" %}
-          {% if page.messages %}
+            {% assign recs = "" | split: "" %}
+            {% if page.messages %}
             {% for m_slug in page.messages %}
-              {% assign item = site.messages | where: "slug", m_slug | first %}
-              {% if item %}
-                {% assign type_lower = item.type | downcase %}
-                {% if type_lower == "recommendation" %}
-                  {% assign recs = recs | push: item %}
+            {% assign item = site.messages | where: "slug", m_slug | first %}
+            {% if item %}
+            {% assign type_lower = item.type | downcase %}
+            {% if type_lower == "recommendation" %}
+            {% assign recs = recs | push: item %}
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            {% if recs.size > 0 %}
+            <div class="recs-list">
+              {% for item in recs %}
+              <div class="recommendation-card">
+                <span class="rec-badge">Recommendation</span>
+                <p class="rec-text">{{ item.title }}</p>
+                {% if item.additional-credit-line %}
+                <div class="rec-credit">{{ item.additional-credit-line }}</div>
                 {% endif %}
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-
-          {% if recs.size > 0 %}
-          <div class="recs-list">
-            {% for item in recs %}
-            <div class="recommendation-card">
-              <span class="rec-badge">Recommendation</span>
-              <p class="rec-text">{{ item.title }}</p>
-              {% if item.additional-credit-line %}
-              <div class="rec-credit">{{ item.additional-credit-line }}</div>
-              {% endif %}
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
+            {% else %}
+            <p class="no-data-msg">No recommendations registered for this case study.</p>
+            {% endif %}
           </div>
-          {% else %}
-          <p class="no-data-msg">No recommendations registered for this case study.</p>
-          {% endif %}
-        </div>
 
-        <!-- Right Column: Supporting Resources -->
-        <div class="tab-right-col">
-          <div class="resources-card">
-            <h3>Resources</h3>
-            {% if page.supporting-resources %}
-            <ul class="resources-list-items">
-              {% for slug in page.supporting-resources %}
+          <!-- Right Column: Supporting Resources -->
+          <div class="tab-right-col">
+            <div class="resources-card">
+              <h3>Resources</h3>
+              {% if page.supporting-resources %}
+              <ul class="resources-list-items">
+                {% for slug in page.supporting-resources %}
                 {% assign item = site.resources | where: "slug", slug | first %}
                 {% if item %}
                 <li class="resource-item">
                   <div class="resource-icon-box">
                     {% assign sel = item.select | downcase %}
                     {% if sel contains "report" or sel contains "final report" %}
-                      📄
-                    {%  elsif sel contains "video" %}
-                      🎥
-                    {%  elsif sel contains "evaluation" %}
-                      📋
-                    {%  else %}
-                      🔗
-                    {%  endif %}
+                    📄
+                    {% elsif sel contains "video" %}
+                    🎥
+                    {% elsif sel contains "evaluation" %}
+                    📋
+                    {% else %}
+                    🔗
+                    {% endif %}
                   </div>
                   <div class="resource-info">
-                    <a href="{{ item.external_url }}" target="_blank" rel="noopener noreferrer" class="resource-link">{{ item.title }}</a>
+                    <a href="{{ item.external_url }}" target="_blank" rel="noopener noreferrer" class="resource-link">{{
+                      item.title }}</a>
                     {% if item.short-description %}
                     <span class="resource-desc">{{ item.short-description }}</span>
                     {% endif %}
                   </div>
                 </li>
                 {% endif %}
-              {% endfor %}
-            </ul>
-            {% else %}
-            <p class="no-data-msg">No supporting resources specified.</p>
-            {% endif %}
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p class="no-data-msg">No supporting resources specified.</p>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Learn More Section -->
+      <div class="case-learn-more-section">
+        <h3 class="learn-more-title">Learn more</h3>
+        <div class="learn-more-links">
+          <button class="learn-more-btn" data-tab="tab-what">About the project</button>
+          <button class="learn-more-btn" data-tab="tab-who">Who was involved</button>
+          <button class="learn-more-btn" data-tab="tab-where">Where people were from</button>
+          <button class="learn-more-btn" data-tab="tab-outcomes">Recommendations and resource</button>
+        </div>
+      </div>
+
+      <hr class="attribution-divider">
+
+      {% if page.submitted-by or page.additional-acknowledgements %}
+      <div class="case-attribution-block">
+        {% if page.submitted-by %}
+        <div class="attribution-item">
+          <div class="attribution-label">Submitted by</div>
+          <div class="attribution-value">{{ page.submitted-by }}</div>
+        </div>
+        {% endif %}
+        {% if page.additional-acknowledgements %}
+        <div class="attribution-item">
+          <div class="attribution-label">Acknowledgements</div>
+          <div class="attribution-value">{{ page.additional-acknowledgements }}</div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="case-copyright-statement">
+        All images, quotes and materials are copyright their original creators unless otherwise stated. To cite this
+        project, please see the 'Outcomes' tab for suggested reports and citations.
+      </div>
+
     </div>
   </div>
 </article>
+
+
+
+
+<!-- Lightbox Overlay -->
+<div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox"
+  style="display:none;">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">✕</button>
+  <div class="lightbox-content">
+    <img src="" alt="" id="lightbox-img" class="lightbox-img">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+</div>
 
 <style>
   /* Reset wrapper layout mapping */
@@ -513,7 +658,7 @@ layout: default
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: inset 0 -2px 5px rgba(0,0,0,0.05);
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.05);
   }
 
   .tab-btn:hover {
@@ -562,7 +707,8 @@ layout: default
     }
   }
 
-  .tab-left-col h3, .tab-right-col h3 {
+  .tab-left-col h3,
+  .tab-right-col h3 {
     font-family: 'Outfit', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
@@ -583,7 +729,10 @@ layout: default
   }
 
   /* Metadata Card (Right Column) - Unboxed clean layout matching design */
-  .metadata-card, .organisers-card, .locations-summary-card, .resources-card {
+  .metadata-card,
+  .organisers-card,
+  .locations-summary-card,
+  .resources-card {
     background: none !important;
     border: none !important;
     border-radius: 0 !important;
@@ -878,16 +1027,361 @@ layout: default
     font-style: italic;
     font-size: 0.95rem;
   }
+
+  /* =============================================
+     MEDIA SECTION (Light Green, inside About tab)
+  ============================================= */
+  .case-media-section {
+    background-color: #eef3ec;
+    margin-top: 2.5rem;
+    padding: 2.5rem 0 3rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* --- Image Gallery --- */
+  .case-gallery {
+    margin-bottom: 2rem;
+  }
+
+  .gallery-scroll-track {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .gallery-scroll-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-thumb-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    width: calc(33.33% - 1.5rem);
+    min-width: 180px;
+    height: 160px;
+  }
+
+  .gallery-thumb-btn:hover {
+    transform: scale(1.02);
+    opacity: 0.92;
+  }
+
+  .gallery-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
+  }
+
+  .gallery-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .gallery-arrow {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    border: 2px solid rgba(73, 106, 64, 0.3);
+    background: rgba(73, 106, 64, 0.08);
+    color: #496a40;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .gallery-arrow:hover {
+    background: rgba(73, 106, 64, 0.18);
+    border-color: rgba(73, 106, 64, 0.6);
+  }
+
+  /* --- Lightbox --- */
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.75rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+
+  .lightbox-close:hover {
+    opacity: 1;
+  }
+
+  .lightbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 12px;
+    object-fit: contain;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .lightbox-caption {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* --- Message Carousel --- */
+  .msg-carousel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .msg-carousel-track {
+    display: flex;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .msg-slide {
+    min-width: 100%;
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding-right: 0.5rem;
+  }
+
+  .msg-slide-left {
+    flex: 2;
+  }
+
+  .msg-slide-right {
+    flex: 1;
+    padding-top: 1rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  .msg-open-quote,
+  .msg-close-quote {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #496a40;
+    line-height: 1;
+    margin-bottom: 0.1rem;
+  }
+
+  .msg-type-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #496a40;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.65rem;
+  }
+
+  .msg-body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #1a2f16;
+    margin-bottom: 0.5rem;
+  }
+
+  .msg-credit {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #496a40;
+    line-height: 1.45;
+    text-align: right;
+    display: block;
+  }
+
+  .msg-carousel-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+  .msg-arrow {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    border: 2px solid rgba(73, 106, 64, 0.3);
+    background: rgba(73, 106, 64, 0.08);
+    color: #496a40;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .msg-arrow:hover {
+    background: rgba(73, 106, 64, 0.18);
+    border-color: rgba(73, 106, 64, 0.6);
+  }
+
+  @media (max-width: 768px) {
+    .gallery-thumb-btn {
+      width: calc(80% - 1rem);
+      min-width: 160px;
+      height: 130px;
+    }
+
+    .msg-slide {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .msg-slide-right {
+      justify-content: flex-start;
+    }
+
+    .msg-credit {
+      text-align: left;
+    }
+  }
+
+  /* Learn More Section */
+  .case-learn-more-section {
+    margin-top: 3.5rem;
+  }
+
+  .learn-more-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a2f16;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+  }
+
+  .learn-more-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .learn-more-btn {
+    background-color: #d2e8cc;
+    color: #2f4f25;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 9999px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+  }
+
+  .learn-more-btn:hover {
+    background-color: #c2dbbd;
+    color: #1a2f16;
+    transform: translateY(-1px);
+  }
+
+  .learn-more-btn:active {
+    transform: translateY(0);
+  }
+
+  .attribution-divider {
+    border: none;
+    border-top: 1px solid rgba(73, 106, 64, 0.2);
+    margin-block: 2.25rem 2.25rem;
+  }
+
+  /* Attribution Block */
+  .case-attribution-block {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .attribution-label {
+    font-weight: 700;
+    color: #1a2f16;
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  .attribution-value {
+    display: block;
+    color: #496a40;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .case-copyright-statement {
+    margin-top: 2.5rem;
+    font-size: 0.825rem;
+    color: #7a9476;
+    line-height: 1.6;
+  }
+
+  .inclusion-efforts-section,
+  .limitations-section {
+    margin-top: 2.5rem;
+  }
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // 1. Tab Swapping Logic
     const tabButtons = document.querySelectorAll('.tab-btn');
     const contentPanels = document.querySelectorAll('.tab-content-panel');
 
     tabButtons.forEach(button => {
-      button.addEventListener('click', function() {
+      button.addEventListener('click', function () {
         const targetId = this.getAttribute('data-target');
 
         // Remove active state from all buttons and panels
@@ -986,42 +1480,120 @@ layout: default
       {% endif %}
     ];
 
-    const mapContainer = document.getElementById('case-mini-map');
-    if (mapContainer && mapMarkers.length > 0) {
-      // Initialize Map inside global window scope so tab logic can access it
-      window.miniMap = L.map('case-mini-map', {
-        zoomControl: true,
-        attributionControl: false
-      }).setView([20, 0], 2);
+  const mapContainer = document.getElementById('case-mini-map');
+  if (mapContainer && mapMarkers.length > 0) {
+    // Initialize Map inside global window scope so tab logic can access it
+    window.miniMap = L.map('case-mini-map', {
+      zoomControl: true,
+      attributionControl: false
+    }).setView([20, 0], 2);
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 20
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 20
+    }).addTo(window.miniMap);
+
+    window.mapBounds = L.latLngBounds();
+
+    mapMarkers.forEach(function (m) {
+      var marker = L.circleMarker([m.lat, m.lng], {
+        radius: m.radius,
+        fillColor: m.color,
+        color: "#ffffff",
+        weight: m.weight,
+        opacity: 1,
+        fillOpacity: 0.85
       }).addTo(window.miniMap);
 
-      window.mapBounds = L.latLngBounds();
+      marker.bindPopup("<strong style='font-family:Plus Jakarta Sans, sans-serif; font-size:11px;'>" + m.title + "</strong>");
+      window.mapBounds.extend([m.lat, m.lng]);
+    });
 
-      mapMarkers.forEach(function (m) {
-        var marker = L.circleMarker([m.lat, m.lng], {
-          radius: m.radius,
-          fillColor: m.color,
-          color: "#ffffff",
-          weight: m.weight,
-          opacity: 1,
-          fillOpacity: 0.85
-        }).addTo(window.miniMap);
+    // Fit bounds after initial setup
+    setTimeout(function () {
+      window.miniMap.invalidateSize();
+      window.miniMap.fitBounds(window.mapBounds, { padding: [15, 15], maxZoom: 10 });
+    }, 150);
+  } else if (mapContainer) {
+    // Hide map container if there are no coordinates to plot
+    mapContainer.parentElement.innerHTML = "<div class='locations-summary-card' style='height: 100%; display: flex; align-items: center; justify-content: center; color: #7a9476; font-style: italic;'>No map data available for this case.</div>";
+  }
+  // 4. Gallery scroll & lightbox
+  const galleryTrack = document.getElementById('gallery-track');
+  const galleryPrev = document.getElementById('gallery-prev');
+  const galleryNext = document.getElementById('gallery-next');
 
-        marker.bindPopup("<strong style='font-family:Plus Jakarta Sans, sans-serif; font-size:11px;'>" + m.title + "</strong>");
-        window.mapBounds.extend([m.lat, m.lng]);
+  if (galleryTrack) {
+    const scrollAmount = () => galleryTrack.offsetWidth * 0.65;
+
+    if (galleryPrev) galleryPrev.addEventListener('click', () => {
+      galleryTrack.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+    });
+    if (galleryNext) galleryNext.addEventListener('click', () => {
+      galleryTrack.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    galleryTrack.querySelectorAll('.gallery-thumb-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        lightboxImg.src = btn.dataset.full;
+        lightboxImg.alt = btn.dataset.caption || '';
+        lightboxCaption.textContent = btn.dataset.caption || '';
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
       });
+    });
 
-      // Fit bounds after initial setup
-      setTimeout(function () {
-        window.miniMap.invalidateSize();
-        window.miniMap.fitBounds(window.mapBounds, { padding: [15, 15], maxZoom: 10 });
-      }, 150);
-    } else if (mapContainer) {
-      // Hide map container if there are no coordinates to plot
-      mapContainer.parentElement.innerHTML = "<div class='locations-summary-card' style='height: 100%; display: flex; align-items: center; justify-content: center; color: #7a9476; font-style: italic;'>No map data available for this case.</div>";
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightbox) lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+      document.body.style.overflow = '';
     }
+  }
+
+  // 5. Message carousel
+  const msgTrack = document.getElementById('msg-track');
+  const msgPrev = document.getElementById('msg-prev');
+  const msgNext = document.getElementById('msg-next');
+
+  if (msgTrack) {
+    const slides = msgTrack.querySelectorAll('.msg-slide');
+    let msgIndex = 0;
+
+    function goToMsg(idx) {
+      msgIndex = (idx + slides.length) % slides.length;
+      msgTrack.style.transform = `translateX(-${msgIndex * 100}%)`;
+    }
+
+    if (msgPrev) msgPrev.addEventListener('click', () => goToMsg(msgIndex - 1));
+    if (msgNext) msgNext.addEventListener('click', () => goToMsg(msgIndex + 1));
+  }
+
+  // 6. Learn More Tab Switcher Logic
+  const learnMoreButtons = document.querySelectorAll('.learn-more-btn');
+  learnMoreButtons.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const targetTab = this.getAttribute('data-tab');
+      const tabBtn = document.querySelector(`.tab-btn[data-target="${targetTab}"]`);
+      if (tabBtn) {
+        tabBtn.click();
+        const tabButtonsContainer = document.querySelector('.tab-buttons-container');
+        if (tabButtonsContainer) {
+          tabButtonsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
   });
 </script>
