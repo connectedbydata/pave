@@ -27,6 +27,10 @@ layout: default
         <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-who">Who</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-where">Where</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-outcomes">Outcomes</button>
+        <button id="trigger-print-preview-btn" class="tab-btn print-trigger-tab-btn"
+          style="background-color: #496a40; margin-left: auto; border-radius: 12px 12px 0 0;">
+          📄 Print Draft
+        </button>
       </div>
     </div>
   </header>
@@ -557,6 +561,281 @@ layout: default
   </div>
 </article>
 
+<!-- Floating Controller Bar for Print Draft -->
+<div id="print-controls" class="print-controls-bar">
+  <div class="print-controls-inner">
+    <span class="print-controls-title">Print Draft Preview</span>
+    <button id="print-now-btn" class="print-ctrl-btn btn-primary-print">Print Draft</button>
+    <button id="print-font-increase" class="print-ctrl-btn btn-sec-print">A+</button>
+    <button id="print-font-decrease" class="print-ctrl-btn btn-sec-print">A-</button>
+    <button id="print-cancel-btn" class="print-ctrl-btn btn-danger-print">Close Preview</button>
+  </div>
+</div>
+
+<!-- Print Draft Container -->
+<div id="print-draft-container">
+
+  <!-- PAGE 1 (Front Page) -->
+  <div class="print-page page-1">
+    <div class="print-brand-header">
+      <img src="{{ "/assets/images/pave-case-book-logo.png" | relative_url }}" alt="PAVE Case Book Logo"
+        class="print-brand-logo" />
+      <span class="print-brand-title">PAVE Casebook</span>
+    </div>
+
+    <div class="print-header-row">
+      <div class="print-header-text">
+        <h1 class="print-title" contenteditable="true">{{ page.title | escape }}</h1>
+        {% if page.describe-the-subject-matter-in-your-own-words-one %}
+        <p class="print-subtitle" contenteditable="true">{{ page.describe-the-subject-matter-in-your-own-words-one |
+          escape }}</p>
+        {% endif %}
+      </div>
+      <div class="print-qr-code-box">
+        <img id="print-qr-code-img" src="" data-url="{{ page.url | absolute_url }}"
+          alt="QR Code Link to Digital Case Study" />
+        <span class="print-qr-label">Scan to view digital case</span>
+      </div>
+    </div>
+
+    <div class="print-grid-two-cols">
+      <!-- Left Column (What / About & Goals & Who & Inclusion) -->
+      <div class="print-col-left-2-3">
+        <h2 class="print-section-title">What</h2>
+        <div class="print-rich-content print-scroll-box" id="print-box-what" contenteditable="true">
+          {{ page.provide-a-brief-description-of-the-project | markdownify }}
+        </div>
+        <div id="print-box-what-more" class="print-more-online-indicator">More content online</div>
+
+        {% if page.project-goals %}
+        <div class="print-goals-section">
+          <h3 class="print-sub-title">Project Goals</h3>
+          <ul class="print-goals-list" contenteditable="true">
+            {% for goal in page.project-goals %}
+            <li>{{ goal }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <h2 class="print-section-title" style="margin-top: 1.25rem;">Who was involved</h2>
+        {% if page.participants %}
+        <div class="print-cohorts-summary" contenteditable="true">
+          {% for slug in page.participants %}
+          {% assign item = site.participants | where: "slug", slug | first %}
+          {% if item %}
+          <div class="print-cohort-entry">
+            <h4 class="print-cohort-name">{{ item.group-description }}</h4>
+            <p class="print-cohort-details">
+              {% if item.how-many-people-took-part %}<strong>Group size:</strong> {{ item.how-many-people-took-part }}
+              people.{% endif %}
+              {% if item.recruitment-method %} <strong>Recruitment:</strong> {{ item.recruitment-method }}.{% endif %}
+              {% if item.was-there-a-specific-target-population %} <strong>Target:</strong> {{
+              item.was-there-a-specific-target-population }}.{% endif %}
+            </p>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if page.inclusion-efforts %}
+        <div class="print-inclusion-section" style="margin-top: 1.25rem;">
+          <h3 class="print-sub-title">Inclusion Efforts</h3>
+          <div class="print-rich-content print-scroll-box" id="print-box-inclusion" contenteditable="true">
+            {{ page.inclusion-efforts | markdownify }}
+          </div>
+          <div id="print-box-inclusion-more" class="print-more-online-indicator">More content online</div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column (Quick Facts / Sidebar) -->
+      <div class="print-col-right-1-3">
+        <!-- Mini Map at the top -->
+        <div id="print-mini-map" class="print-mini-map"></div>
+
+        <div class="print-facts-sidebar" contenteditable="true">
+          {% if page.what-year-did-the-project-start or page.what-year-did-the-project-conclude %}
+          <div class="print-fact-item">
+            <div class="print-fact-label">Timeline</div>
+            <div class="print-fact-val">
+              {{ page.what-year-did-the-project-start }}
+              {% if page.what-year-did-the-project-conclude %}
+              &ndash; {{ page.what-year-did-the-project-conclude }}
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if page.how-was-the-project-initiated %}
+          <div class="print-fact-item">
+            <div class="print-fact-label">Initiation</div>
+            <div class="print-fact-val">{{ page.how-was-the-project-initiated | join: ", " }}</div>
+          </div>
+          {% endif %}
+
+          {% if page.lead-organisations %}
+          <div class="print-fact-item">
+            <div class="print-fact-label">Led By</div>
+            <div class="print-fact-val">
+              {% for slug in page.lead-organisations %}
+              {% assign item = site.organisations | where: "slug", slug | first %}
+              {% if item %}{{ item.title }}{% unless forloop.last %}, {% endunless %}{% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if page.funding-organisations %}
+          <div class="print-fact-item">
+            <div class="print-fact-label">Funded By</div>
+            <div class="print-fact-val">
+              {% for slug in page.funding-organisations %}
+              {% assign item = site.organisations | where: "slug", slug | first %}
+              {% if item %}{{ item.title }}{% unless forloop.last %}, {% endunless %}{% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% assign unique_methods = "" | split: "" %}
+          {% if page.participants %}
+          {% for part_slug in page.participants %}
+          {% assign part = site.participants | where: "slug", part_slug | first %}
+          {% if part and part.which-of-the-following-methods-were-used-to %}
+          {% for method in part.which-of-the-following-methods-were-used-to %}
+          {% unless unique_methods contains method %}
+          {% assign unique_methods = unique_methods | push: method %}
+          {% endunless %}
+          {% endfor %}
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+
+          {% if unique_methods.size > 0 %}
+          <div class="print-fact-item">
+            <div class="print-fact-label">Methods</div>
+            <div class="print-methods-pills">
+              {% for method in unique_methods %}
+              <span class="print-method-pill">{{ method }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 (Back Page) -->
+  <div class="print-page page-2">
+    <div class="print-brand-header">
+      <img src="{{ "/assets/images/pave-case-book-logo.png" | relative_url }}" alt="PAVE Case Book Logo"
+        class="print-brand-logo" />
+      <span class="print-brand-title">PAVE Casebook</span>
+    </div>
+
+    <!-- Photos across the top -->
+    {% if page.photos-and-images and page.photos-and-images.size > 0 %}
+    <div class="print-photos-row">
+      {% for photo in page.photos-and-images limit: 3 %}
+      {% assign img_url = photo.url | relative_url %}
+      <div class="print-photo-wrapper">
+        <img src="{{ img_url }}" alt="{{ photo.filename | escape }}" class="print-photo" />
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Key Messages -->
+    {% assign all_messages = "" | split: "" %}
+    {% if page.messages %}
+    {% for m_slug in page.messages %}
+    {% assign msg = site.messages | where: "slug", m_slug | first %}
+    {% if msg %}
+    {% assign all_messages = all_messages | push: msg %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if all_messages.size > 0 %}
+    <div class="print-messages-section">
+      <h2 class="print-section-title">Key Messages</h2>
+      <ul class="print-messages-list" contenteditable="true">
+        {% for msg in all_messages limit: 7 %}
+        <li class="print-message-item">
+          <strong class="print-message-type">[{{ msg.type }}]</strong>
+          <span class="print-message-text">&ldquo;{{ msg.title }}&rdquo;</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% if all_messages.size > 7 %}
+      <p class="print-read-more-note"><em>+{{ all_messages.size | minus: 7 }} more messages online.</em></p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Limitations -->
+    {% if page.what-limitations-to-the-project-should-be-noted %}
+    <div class="print-limitations-section" style="margin-top: 1.25rem;">
+      <h2 class="print-section-title">Limitations</h2>
+      <div class="print-rich-content print-scroll-box" id="print-box-limitations" contenteditable="true">
+        {{ page.what-limitations-to-the-project-should-be-noted | markdownify }}
+      </div>
+      <div id="print-box-limitations-more" class="print-more-online-indicator">More content online</div>
+    </div>
+    {% endif %}
+
+    <!-- Supporting Resources Cards at the bottom -->
+    {% if page.supporting-resources and page.supporting-resources.size > 0 %}
+    <div class="print-resources-container">
+      <h3 class="print-resources-heading">Supporting Resources</h3>
+      <div class="print-resources-cards-row">
+        {% if page.supporting-resources.size <= 4 %} {% for slug in page.supporting-resources %} {% assign
+          item=site.resources | where: "slug" , slug | first %} {% if item %} <div class="print-resource-card"
+          contenteditable="true">
+          <div class="print-resource-title">{{ item.title }}</div>
+          <div class="print-resource-desc">{{ item.short-description | default: item.select | truncate: 80 }}</div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% else %}
+      {% for slug in page.supporting-resources limit: 3 %}
+      {% assign item = site.resources | where: "slug", slug | first %}
+      {% if item %}
+      <div class="print-resource-card" contenteditable="true">
+        <div class="print-resource-title">{{ item.title }}</div>
+        <div class="print-resource-desc">{{ item.short-description | default: item.select | truncate: 80 }}</div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% assign remaining_count = page.supporting-resources.size | minus: 3 %}
+      <div class="print-resource-card print-resource-more-card">
+        <div class="print-resource-more-text">+{{ remaining_count }} more online</div>
+        <div class="print-resource-more-sub">Scan QR code to view</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Footer Attribution and Copyright Statement -->
+  <div class="print-footer-row" contenteditable="true">
+    <div class="print-attribution-text">
+      {% if page.submitted-by %}<strong>Submitted by:</strong> {{ page.submitted-by }}. {% endif %}
+      {% if page.additional-acknowledgements %}<strong>Acknowledgements:</strong> {{ page.additional-acknowledgements
+      }}.{% endif %}
+    </div>
+    <div class="print-disclaimer">
+      All images, quotes and materials are copyright their original creators unless otherwise stated. To cite this
+      project, please see the digital Outcomes tab.
+    </div>
+  </div>
+</div>
+
+</div>
+
 
 
 
@@ -571,6 +850,11 @@ layout: default
 </div>
 
 <style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
   /* Reset wrapper layout mapping */
   body {
     background-color: #f6f8f5;
@@ -1361,16 +1645,684 @@ layout: default
     line-height: 1.5;
   }
 
-  .case-copyright-statement {
-    margin-top: 2.5rem;
-    font-size: 0.825rem;
-    color: #7a9476;
-    line-height: 1.6;
+  /* =============================================
+     PRINT DRAFT LAYOUT AND STYLES
+  ============================================= */
+  #print-controls {
+    display: none;
   }
 
-  .inclusion-efforts-section,
-  .limitations-section {
-    margin-top: 2.5rem;
+  #print-draft-container {
+    display: none;
+  }
+
+  body.print-mode-active {
+    background-color: #f1f5f9 !important;
+    margin: 0 !important;
+    padding: 5rem 0 2rem 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  body.print-mode-active .case-study-page,
+  body.print-mode-active .site-header,
+  body.print-mode-active .site-footer,
+  body.print-mode-active .lightbox-overlay {
+    display: none !important;
+  }
+
+  body.print-mode-active #print-draft-container {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    --print-base-size: 10pt;
+    font-size: var(--print-base-size);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #1e293b;
+  }
+
+  body.print-mode-active #print-controls {
+    display: flex !important;
+  }
+
+  /* Controls Bar */
+  .print-controls-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background-color: #1e293b;
+    color: white;
+    z-index: 99999;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    justify-content: center;
+  }
+
+  .print-controls-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .print-controls-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-right: auto;
+    color: #f8fafc;
+  }
+
+  .print-ctrl-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary-print {
+    background-color: #496a40;
+    color: white;
+  }
+
+  .btn-primary-print:hover {
+    background-color: #385331;
+  }
+
+  .btn-sec-print {
+    background-color: #475569;
+    color: white;
+  }
+
+  .btn-sec-print:hover {
+    background-color: #334155;
+  }
+
+  .btn-danger-print {
+    background-color: #b91c1c;
+    color: white;
+  }
+
+  .btn-danger-print:hover {
+    background-color: #991b1b;
+  }
+
+  .print-mini-map {
+    height: 110px;
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 0.95rem;
+    border: 1px solid rgba(73, 106, 64, 0.15);
+    background-color: #f8fafc;
+    z-index: 10;
+  }
+
+  .print-methods-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+  }
+
+  .print-method-pill {
+    display: inline-block;
+    background-color: rgba(73, 106, 64, 0.08);
+    color: #496a40;
+    font-size: 0.78em;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 12px;
+    border: 1px solid rgba(73, 106, 64, 0.15);
+    text-align: center;
+    width: fit-content;
+  }
+
+  /* Page 2 Print Photos Row */
+  .print-photos-row {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    margin-bottom: 0.95rem;
+  }
+
+  .print-photo-wrapper {
+    flex: 1;
+    aspect-ratio: 3/2;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid rgba(73, 106, 64, 0.15);
+  }
+
+  .print-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Page 2 Print Messages */
+  .print-messages-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .print-messages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .print-message-item {
+    font-size: 0.85em;
+    line-height: 1.35;
+    color: #334155;
+    margin-bottom: 0.45rem;
+  }
+
+  .print-message-type {
+    font-weight: 700;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    color: #496a40;
+    margin-right: 0.4rem;
+  }
+
+  .print-message-text {
+    font-style: italic;
+    color: #1e293b;
+  }
+
+  /* Page 2 Supporting Resources Mini Cards */
+  .print-resources-container {
+    margin-top: 0.75rem;
+    border-top: 1px dashed rgba(73, 106, 64, 0.2);
+    padding-top: 0.65rem;
+  }
+
+  .print-resources-heading {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #1a2f16;
+    text-transform: uppercase;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: 0.03em;
+  }
+
+  .print-resources-cards-row {
+    display: flex;
+    gap: 0.65rem;
+    width: 100%;
+  }
+
+  .print-resource-card {
+    flex: 1;
+    background-color: #f8fafc;
+    border: 1px solid rgba(73, 106, 64, 0.12);
+    border-radius: 6px;
+    padding: 0.5rem 0.6rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .print-resource-title {
+    font-weight: 700;
+    font-size: 0.75em;
+    color: #243f1f;
+    line-height: 1.25;
+    margin-bottom: 0.15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .print-resource-desc {
+    font-size: 0.65em;
+    color: #475569;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .print-resource-more-card {
+    background-color: rgba(73, 106, 64, 0.04);
+    border: 1px dashed rgba(73, 106, 64, 0.25);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .print-resource-more-text {
+    font-weight: 700;
+    font-size: 0.8em;
+    color: #496a40;
+  }
+
+  .print-resource-more-sub {
+    font-size: 0.6em;
+    color: #7a9476;
+    margin-top: 0.1rem;
+  }
+
+  /* A4 Pages Sizing and Styles */
+  .print-page {
+    width: 210mm;
+    height: 297mm;
+    padding: 20mm 18mm;
+    background-color: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  /* Make text outline visible on hover so they know it is editable */
+  [contenteditable="true"] {
+    outline: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  [contenteditable="true"]:hover {
+    background-color: rgba(73, 106, 64, 0.05);
+    box-shadow: 0 0 0 1px rgba(73, 106, 64, 0.15);
+  }
+
+  [contenteditable="true"]:focus {
+    background-color: rgba(73, 106, 64, 0.08);
+    box-shadow: 0 0 0 2px rgba(73, 106, 64, 0.3);
+  }
+
+  /* Page 1 Header */
+  .print-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #496a40;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .print-header-text {
+    flex: 1;
+    padding-right: 1.5rem;
+  }
+
+  .print-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2em;
+    font-weight: 700;
+    color: #1a2f16;
+    margin: 0 0 0.4rem 0;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .print-subtitle {
+    font-size: 1em;
+    color: #556c50;
+    margin: 0;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .print-qr-code-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .print-qr-code-box img {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 4px;
+  }
+
+  .print-qr-label {
+    font-size: 0.55em;
+    color: #7a9476;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  /* Columns Grid Layout */
+  .print-grid-two-cols {
+    display: grid;
+    grid-template-columns: 2.1fr 0.9fr;
+    gap: 1.5rem;
+    flex: 1;
+  }
+
+  .print-col-left-2-3 {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .print-col-right-1-3 {
+    border-left: 1px solid rgba(73, 106, 64, 0.15);
+    padding-left: 1.5rem;
+  }
+
+  .print-grid-two-cols-half {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    flex: 1;
+  }
+
+  .print-col-half {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* Headings */
+  .print-section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #1a2f16;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid #496a40;
+    padding-bottom: 0.25rem;
+  }
+
+  .print-sub-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.025em;
+    font-weight: 600;
+    color: #1a2f16;
+    margin: 0 0 0.35rem 0;
+  }
+
+  .print-rich-content {
+    line-height: 1.45;
+    font-size: 0.9em;
+    color: #243f1f;
+  }
+
+  .print-rich-content p {
+    margin: 0 0 0.6rem 0;
+  }
+
+  .print-rich-content p:last-child {
+    margin: 0;
+  }
+
+  /* Goals List */
+  .print-goals-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9em;
+    color: #243f1f;
+  }
+
+  .print-goals-list li {
+    margin-bottom: 0.3rem;
+  }
+
+  /* Facts Sidebar Stacked */
+  .print-facts-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+  }
+
+  .print-fact-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .print-fact-label {
+    font-weight: 700;
+    color: #1a2f16;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    padding: 0;
+    margin-bottom: 0.15rem;
+  }
+
+  .print-fact-val {
+    color: #496a40;
+    font-size: 0.825em;
+    padding: 0;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+
+  .print-read-more-note {
+    font-size: 0.8em;
+    color: #7a9476;
+    margin-top: 0.35rem;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* Scrollable text boxes sizing and styling */
+  .print-scroll-box {
+    overflow-y: auto;
+    border: 1px solid transparent;
+    padding: 2px;
+    box-sizing: border-box;
+  }
+
+  #print-box-what {
+    max-height: 130px;
+  }
+
+  #print-box-inclusion {
+    max-height: 110px;
+  }
+
+  #print-box-limitations {
+    max-height: 200px;
+  }
+
+  .print-more-online-indicator {
+    display: none;
+    font-size: 0.8em;
+    color: #7a9476;
+    margin-top: 0.35rem;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .print-more-online-indicator.visible {
+    display: block !important;
+  }
+
+  @media print {
+    .print-scroll-box {
+      overflow-y: hidden !important;
+      max-height: none !important;
+    }
+
+    body.print-mode-active #print-box-what {
+      max-height: 130px !important;
+    }
+
+    body.print-mode-active #print-box-inclusion {
+      max-height: 110px !important;
+    }
+
+    body.print-mode-active #print-box-limitations {
+      max-height: 200px !important;
+    }
+  }
+
+  /* PAVE Casebook Running Header */
+  .print-brand-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #496a40;
+    padding-bottom: 0.45rem;
+    margin-bottom: 0.85rem;
+    width: 100%;
+  }
+
+  .print-brand-logo {
+    height: 28px;
+    display: block;
+  }
+
+  .print-brand-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.85em;
+    color: #496a40;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Cohorts summaries */
+  .print-cohorts-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .print-cohort-entry {
+    background-color: #fbfcfb;
+    border-left: 3px solid #496a40;
+    padding: 0.4rem 0.65rem;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.9em;
+  }
+
+  .print-cohort-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #1a2f16;
+    margin: 0 0 0.2rem 0;
+  }
+
+  .print-cohort-details {
+    margin: 0;
+    font-size: 0.825em;
+    color: #556c50;
+    line-height: 1.35;
+  }
+
+  /* Recommendations & Resources */
+  .print-recs-list,
+  .print-resources-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.85em;
+    color: #243f1f;
+  }
+
+  .print-recs-list li,
+  .print-resources-list li {
+    margin-bottom: 0.35rem;
+    line-height: 1.35;
+  }
+
+  /* Footer attribution and copyright */
+  .print-footer-row {
+    border-top: 1px solid rgba(73, 106, 64, 0.15);
+    padding-top: 0.65rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .print-attribution-text {
+    font-size: 0.8em;
+    color: #1a2f16;
+  }
+
+  .print-disclaimer {
+    font-size: 0.7em;
+    color: #7a9476;
+    line-height: 1.35;
+  }
+
+  /* =============================================
+     ACTUAL PRINT MEDIA SPECIFIC STYLES
+  ============================================= */
+  @media print {
+    body.print-mode-active #print-controls,
+    #print-controls {
+      display: none !important;
+    }
+
+    #print-draft-container {
+      display: none !important;
+    }
+
+    body.print-mode-active #print-draft-container {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      gap: 0 !important;
+    }
+
+    body.print-mode-active .case-study-page,
+    body.print-mode-active .site-header,
+    body.print-mode-active .site-footer,
+    body.print-mode-active .lightbox-overlay {
+      display: none !important;
+    }
+
+    body.print-mode-active {
+      display: block !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background-color: white !important;
+      width: auto !important;
+      height: auto !important;
+    }
+
+    body {
+      background-color: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .print-page {
+      box-shadow: none !important;
+      margin: 0 !important;
+      width: 210mm !important;
+      height: 296mm !important; /* Safety margin (296mm instead of 297mm) to prevent browser rounding 3-page overflow */
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      page-break-after: always !important;
+      break-after: page !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
   }
 </style>
 
@@ -1414,70 +2366,70 @@ layout: default
     // 3. Mini Map Loader
     var mapMarkers = [
       // Lead Organisations
-      {% if page.lead-organisations %}
-        {% for org_slug in page.lead-organisations %}
-          {% assign org = site.organisations | where: "slug", org_slug | first %}
-          {% if org and org.main-location %}
-            {% for loc_slug in org.main-location %}
-              {% assign loc = site.locations | where: "slug", loc_slug | first %}
-              {% if loc and loc.latitude and loc.longitude %}
-                {
-                  lat: {{ loc.latitude }},
-                  lng: {{ loc.longitude }},
-                  title: "{{ org.title | escape }} (Lead)",
-                  color: "#496a40",
-                  radius: 7,
-                  weight: 2
-                },
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
+      {% if page['lead-organisations'] %}
+        {% for org_slug in page['lead-organisations'] %}
+  {% assign org = site.organisations | where: "slug", org_slug | first %}
+  {% if org and org['main-location'] %}
+  {% for loc_slug in org['main-location'] %}
+  {% assign loc = site.locations | where: "slug", loc_slug | first %}
+  {% if loc and loc.latitude and loc.longitude %}
+  {
+    lat: parseFloat("{{ loc.latitude }}"),
+    lng: parseFloat("{{ loc.longitude }}"),
+    title: "{{ org.title | escape }} (Lead)",
+      color: "#496a40",
+        radius: 7,
+          weight: 2
+  },
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  {% endfor %}
+  {% endif %}
 
-      // Involved Organisations
-      {% if page.involved-organisations %}
-        {% for org_slug in page.involved-organisations %}
-          {% assign org = site.organisations | where: "slug", org_slug | first %}
-          {% if org and org.main-location %}
-            {% for loc_slug in org.main-location %}
-              {% assign loc = site.locations | where: "slug", loc_slug | first %}
-              {% if loc and loc.latitude and loc.longitude %}
-                {
-                  lat: {{ loc.latitude }},
-                  lng: {{ loc.longitude }},
-                  title: "{{ org.title | escape }} (Involved)",
-                  color: "#8fa68b",
-                  radius: 4.5,
-                  weight: 1.5
-                },
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
+  // Involved Organisations
+  {% if page['involved-organisations'] %}
+  {% for org_slug in page['involved-organisations'] %}
+  {% assign org = site.organisations | where: "slug", org_slug | first %}
+  {% if org and org['main-location'] %}
+  {% for loc_slug in org['main-location'] %}
+  {% assign loc = site.locations | where: "slug", loc_slug | first %}
+  {% if loc and loc.latitude and loc.longitude %}
+  {
+    lat: parseFloat("{{ loc.latitude }}"),
+    lng: parseFloat("{{ loc.longitude }}"),
+    title: "{{ org.title | escape }} (Involved)",
+      color: "#8fa68b",
+        radius: 4.5,
+          weight: 1.5
+  },
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  {% endfor %}
+  {% endif %}
 
-      // Participants
-      {% if page.participants %}
-        {% for part_slug in page.participants %}
-          {% assign part = site.participants | where: "slug", part_slug | first %}
-          {% if part and part.locations %}
-            {% for loc_slug in part.locations %}
-              {% assign loc = site.locations | where: "slug", loc_slug | first %}
-              {% if loc and loc.latitude and loc.longitude %}
-                {
-                  lat: {{ loc.latitude }},
-                  lng: {{ loc.longitude }},
-                  title: "{{ part.title | escape }} (Participants)",
-                  color: "#e67e22",
-                  radius: 5.5,
-                  weight: 1.5
-                },
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
+  // Participants
+  {% if page.participants %}
+  {% for part_slug in page.participants %}
+  {% assign part = site.participants | where: "slug", part_slug | first %}
+  {% if part and part.locations %}
+  {% for loc_slug in part.locations %}
+  {% assign loc = site.locations | where: "slug", loc_slug | first %}
+  {% if loc and loc.latitude and loc.longitude %}
+  {
+    lat: parseFloat("{{ loc.latitude }}"),
+    lng: parseFloat("{{ loc.longitude }}"),
+    title: "{{ part.title | escape }} (Participants)",
+      color: "#e67e22",
+        radius: 5.5,
+          weight: 1.5
+  },
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  {% endfor %}
+  {% endif %}
     ];
 
   const mapContainer = document.getElementById('case-mini-map');
@@ -1516,6 +2468,45 @@ layout: default
   } else if (mapContainer) {
     // Hide map container if there are no coordinates to plot
     mapContainer.parentElement.innerHTML = "<div class='locations-summary-card' style='height: 100%; display: flex; align-items: center; justify-content: center; color: #7a9476; font-style: italic;'>No map data available for this case.</div>";
+  }
+
+  // Initialize Printable Mini Map
+  const printMapContainer = document.getElementById('print-mini-map');
+  if (printMapContainer && mapMarkers.length > 0) {
+    window.printMiniMap = L.map('print-mini-map', {
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      boxZoom: false,
+      keyboard: false
+    }).setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 20
+    }).addTo(window.printMiniMap);
+
+    window.printMapBounds = L.latLngBounds();
+
+    mapMarkers.forEach(function (m) {
+      L.circleMarker([m.lat, m.lng], {
+        radius: Math.max(3, m.radius - 1.5),
+        fillColor: m.color,
+        color: "#ffffff",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.85
+      }).addTo(window.printMiniMap);
+      window.printMapBounds.extend([m.lat, m.lng]);
+    });
+
+    setTimeout(function () {
+      window.printMiniMap.invalidateSize();
+      window.printMiniMap.fitBounds(window.printMapBounds, { padding: [10, 10], maxZoom: 10 });
+    }, 250);
+  } else if (printMapContainer) {
+    printMapContainer.style.display = 'none';
   }
   // 4. Gallery scroll & lightbox
   const galleryTrack = document.getElementById('gallery-track');
@@ -1595,5 +2586,106 @@ layout: default
       }
     });
   });
+
+  // 7. Print Draft Preview Logic
+  const triggerPrintBtn = document.getElementById('trigger-print-preview-btn');
+  const closePrintBtn = document.getElementById('print-cancel-btn');
+  const printNowBtn = document.getElementById('print-now-btn');
+  const fontIncreaseBtn = document.getElementById('print-font-increase');
+  const fontDecreaseBtn = document.getElementById('print-font-decrease');
+  const printContainer = document.getElementById('print-draft-container');
+
+  const overflowPairs = [
+    { box: 'print-box-what', indicator: 'print-box-what-more' },
+    { box: 'print-box-inclusion', indicator: 'print-box-inclusion-more' },
+    { box: 'print-box-limitations', indicator: 'print-box-limitations-more' }
+  ];
+
+  function checkOverflow(boxId, indicatorId) {
+    const box = document.getElementById(boxId);
+    const indicator = document.getElementById(indicatorId);
+    if (box && indicator) {
+      const isOverflowing = box.scrollHeight > box.clientHeight + 2;
+      if (isOverflowing) {
+        indicator.classList.add('visible');
+      } else {
+        indicator.classList.remove('visible');
+      }
+    }
+  }
+
+  function runAllOverflowChecks() {
+    overflowPairs.forEach(p => checkOverflow(p.box, p.indicator));
+  }
+
+  function initOverflowCheckers() {
+    overflowPairs.forEach(p => {
+      const boxEl = document.getElementById(p.box);
+      if (boxEl) {
+        checkOverflow(p.box, p.indicator);
+        boxEl.addEventListener('input', () => checkOverflow(p.box, p.indicator));
+        boxEl.addEventListener('keyup', () => checkOverflow(p.box, p.indicator));
+        boxEl.addEventListener('mouseup', () => checkOverflow(p.box, p.indicator));
+        boxEl.addEventListener('blur', () => checkOverflow(p.box, p.indicator));
+        boxEl.addEventListener('paste', () => {
+          setTimeout(() => checkOverflow(p.box, p.indicator), 50);
+        });
+      }
+    });
+  }
+
+  if (triggerPrintBtn) {
+    triggerPrintBtn.addEventListener('click', function () {
+      const qrImg = document.getElementById('print-qr-code-img');
+      if (qrImg && (!qrImg.getAttribute('src') || qrImg.getAttribute('src') === '')) {
+        const pageUrl = qrImg.getAttribute('data-url') || window.location.href;
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pageUrl)}`;
+      }
+      document.body.classList.add('print-mode-active');
+      window.scrollTo(0, 0);
+
+      // Resize the print mini-map once container is visible
+      if (window.printMiniMap && window.printMapBounds) {
+        setTimeout(function () {
+          window.printMiniMap.invalidateSize();
+          window.printMiniMap.fitBounds(window.printMapBounds, { padding: [10, 10], maxZoom: 10 });
+        }, 100);
+      }
+
+      // Initialize overflow checkers once containers are visible
+      setTimeout(function () {
+        initOverflowCheckers();
+      }, 150);
+    });
+  }
+
+  if (closePrintBtn) {
+    closePrintBtn.addEventListener('click', function () {
+      document.body.classList.remove('print-mode-active');
+    });
+  }
+
+  if (printNowBtn) {
+    printNowBtn.addEventListener('click', function () {
+      window.print();
+    });
+  }
+
+  let printBaseSizeVal = 10.0;
+  if (fontIncreaseBtn && printContainer) {
+    fontIncreaseBtn.addEventListener('click', function () {
+      printBaseSizeVal += 0.5;
+      printContainer.style.setProperty('--print-base-size', `${printBaseSizeVal}pt`);
+      setTimeout(runAllOverflowChecks, 50);
+    });
+  }
+
+  if (fontDecreaseBtn && printContainer) {
+    fontDecreaseBtn.addEventListener('click', function () {
+      printBaseSizeVal -= 0.5;
+      printContainer.style.setProperty('--print-base-size', `${printBaseSizeVal}pt`);
+      setTimeout(runAllOverflowChecks, 50);
+    });
+  }
   });
 </script>
