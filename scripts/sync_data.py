@@ -41,7 +41,7 @@ ATTACHMENT_DIR = Path("assets/attachments")
 
 # Sync Settings
 FILTER_FIELD_ID = "fldrM6RRk8easAxSq"  # Default: Workflow: Status
-FILTER_VALUES = ["Completed","Draft","Nomination","Submission"]           # Only sync records with these status values
+FILTER_VALUES = ["Completed"]           # Only sync records with these status values
 
 def slugify(text):
     text = str(text).lower()
