@@ -1,6 +1,6 @@
 ---
 layout: generic
-title: Liverpool City Region Resident's Assembly on Data and AI-Liverpool City Region
+title: Liverpool City Region Residents' Assembly on Data and AI-Liverpool City Region
   Residents
 airtable_id: b1a0bcab8f65a7d9
 slug: liverpool-city-region-residents-assembly-on-data-and-ai-liverpool-city-region-residents
@@ -17,7 +17,7 @@ which-of-the-following-methods-were-used-to:
 # On average, how many hours did each participant engage for?
 on-average-how-many-hours-did-each-participant: 27
 # Name
-name: Liverpool City Region Resident's Assembly on Data and AI-Liverpool City Region
+name: Liverpool City Region Residents' Assembly on Data and AI-Liverpool City Region
   Residents
 # Group description
 group-description: Liverpool City Region Residents
@@ -29,7 +29,8 @@ do-any-of-the-following-apply:
 # How many people took part?
 how-many-people-took-part: 59
 # Cases
-cases: []
+cases:
+- liverpool-city-region-residents-assembly-on-data-and-ai
 # Recruitment description
 recruitment-description: Sortition recruitment by post
 # Was there a specific target population?

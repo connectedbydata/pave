@@ -11,7 +11,8 @@ website-address: https://foundation.mozilla.org/
 # Name
 name: Mozilla Foundation
 # Lead organisation for
-lead-organisation-for: []
+lead-organisation-for:
+- imaginative-intelligences-hollywood-edition
 # Mission statement
 mission-statement: 'To ensure that the internet is a global public resource, open
   and accessible to all. (Source: https://foundation.mozilla.org/)'
@@ -21,4 +22,5 @@ main-location:
 # Funding organisation for
 funding-organisation-for:
 - the-peoples-panel-on-ai
+- imaginative-intelligences-hollywood-edition
 ---

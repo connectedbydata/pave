@@ -19,7 +19,8 @@ group-description: Stakeholders and end-users
 # How many people took part?
 how-many-people-took-part: 150
 # Cases
-cases: []
+cases:
+- participatory-harm-auditing-workbenches-and-methodologies-phawm
 # Recruitment description
 recruitment-description: snowballing, through partner organisations, advertising via
   social media

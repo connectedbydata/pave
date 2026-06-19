@@ -8,6 +8,7 @@ participants:
 - equity-and-inclusion-in-quantitative-surveys
 - odyssean-process-on-ai-citizen-assembly
 - participatory-harm-auditing-workbenches-and-methodologies-phawm-stakeholders-and-end-users
+- ai-multiply-targeting-everyday-decision-makers-in-research-early-career-researcher-and-patient-and-p
 # Longitude
 longitude: -3.436
 # Name

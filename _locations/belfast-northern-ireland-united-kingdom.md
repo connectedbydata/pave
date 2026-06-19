@@ -7,6 +7,7 @@ slug: belfast-northern-ireland-united-kingdom
 participants:
 - peoples-ai-stewardship-summits-summit-public-participants
 - peoples-ai-stewardship-summits-summits-stakeholder-participants
+- leverhulme-trust-funded-studentxgenai-project-student-experiences-of-genai-project-university-studen
 # Longitude
 longitude: -5.9301829
 # Name

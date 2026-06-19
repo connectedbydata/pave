@@ -7,6 +7,7 @@ slug: england-united-kingdom
 participants:
 - the-peoples-panel-on-ai-peoples-panel
 - generative-ai-in-education-have-your-say-school-students
+- leverhulme-trust-funded-studentxgenai-project-student-experiences-of-genai-project-university-studen
 # Longitude
 longitude: -1.1743
 # Name

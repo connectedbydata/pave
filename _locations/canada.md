@@ -13,6 +13,9 @@ participants:
 longitude: -106.3468
 # Name
 name: Canada
+# Cases
+cases:
+- ai-for-diabetes-prediction-prevention-ai4dpp
 # Latitude
 latitude: 56.1304
 # Country Code
