@@ -8,6 +8,8 @@ name: Queen Mary University of London
 # Lead organisation for
 lead-organisation-for:
 - co-designing-animated-videos-to-explain-large-language-models-and-their-use-in-healthcare-and-resear
+- data-against-feminicide
 # Funding organisation for
-funding-organisation-for: []
+funding-organisation-for:
+- data-against-feminicide
 ---

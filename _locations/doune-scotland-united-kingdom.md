@@ -8,6 +8,7 @@ participants:
 - exploring-childrens-rights-and-ai-classroom-workshops
 - exploring-childrens-rights-and-ai-cross-school-group
 - exploring-childrens-rights-and-ai-survey
+- leverhulme-trust-funded-studentxgenai-project-student-experiences-of-genai-project-university-studen
 # Longitude
 longitude: -4.0532
 # Name

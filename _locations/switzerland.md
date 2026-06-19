@@ -7,6 +7,12 @@ slug: switzerland
 participants:
 - citizens-assembly-on-ai-french-speaking-switzerland-assembly-group
 - citizens-assembly-on-ai-french-speaking-switzerland-online-survey
+# Longitude
+longitude: 8.2319736
 # Name
 name: Switzerland
+# Latitude
+latitude: 46.7985624
+# Country Code
+country-code: CH
 ---
