@@ -47,6 +47,9 @@
 
           <!-- Right Column: Project Facts -->
           <div class="tab-right-col">
+            <div class="case-source-box">
+              <p>This case was {% if page.submitted-by and page.submitted-by != "" %}based on submission from '{{ page.submitted-by | strip }}'{% else %}written through desk research{% endif %}, edited by the PAVE Case Book team. Check the project website or related resources for suggested citations.</p>
+            </div>
             <div class="metadata-card">
               <table class="metadata-table">
                 {% if page.what-year-did-the-project-start or page.what-year-did-the-project-conclude %}

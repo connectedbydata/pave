@@ -206,12 +206,28 @@ def refresh_case(record_id):
 @app.route('/pave/assets/<path:filename>')
 @app.route('/assets/<path:filename>')
 def serve_assets(filename):
+    candidates = []
+    
+    # Candidate 1: Local self-contained static folder
+    static_dir = Path(__file__).resolve().parent / "static"
+    static_path = static_dir / filename
+    if static_path.exists():
+        candidates.append(static_path)
+        
+    # Candidates 2: Parent repo folders (Jekyll workspace)
     for folder in ["_site/assets", "assets"]:
-        target_dir = WORKSPACE_ROOT / folder
-        if (target_dir / filename).exists():
-            from flask import send_from_directory
-            return send_from_directory(str(target_dir), filename)
-    abort(404)
+        parent_path = WORKSPACE_ROOT / folder / filename
+        if parent_path.exists():
+            candidates.append(parent_path)
+            
+    if not candidates:
+        abort(404)
+        
+    # Serve the candidate with the latest modification time to prevent serving stale assets
+    newest_path = max(candidates, key=lambda p: p.stat().st_mtime)
+    
+    from flask import send_from_directory
+    return send_from_directory(str(newest_path.parent), newest_path.name)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Standalone Flask preview application.")

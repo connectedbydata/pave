@@ -160,6 +160,21 @@
     margin-bottom: 1.5rem;
   }
 
+  .case-source-box {
+    background-color: #f3f7f2;
+    border: 1px solid rgba(73, 106, 64, 0.15);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #243f1f;
+
+    p {
+      margin: 0;
+    }
+  }
+
   /* Metadata Card (Right Column) - Unboxed clean layout matching design */
   .metadata-card,
   .organisers-card,
