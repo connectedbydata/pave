@@ -83,6 +83,15 @@
                 </tr>
                 {% endif %}
 
+                {% if page['how-was-the-project-initiated'] %}
+                <tr>
+                  <td class="meta-label">Initiation method</td>
+                  <td class="meta-value">
+                    {{ page['how-was-the-project-initiated'] | join(", ") }}
+                  </td>
+                </tr>
+                {% endif %}
+
                 {% set unique_methods = [] %}
                 {% if page.participants %}
                   {% for part_slug in page.participants %}
@@ -98,18 +107,9 @@
                 {% endif %}
                 {% if (unique_methods | length) > 0 %}
                 <tr>
-                  <td class="meta-label">Methods used</td>
+                  <td class="meta-label">Participation methods</td>
                   <td class="meta-value">
                     {{ unique_methods | join(", ") }}
-                  </td>
-                </tr>
-                {% endif %}
-
-                {% if page['how-was-the-project-initiated'] %}
-                <tr>
-                  <td class="meta-label">Initiation method</td>
-                  <td class="meta-value">
-                    {{ page['how-was-the-project-initiated'] | join(", ") }}
                   </td>
                 </tr>
                 {% endif %}
@@ -443,11 +443,29 @@
       <!-- 4. OUTCOMES TAB PANEL -->
       <div class="tab-content-panel" id="tab-outcomes" role="tabpanel">
         <div class="tab-two-columns">
-          <!-- Left Column: Recommendations list -->
+          <!-- Left Column: Key outcomes list -->
           <div class="tab-left-col">
-            <h3>Recommendations</h3>
+            <h3>Key outcomes</h3>
+
+            {% set ns_report = namespace(url=page['project-url']) %}
+            {% if page['supporting-resources'] %}
+              {% set ns_found = namespace(flag=false) %}
+              {% for slug in page['supporting-resources'] %}
+                {% set r_item = site.resources.get(slug) %}
+                {% if r_item and not ns_found.flag %}
+                  {% set r_sel = r_item.select | downcase %}
+                  {% if "report" in r_sel or "final report" in r_sel %}
+                    {% set ns_report.url = r_item.external_url %}
+                    {% set ns_found.flag = true %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
 
             {% set recs = [] %}
+            {% set quotes = [] %}
+            {% set issues = [] %}
+
             {% if page.messages %}
               {% for m_slug in page.messages %}
                 {% set item = site.messages.get(m_slug) %}
@@ -455,25 +473,80 @@
                   {% set type_lower = item.type | downcase %}
                   {% if type_lower == "recommendation" %}
                     {% do recs.append(item) %}
+                  {% elif type_lower == "quote" %}
+                    {% do quotes.append(item) %}
+                  {% elif type_lower == "issue" %}
+                    {% do issues.append(item) %}
                   {% endif %}
                 {% endif %}
               {% endfor %}
             {% endif %}
 
+            {% set total_messages = (recs | length) + (quotes | length) + (issues | length) %}
+            {% if total_messages > 0 %}
+            {% set parts = [] %}
             {% if (recs | length) > 0 %}
+              {% do parts.append('<a href="#recommendations-start">' ~ (recs | length) ~ ' recommendations</a>') %}
+            {% endif %}
+            {% if (quotes | length) > 0 %}
+              {% do parts.append('<a href="#quotes-start">' ~ (quotes | length) ~ ' participant quotes</a>') %}
+            {% endif %}
+            {% if (issues | length) > 0 %}
+              {% do parts.append('<a href="#issues-start">' ~ (issues | length) ~ ' themes raised (issues)</a>') %}
+            {% endif %}
+
+            <p class="outcomes-intro">
+              We have extracted 
+              {% if (parts | length) == 1 %}
+                {{ parts[0] | safe }}
+              {% elif (parts | length) == 2 %}
+                {{ parts[0] | safe }} and {{ parts[1] | safe }}
+              {% elif (parts | length) == 3 %}
+                {{ parts[0] | safe }}, {{ parts[1] | safe }} and {{ parts[2] | safe }}
+              {% endif %}
+              from the project report for you to review here. 
+              Read the full report to see these in context.
+            </p>
+
             <div class="recs-list">
-              {% for item in recs %}
-              <div class="recommendation-card">
-                <span class="rec-badge">Recommendation</span>
-                <p class="rec-text">{{ item.title }}</p>
-                {% if item['additional-credit-line'] %}
-                <div class="rec-credit">{{ item['additional-credit-line'] }}</div>
-                {% endif %}
-              </div>
-              {% endfor %}
+              {% if (recs | length) > 0 %}
+                {% for item in recs %}
+                <div class="recommendation-card outcome-recommendation" {% if loop.first %}id="recommendations-start"{% endif %}>
+                  <span class="rec-badge badge-recommendation">{{ item.type }}</span>
+                  <p class="rec-text">{{ item.title }}</p>
+                  {% if item['additional-credit-line'] %}
+                  <div class="rec-credit">{{ item['additional-credit-line'] }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              {% endif %}
+
+              {% if (quotes | length) > 0 %}
+                {% for item in quotes %}
+                <div class="recommendation-card outcome-quote" {% if loop.first %}id="quotes-start"{% endif %}>
+                  <span class="rec-badge badge-quote">{{ item.type }}</span>
+                  <p class="rec-text">&ldquo;{{ item.title }}&rdquo;</p>
+                  {% if item['additional-credit-line'] %}
+                  <div class="rec-credit">{{ item['additional-credit-line'] }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              {% endif %}
+
+              {% if (issues | length) > 0 %}
+                {% for item in issues %}
+                <div class="recommendation-card outcome-issue" {% if loop.first %}id="issues-start"{% endif %}>
+                  <span class="rec-badge badge-issue">{{ item.type }}</span>
+                  <p class="rec-text">{{ item.title }}</p>
+                  {% if item['additional-credit-line'] %}
+                  <div class="rec-credit">{{ item['additional-credit-line'] }}</div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              {% endif %}
             </div>
             {% else %}
-            <p class="no-data-msg">No recommendations registered for this case study.</p>
+            <p class="no-data-msg">No outcomes registered for this case study.</p>
             {% endif %}
           </div>
 

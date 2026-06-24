@@ -1593,6 +1593,21 @@ body {
 }
 
 /* Outcomes elements */
+.outcomes-intro {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #556c50;
+  margin-bottom: 2rem;
+}
+.outcomes-intro a {
+  color: #496a40;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.outcomes-intro a:hover {
+  color: #1a2f16;
+}
+
 .recommendation-card {
   background-color: #f3f7f2;
   border-left: 4px solid #496a40;
@@ -1628,6 +1643,20 @@ body {
   color: #556c50;
   margin-top: 0.5rem;
   font-weight: 500;
+}
+
+.recommendation-card.outcome-issue {
+  border-left-color: #bc5a45;
+}
+.rec-badge.badge-issue {
+  color: #bc5a45;
+}
+
+.recommendation-card.outcome-quote {
+  border-left-color: #4a7c8a;
+}
+.rec-badge.badge-quote {
+  color: #4a7c8a;
 }
 
 /* Resources Card & Items */

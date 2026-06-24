@@ -48,7 +48,10 @@
           <!-- Right Column: Project Facts -->
           <div class="tab-right-col">
             <div class="case-source-box">
-              <p>This case was {% if page.submitted-by and page.submitted-by != "" %}based on submission from '{{ page.submitted-by | strip }}'{% else %}written through desk research{% endif %}, edited by the PAVE Case Book team. Check the project website or related resources for suggested citations.</p>
+              <p>This case was {% if page.submitted-by and page.submitted-by != "" %}contributed by {{ page.submitted-by
+                | strip }}{% else %}written through desk research{% endif %}, edited by the PAVE Case Book team. Check
+                the <a href="{{ page.project-url }}" target="_blank" rel="noopener">project website</a> or related
+                resources for suggested citations.</p>
             </div>
             <div class="metadata-card">
               <table class="metadata-table">
@@ -86,6 +89,15 @@
                 </tr>
                 {% endif %}
 
+                {% if page.how-was-the-project-initiated %}
+                <tr>
+                  <td class="meta-label">Initiation method</td>
+                  <td class="meta-value">
+                    {{ page.how-was-the-project-initiated | join: ", " }}
+                  </td>
+                </tr>
+                {% endif %}
+
                 {% assign unique_methods = "" | split: "" %}
                 {% if page.participants %}
                 {% for part_slug in page.participants %}
@@ -101,26 +113,16 @@
                 {% endif %}
                 {% if unique_methods.size > 0 %}
                 <tr>
-                  <td class="meta-label">Methods used</td>
+                  <td class="meta-label">Participation methods</td>
                   <td class="meta-value">
                     {{ unique_methods | join: ", " }}
-                  </td>
-                </tr>
-                {% endif %}
-
-                {% if page.how-was-the-project-initiated %}
-                <tr>
-                  <td class="meta-label">Initiation method</td>
-                  <td class="meta-value">
-                    {{ page.how-was-the-project-initiated | join: ", " }}
                   </td>
                 </tr>
                 {% endif %}
               </table>
 
               {% if page.project-url %}
-              <a href="{{ page.project-url }}" target="_blank" rel="noopener noreferrer"
-                class="btn btn-primary btn-visit-project">
+              <a href="{{ page.project-url }}" target="_blank" rel="noopener" class="btn btn-primary btn-visit-project">
                 Visit Project website <span class="btn-icon">↗</span>
               </a>
               {% endif %}
@@ -446,11 +448,16 @@
       <!-- 4. OUTCOMES TAB PANEL -->
       <div class="tab-content-panel" id="tab-outcomes" role="tabpanel">
         <div class="tab-two-columns">
-          <!-- Left Column: Recommendations list -->
+          <!-- Left Column: Key outcomes list -->
           <div class="tab-left-col">
-            <h3>Recommendations</h3>
+            <h3>Key outcomes</h3>
+
+
 
             {% assign recs = "" | split: "" %}
+            {% assign quotes = "" | split: "" %}
+            {% assign issues = "" | split: "" %}
+
             {% if page.messages %}
             {% for m_slug in page.messages %}
             {% assign item = site.messages | where: "slug", m_slug | first %}
@@ -458,25 +465,84 @@
             {% assign type_lower = item.type | downcase %}
             {% if type_lower == "recommendation" %}
             {% assign recs = recs | push: item %}
+            {% elsif type_lower == "quote" %}
+            {% assign quotes = quotes | push: item %}
+            {% elsif type_lower == "issue" %}
+            {% assign issues = issues | push: item %}
             {% endif %}
             {% endif %}
             {% endfor %}
             {% endif %}
 
+            {% assign total_messages = recs.size | plus: quotes.size | plus: issues.size %}
+            {% if total_messages > 0 %}
+            {% assign parts = "" | split: "" %}
             {% if recs.size > 0 %}
+              {% capture rec_link %}<a href="#recommendations-start">{{ recs.size }} recommendations</a>{% endcapture %}
+              {% assign parts = parts | push: rec_link %}
+            {% endif %}
+            {% if quotes.size > 0 %}
+              {% capture quote_link %}<a href="#quotes-start">{{ quotes.size }} participant quotes</a>{% endcapture %}
+              {% assign parts = parts | push: quote_link %}
+            {% endif %}
+            {% if issues.size > 0 %}
+              {% capture issue_link %}<a href="#issues-start">{{ issues.size }} themes raised (issues)</a>{% endcapture %}
+              {% assign parts = parts | push: issue_link %}
+            {% endif %}
+
+            <p class="outcomes-intro">
+              We have extracted 
+              {% if parts.size == 1 %}
+                {{ parts[0] }}
+              {% elsif parts.size == 2 %}
+                {{ parts[0] }} and {{ parts[1] }}
+              {% elsif parts.size == 3 %}
+                {{ parts[0] }}, {{ parts[1] }} and {{ parts[2] }}
+              {% endif %}
+              from the project report for you to review here.
+              Read the full report to see these in context.
+            </p>
+
             <div class="recs-list">
+              {% if recs.size > 0 %}
               {% for item in recs %}
-              <div class="recommendation-card">
-                <span class="rec-badge">Recommendation</span>
+              <div class="recommendation-card outcome-recommendation" {% if forloop.first %}id="recommendations-start"
+                {% endif %}>
+                <span class="rec-badge badge-recommendation">{{ item.type }}</span>
                 <p class="rec-text">{{ item.title }}</p>
                 {% if item.additional-credit-line %}
                 <div class="rec-credit">{{ item.additional-credit-line }}</div>
                 {% endif %}
               </div>
               {% endfor %}
+              {% endif %}
+
+              {% if quotes.size > 0 %}
+              {% for item in quotes %}
+              <div class="recommendation-card outcome-quote" {% if forloop.first %}id="quotes-start" {% endif %}>
+                <span class="rec-badge badge-quote">{{ item.type }}</span>
+                <p class="rec-text">&ldquo;{{ item.title }}&rdquo;</p>
+                {% if item.additional-credit-line %}
+                <div class="rec-credit">{{ item.additional-credit-line }}</div>
+                {% endif %}
+              </div>
+              {% endfor %}
+              {% endif %}
+
+              {% if issues.size > 0 %}
+              {% for item in issues %}
+              <div class="recommendation-card outcome-issue" {% if forloop.first %}id="issues-start" {% endif %}>
+                <span class="rec-badge badge-issue">{{ item.type }}</span>
+                <p class="rec-text">{{ item.title }}</p>
+                {% if item.additional-credit-line %}
+                <div class="rec-credit">{{ item.additional-credit-line }}</div>
+                {% endif %}
+              </div>
+              {% endfor %}
+              {% endif %}
             </div>
             {% else %}
-            <p class="no-data-msg">No recommendations registered for this case study.</p>
+            <p class="no-data-msg">No outcomes registered for this case study.</p>
             {% endif %}
           </div>
 
