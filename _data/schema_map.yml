@@ -7,26 +7,27 @@ tblxVFG1lM7trGD5m:
       type: singleLineText
       sync: true
       slug: project-title
+    fldZ0f5pRfDE7lIuk:
+      name: Preview
+      type: button
+      sync: false
+      slug: open-url
+      comment: Name changed from "Open URL" - field slug not updated yet
     fldjqAHoLIaL3Aw5e:
       name: Assigned to
       type: singleCollaborator
       sync: false
       slug: assigned-to
-    fldnGSaj7zRScwJt8:
-      name: Editing link
-      type: button
+    fldyT0fI25iZQRBiH:
+      name: Curation decision
+      type: singleSelect
       sync: false
-      slug: editing-link
-    fldZ0f5pRfDE7lIuk:
-      name: Open URL
-      type: button
-      sync: false
-      slug: open-url
-    fldyTy9X5T9piyHAd:
-      name: Created
-      type: createdTime
-      sync: false
-      slug: created
+      slug: curation-decision
+      choices:
+      - Featured Full Case
+      - Full Case
+      - Mapping Entry
+      - Do not include
     fldrM6RRk8easAxSq:
       name: 'Workflow: Status'
       type: singleSelect
@@ -52,6 +53,9 @@ tblxVFG1lM7trGD5m:
       - Triage assessment
       - Invited to submit
       - Await submission
+      - PAIRS Case to Invite or Write Up
+      - 'Completed: Ready to publish'
+      - 'Low priority: Come back to'
     fld20rG6I32pf879z:
       name: Outreach E-mail
       type: email
@@ -67,15 +71,6 @@ tblxVFG1lM7trGD5m:
       type: singleLineText
       sync: false
       slug: case-location-internal-field
-    fldyT0fI25iZQRBiH:
-      name: Curation decision
-      type: singleSelect
-      sync: false
-      slug: curation-decision
-      choices:
-      - Featured Full Case
-      - Full Case
-      - Mapping Entry
     fldVXcw3fVYGdRRM9:
       name: Submitted by
       type: singleLineText
@@ -199,9 +194,14 @@ tblxVFG1lM7trGD5m:
       type: singleLineText
       sync: true
       slug: describe-the-subject-matter-in-your-own-words-one
+    fldhGyJhC2XIxyBlP:
+      name: All methods used in case
+      type: rollup
+      sync: false
+      slug: all-methods-used-in-case
     fld0oykyuwbVPbW0H:
       name: Provide a brief description of the project
-      type: multilineText
+      type: richText
       sync: true
       slug: provide-a-brief-description-of-the-project
     fld8UK4VG4qwQf4bA:
@@ -244,12 +244,12 @@ tblxVFG1lM7trGD5m:
       slug: why-is-this-project-important-to-include-in-the
     fldPOu99itaN5PMaK:
       name: Inclusion efforts
-      type: multilineText
+      type: richText
       sync: true
       slug: inclusion-efforts
     fld3PwRR35QU6D1CK:
       name: What limitations to the project should be noted?
-      type: multilineText
+      type: richText
       sync: true
       slug: what-limitations-to-the-project-should-be-noted
     fldx2fmatqG1K5Arm:
@@ -294,6 +294,74 @@ tblxVFG1lM7trGD5m:
       type: formula
       sync: false
       slug: record-id
+    fld4ZpPx64LJRS1br:
+      name: Messages extracted for case
+      type: count
+      sync: false
+      slug: messages-extracted-for-case
+    fld1OZQxueUn0wzfB:
+      name: E-mail Draft
+      type: formula
+      sync: false
+      slug: e-mail-draft
+    fldtDVsiQBcmomR4P:
+      name: Case sign off log
+      type: singleLineText
+      sync: false
+      slug: case-sign-off-log
+    fldnGSaj7zRScwJt8:
+      name: Editing link
+      type: button
+      sync: false
+      slug: editing-link
+    fldyTy9X5T9piyHAd:
+      name: Created
+      type: createdTime
+      sync: false
+      slug: created
+    fldI9y7Klo4V9og94:
+      name: Theme
+      type: multipleSelects
+      sync: false
+      slug: theme
+      choices:
+      - Education
+      - Healthcare
+      - Environment
+      - Safety
+      - Work
+      - Youth
+      - Artificial Intelligence
+    fldu2BNJERB7Lc1rq:
+      name: Level of engagement
+      type: singleSelect
+      sync: false
+      slug: level-of-engagement
+      choices:
+      - Professional
+      - Community
+      - National
+      - Global
+    fldgY2iGGBic2LTMQ:
+      name: Generate Auto Summary
+      type: button
+      sync: false
+      slug: generate-auto-summary
+    fldO6aPwKndcHXQJn:
+      name: Auto-Summary
+      type: multilineText
+      sync: false
+      slug: auto-summary
+    fldgrmlTFHIgHExO6:
+      name: Method Image
+      type: multipleAttachments
+      sync: true
+      slug: method-image
+    fldT5uYeCBem2btX1:
+      name: Method image caption
+      type: singleLineText
+      sync: true
+      slug: method-image-caption
 tblJCL1taIotM6y4Y:
   name: Organisations
   primaryFieldId: fldUH8cT7KyUpg1wT
@@ -348,10 +416,11 @@ tblJCL1taIotM6y4Y:
       - Non-profit
       - Research
     flddoGqidRIofZTI7:
-      name: Mission statement
+      name: Mission statement (DATA CLEANING NEEDED)
       type: multilineText
       sync: true
       slug: mission-statement
+      comment: Name changed from "Mission statement" - field slug not updated yet
     fld2xaF90kx4CF3ZG:
       name: Logo
       type: multipleAttachments
@@ -528,6 +597,16 @@ tblRGGoBamk2WGdUD:
       slug: cases
       options:
         linkedTableId: tblxVFG1lM7trGD5m
+    fldQp9mBT2YvutaBa:
+      name: 'Workflow: Status Rollup (from Cases)'
+      type: rollup
+      sync: false
+      slug: workflow-status-rollup-from-cases
+    fldmwWAn0dPLX03TI:
+      name: Created
+      type: createdTime
+      sync: false
+      slug: created
 tblu6lFzOdgEQKGC4:
   name: Resources
   primaryFieldId: fld174spfMr309suV
@@ -614,6 +693,11 @@ tblZ5YZLljxHXapOF:
       type: multilineText
       sync: true
       slug: name
+    fldo3jzKvZqYeXvYi:
+      name: Additional Credit Line
+      type: singleLineText
+      sync: true
+      slug: additional-credit-line
     fld9WcxhWfobqkI72:
       name: Type
       type: singleSelect
@@ -623,11 +707,6 @@ tblZ5YZLljxHXapOF:
       - Recommendation
       - Issue
       - Quote
-    fldo3jzKvZqYeXvYi:
-      name: Additional Credit Line
-      type: singleLineText
-      sync: true
-      slug: additional-credit-line
     fldCuzVkCPc37vZiY:
       name: Cases
       type: multipleRecordLinks

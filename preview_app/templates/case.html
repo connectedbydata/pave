@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% macro read_more_text(text, id) %}
+  {% if text %}
+    {% if "<!--more-->" in text %}
+      {% set parts = text.split("<!--more-->", 1) %}
+      <div class="read-more-container" id="read-more-{{ id }}">
+        <div class="read-more-teaser">
+          {{ parts[0] | markdownify }}
+        </div>
+        <div class="read-more-expanded" style="display: none;">
+          {{ parts[1] | markdownify }}
+        </div>
+        <button class="read-more-trigger" aria-expanded="false" data-id="{{ id }}">Read more</button>
+      </div>
+    {% else %}
+      {{ text | markdownify }}
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
 <article class="case-study-page">
 
   <!-- Case Header Banner (Green background with dot pattern) -->
@@ -38,7 +57,42 @@
           <!-- Left Column: Rich Text Narrative -->
           <div class="tab-left-col">
             <div class="tab-rich-content">
-              {{ page['provide-a-brief-description-of-the-project'] | markdownify }}
+              {{ read_more_text(page['provide-a-brief-description-of-the-project'], 'description') }}
+
+              {% set res_vars = namespace(has_facilitation_guide=false, has_evaluation=false) %}
+              {% if page['supporting-resources'] %}
+                {% for slug in page['supporting-resources'] %}
+                  {% set res = site.resources.get(slug) %}
+                  {% if res %}
+                    {% set res_type = res.select | default('') | downcase %}
+                    {% set res_title = res.title | default('') | downcase %}
+                    {% if "facilitation guide" in res_type or "facilitation guide" in res_title or "facilitator guide" in res_title %}
+                      {% set res_vars.has_facilitation_guide = true %}
+                    {% elif "evaluation" in res_type or "evaluation" in res_title %}
+                      {% set res_vars.has_evaluation = true %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {% if res_vars.has_facilitation_guide %}
+              <p><em>A <a href="#tab-outcomes" class="tab-switcher-link" data-tab="tab-outcomes">facilitation guide</a> for this project may provide more details on the methodology.</em></p>
+              {% endif %}
+              {% if res_vars.has_evaluation %}
+              <p><em>An <a href="#tab-outcomes" class="tab-switcher-link" data-tab="tab-outcomes">project evaluation</a> is available with more details.</em></p>
+              {% endif %}
+
+              {% if page['method-image'] and (page['method-image'] | length) > 0 %}
+              {% set method_img = page['method-image'] | first %}
+              <div class="method-image-container">
+                <figure class="method-image-figure">
+                  <img src="{{ method_img.url }}" alt="{% if page['method-image-caption'] %}{{ page['method-image-caption'] | escape }}{% else %}Method image{% endif %}" class="method-image-img" loading="lazy">
+                  {% if page['method-image-caption'] %}
+                  <figcaption class="method-image-caption">{{ page['method-image-caption'] | escape }}</figcaption>
+                  {% endif %}
+                </figure>
+              </div>
+              {% endif %}
             </div>
           </div>
 
@@ -203,6 +257,77 @@
         <div class="tab-two-columns">
           <!-- Left Column: Participant Cohorts -->
           <div class="tab-left-col">
+            {% set vars = namespace(total_people=0, total_cohorts=0, min_hours=999999, max_hours=-1, has_hours_data=false) %}
+            {% set unique_methods = [] %}
+
+            {% if page.participants %}
+              {% for slug in page.participants %}
+                {% set item = site.participants.get(slug) %}
+                {% if item %}
+                  {% set vars.total_cohorts = vars.total_cohorts + 1 %}
+                  {% if item['how-many-people-took-part'] %}
+                    {% set vars.total_people = vars.total_people + (item['how-many-people-took-part'] | int) %}
+                  {% endif %}
+                  {% if item['on-average-how-many-hours-did-each-participant'] %}
+                    {% set hours = item['on-average-how-many-hours-did-each-participant'] | int %}
+                    {% set vars.has_hours_data = true %}
+                    {% if hours < vars.min_hours %}
+                      {% set vars.min_hours = hours %}
+                    {% endif %}
+                    {% if hours > vars.max_hours %}
+                      {% set vars.max_hours = hours %}
+                    {% endif %}
+                  {% endif %}
+                  {% if item['which-of-the-following-methods-were-used-to'] %}
+                    {% for method in item['which-of-the-following-methods-were-used-to'] %}
+                      {% if method not in unique_methods %}
+                        {% do unique_methods.append(method) %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+            {% if vars.total_cohorts > 0 %}
+            <p class="outcomes-intro">
+              This process engaged with a total of {{ vars.total_people }} people{% if vars.total_cohorts > 1 %} across {{ vars.total_cohorts }} cohorts{% endif %}.
+              {% if (unique_methods | length) > 0 %}
+                {% if vars.has_hours_data %}
+                  {% if vars.min_hours == vars.max_hours or vars.total_cohorts <= 1 %}
+                    Participants were involved for approximately {{ vars.min_hours }} hours each
+                  {% else %}
+                    Participants were involved for between {{ vars.min_hours }} and {{ vars.max_hours }} hours
+                  {% endif %}
+                  through
+                {% else %}
+                  through
+                {% endif %}
+                {% if (unique_methods | length) == 1 %}
+                  {{ unique_methods[0] | downcase }} methods
+                {% else %}
+                  a range of methods including
+                  {% for m in unique_methods %}
+                    {% set m_lower = m | downcase %}
+                    {% if loop.last %}
+                      and {{ m_lower }}
+                    {% else %}
+                      {% if not loop.first %}, {% endif %}{{ m_lower }}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}.
+              {% else %}
+                {% if vars.has_hours_data %}
+                  {% if vars.min_hours == vars.max_hours or vars.total_cohorts <= 1 %}
+                    Participants were involved for approximately {{ vars.min_hours }} hours each.
+                  {% else %}
+                    Participants were involved for between {{ vars.min_hours }} and {{ vars.max_hours }} hours.
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            </p>
+            {% endif %}
+
             <h3>Participant cohorts</h3>
             {% if page.participants %}
             <div class="cohorts-list">
@@ -222,6 +347,12 @@
                   <tr>
                     <td class="cohort-label">Group size</td>
                     <td class="cohort-value">{{ item['how-many-people-took-part'] }} people</td>
+                  </tr>
+                  {% endif %}
+                  {% if item['on-average-how-many-hours-did-each-participant'] %}
+                  <tr>
+                    <td class="cohort-label">Engagement time</td>
+                    <td class="cohort-value">{{ item['on-average-how-many-hours-did-each-participant'] }} hours (per-participant on average)</td>
                   </tr>
                   {% endif %}
                   {% if item['was-there-a-specific-target-population'] %}
@@ -280,7 +411,7 @@
             <div class="inclusion-efforts-section">
               <h3>Inclusion efforts</h3>
               <div class="tab-rich-content">
-                {{ page['inclusion-efforts'] | markdownify }}
+                {{ read_more_text(page['inclusion-efforts'], 'inclusion') }}
               </div>
             </div>
             {% endif %}
@@ -289,7 +420,7 @@
             <div class="limitations-section">
               <h3>Limitations</h3>
               <div class="tab-rich-content">
-                {{ page['what-limitations-to-the-project-should-be-noted'] | markdownify }}
+                {{ read_more_text(page['what-limitations-to-the-project-should-be-noted'], 'limitations') }}
               </div>
             </div>
             {% endif %}
@@ -1258,6 +1389,47 @@
         setTimeout(window.runAllOverflowChecks, 50);
       });
     }
+
+    // Tab Switcher Links (e.g. inline links inside paragraph content)
+    const tabSwitcherLinks = document.querySelectorAll('.tab-switcher-link');
+    tabSwitcherLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetTab = this.getAttribute('data-tab');
+        const tabBtn = document.querySelector(`.tab-btn[data-target="${targetTab}"]`);
+        if (tabBtn) {
+          tabBtn.click();
+          const tabButtonsContainer = document.querySelector('.tab-buttons-container');
+          if (tabButtonsContainer) {
+            tabButtonsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+
+    // Read More Toggle Logic
+    const readMoreTriggers = document.querySelectorAll('.read-more-trigger');
+    readMoreTriggers.forEach(trigger => {
+      trigger.addEventListener('click', function () {
+        const container = this.closest('.read-more-container');
+        if (container) {
+          const expandedDiv = container.querySelector('.read-more-expanded');
+          if (expandedDiv) {
+            const isHidden = expandedDiv.style.display === 'none';
+            if (isHidden) {
+              expandedDiv.style.display = 'block';
+              this.textContent = 'Read less';
+              this.setAttribute('aria-expanded', 'true');
+            } else {
+              expandedDiv.style.display = 'none';
+              this.textContent = 'Read more';
+              this.setAttribute('aria-expanded', 'false');
+              container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }
+        }
+      });
+    });
   });
 </script>
 {% endblock %}

@@ -2721,4 +2721,51 @@ body.print-mode-active #print-controls {
   }
 }
 
+.read-more-trigger {
+  display: inline-block;
+  background: none;
+  border: none;
+  color: #496a40;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  margin-top: 0.5rem;
+  transition: color 0.2s;
+}
+.read-more-trigger:hover {
+  color: #1a2f16;
+}
+
+.method-image-container {
+  margin-block: 2rem;
+}
+.method-image-figure {
+  margin: 0;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(73, 106, 64, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+.method-image-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(73, 106, 64, 0.08);
+}
+.method-image-caption {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #496a40;
+  font-style: italic;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 /*# sourceMappingURL=main.css.map */

@@ -38,6 +38,10 @@ a {
   text-decoration: none;
   transition: color 0.2s ease;
 
+  &:visited {
+    color: #496a40;
+  }
+
   &:hover {
     color: #1a2f16;
     text-decoration: underline;

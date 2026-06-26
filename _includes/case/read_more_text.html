@@ -1,0 +1,14 @@
+{% assign parts = include.text | split: "<!--more-->" %}
+{% if parts.size > 1 %}
+  <div class="read-more-container" id="read-more-{{ include.id }}">
+    <div class="read-more-teaser">
+      {{ parts[0] | markdownify }}
+    </div>
+    <div class="read-more-expanded" style="display: none;">
+      {{ parts[1] | markdownify }}
+    </div>
+    <button class="read-more-trigger" aria-expanded="false" data-id="{{ include.id }}">Read more</button>
+  </div>
+{% else %}
+  {{ include.text | markdownify }}
+{% endif %}

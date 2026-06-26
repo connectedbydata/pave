@@ -41,7 +41,46 @@
           <!-- Left Column: Rich Text Narrative -->
           <div class="tab-left-col">
             <div class="tab-rich-content">
-              {{ page.provide-a-brief-description-of-the-project | markdownify }}
+              {% include case/read_more_text.html text=page.provide-a-brief-description-of-the-project id="description" %}
+
+              {% assign has_facilitation_guide = false %}
+              {% assign has_evaluation = false %}
+              {% if page.supporting-resources %}
+              {% for slug in page.supporting-resources %}
+              {% assign res = site.resources | where: "slug", slug | first %}
+              {% if res %}
+              {% assign res_type = res.select | downcase %}
+              {% assign res_title = res.title | downcase %}
+              {% if res_type contains "facilitation guide" or res_title contains "facilitation guide" or res_title
+              contains "facilitator guide" %}
+              {% assign has_facilitation_guide = true %}
+              {% elsif res_type contains "evaluation" or res_title contains "evaluation" %}
+              {% assign has_evaluation = true %}
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+              {% endif %}
+
+              {% if has_facilitation_guide %}
+              <p><em>A <a href="#tab-outcomes" class="tab-switcher-link" data-tab="tab-outcomes">facilitation guide</a>
+                  for this project may provide more details on the methodology.</em></p>
+              {% endif %}
+              {% if has_evaluation %}
+              <p><em>An <a href="#tab-outcomes" class="tab-switcher-link" data-tab="tab-outcomes">project evaluation</a>
+                  is available with more details.</em></p>
+              {% endif %}
+
+              {% if page.method-image and page.method-image.size > 0 %}
+              {% assign method_img = page.method-image | first %}
+              <div class="method-image-container">
+                <figure class="method-image-figure">
+                  <img src="{{ method_img.url | relative_url }}" alt="{% if page.method-image-caption %}{{ page.method-image-caption | escape }}{% else %}Method image{% endif %}" class="method-image-img" loading="lazy">
+                  {% if page.method-image-caption %}
+                  <figcaption class="method-image-caption">{{ page.method-image-caption | escape }}</figcaption>
+                  {% endif %}
+                </figure>
+              </div>
+              {% endif %}
             </div>
           </div>
 
@@ -208,96 +247,154 @@
         <div class="tab-two-columns">
           <!-- Left Column: Participant Cohorts -->
           <div class="tab-left-col">
-            <h3>Participant cohorts</h3>
-            {% if page.participants %}
-            <div class="cohorts-list">
-              {% for slug in page.participants %}
-              {% assign item = site.participants | where: "slug", slug | first %}
-              {% if item %}
-              <div class="cohort-card">
-                <h4>{{ item.group-description }}</h4>
-                <table class="cohort-table">
-                  {% if item.recruitment-method %}
-                  <tr>
-                    <td class="cohort-label">Recruitment method</td>
-                    <td class="cohort-value">{{ item.recruitment-method }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if item.how-many-people-took-part %}
-                  <tr>
-                    <td class="cohort-label">Group size</td>
-                    <td class="cohort-value">{{ item.how-many-people-took-part }} people</td>
-                  </tr>
-                  {% endif %}
-                  {% if item.was-there-a-specific-target-population %}
-                  <tr>
-                    <td class="cohort-label">Target Population</td>
-                    <td class="cohort-value">{{ item.was-there-a-specific-target-population }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if item.which-of-the-following-methods-were-used-to %}
-                  <tr>
-                    <td class="cohort-label">Engagement Methods Used</td>
-                    <td class="cohort-value">{{ item.which-of-the-following-methods-were-used-to | join: ", " }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if item.where-did-engagement-take-place %}
-                  <tr>
-                    <td class="cohort-label">Engagement Setting</td>
-                    <td class="cohort-value">{{ item.where-did-engagement-take-place | join: ", " }}</td>
-                  </tr>
-                  {% endif %}
+            {% assign total_people = 0 %}
+            {% assign total_cohorts = 0 %}
+            {% assign min_hours = 999999 %}
+            {% assign max_hours = -1 %}
+            {% assign has_hours_data = false %}
+            {% assign unique_methods = "" | split: "" %}
 
-                  {% assign has_locs = false %}
-                  {% assign loc_titles = "" | split: "" %}
-                  {% if item.locations %}
-                  {% for loc_slug in item.locations %}
-                  {% assign loc_obj = site.locations | where: "slug", loc_slug | first %}
-                  {% if loc_obj %}
-                  {% assign loc_titles = loc_titles | push: loc_obj.title %}
-                  {% assign has_locs = true %}
-                  {% endif %}
-                  {% endfor %}
-                  {% endif %}
-                  {% if has_locs %}
-                  <tr>
-                    <td class="cohort-label">Location</td>
-                    <td class="cohort-value">{{ loc_titles | join: ", " }}</td>
-                  </tr>
-                  {% else %}
-                  {% if item.where-were-participants-from %}
-                  <tr>
-                    <td class="cohort-label">Location</td>
-                    <td class="cohort-value">{{ item.where-were-participants-from }}</td>
-                  </tr>
-                  {% endif %}
-                  {% endif %}
-                </table>
-              </div>
+            {% if page.participants %}
+            {% for slug in page.participants %}
+            {% assign item = site.participants | where: "slug", slug | first %}
+            {% if item %}
+            {% assign total_cohorts = total_cohorts | plus: 1 %}
+            {% if item.how-many-people-took-part %}
+            {% assign total_people = total_people | plus: item.how-many-people-took-part %}
+            {% endif %}
+            {% if item.on-average-how-many-hours-did-each-participant %}
+            {% assign hours = item.on-average-how-many-hours-did-each-participant | plus: 0 %}
+            {% assign has_hours_data = true %}
+            {% if hours < min_hours %} {% assign min_hours=hours %} {% endif %} {% if hours> max_hours %}
+              {% assign max_hours = hours %}
+              {% endif %}
+              {% endif %}
+              {% if item.which-of-the-following-methods-were-used-to %}
+              {% for method in item.which-of-the-following-methods-were-used-to %}
+              {% unless unique_methods contains method %}
+              {% assign unique_methods = unique_methods | push: method %}
+              {% endunless %}
+              {% endfor %}
+              {% endif %}
               {% endif %}
               {% endfor %}
-            </div>
-            {% else %}
-            <p class="no-data-msg">No participant cohort details available.</p>
-            {% endif %}
+              {% endif %}
 
-            {% if page.inclusion-efforts %}
-            <div class="inclusion-efforts-section">
-              <h3>Inclusion efforts</h3>
-              <div class="tab-rich-content">
-                {{ page.inclusion-efforts | markdownify }}
-              </div>
-            </div>
-            {% endif %}
+              {% if total_cohorts > 0 %}
+              <p class="outcomes-intro">
+                This process engaged with a total of {{ total_people }} people{% if total_cohorts > 1 %} across {{
+                total_cohorts }} cohorts{% endif %}.
+                {% if unique_methods.size > 0 %}
+                {% if has_hours_data %}
+                {% if min_hours == max_hours or total_cohorts <= 1 %} Participants were involved for approximately {{
+                  min_hours }} hours each {% else %} Participants were involved for between {{ min_hours }} and {{
+                  max_hours }} hours {% endif %} through {% else %} through {% endif %} {% if unique_methods.size==1 %}
+                  {{ unique_methods[0] | downcase }} methods{% else %} a range of methods including {% for m in
+                  unique_methods %} {% assign m_lower=m | downcase %} {% if forloop.last %} and {{ m_lower }}{% else
+                  %}{% if forloop.first==false %}, {% endif %}{{ m_lower }}{% endif %} {% endfor %}{% endif %}. {% else
+                  %} {% if has_hours_data %} {% if min_hours==max_hours or total_cohorts <=1 %} Participants were
+                  involved for approximately {{ min_hours }} hours each. {% else %} Participants were involved for
+                  between {{ min_hours }} and {{ max_hours }} hours. {% endif %} {% endif %} {% endif %} </p>
+                  {% endif %}
 
-            {% if page.what-limitations-to-the-project-should-be-noted %}
-            <div class="limitations-section">
-              <h3>Limitations</h3>
-              <div class="tab-rich-content">
-                {{ page.what-limitations-to-the-project-should-be-noted | markdownify }}
-              </div>
-            </div>
-            {% endif %}
+                  <h3>Participant cohorts</h3>
+                  {% if page.participants %}
+                  <div class="cohorts-list">
+                    {% for slug in page.participants %}
+                    {% assign item = site.participants | where: "slug", slug | first %}
+                    {% if item %}
+                    <div class="cohort-card">
+                      <h4>{{ item.group-description }}</h4>
+                      <table class="cohort-table">
+                        {% if item.recruitment-method %}
+                        <tr>
+                          <td class="cohort-label">Recruitment method</td>
+                          <td class="cohort-value">{{ item.recruitment-method }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.how-many-people-took-part %}
+                        <tr>
+                          <td class="cohort-label">Group size</td>
+                          <td class="cohort-value">{{ item.how-many-people-took-part }} people</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.on-average-how-many-hours-did-each-participant %}
+                        <tr>
+                          <td class="cohort-label">Engagement time</td>
+                          <td class="cohort-value">{{ item.on-average-how-many-hours-did-each-participant }} hours
+                            (per-participant on average)</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.was-there-a-specific-target-population %}
+                        <tr>
+                          <td class="cohort-label">Target Population</td>
+                          <td class="cohort-value">{{ item.was-there-a-specific-target-population }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.which-of-the-following-methods-were-used-to %}
+                        <tr>
+                          <td class="cohort-label">Engagement Methods Used</td>
+                          <td class="cohort-value">{{ item.which-of-the-following-methods-were-used-to | join: ", " }}
+                          </td>
+                        </tr>
+                        {% endif %}
+                        {% if item.where-did-engagement-take-place %}
+                        <tr>
+                          <td class="cohort-label">Engagement Setting</td>
+                          <td class="cohort-value">{{ item.where-did-engagement-take-place | join: ", " }}</td>
+                        </tr>
+                        {% endif %}
+
+                        {% assign has_locs = false %}
+                        {% assign loc_titles = "" | split: "" %}
+                        {% if item.locations %}
+                        {% for loc_slug in item.locations %}
+                        {% assign loc_obj = site.locations | where: "slug", loc_slug | first %}
+                        {% if loc_obj %}
+                        {% assign loc_titles = loc_titles | push: loc_obj.title %}
+                        {% assign has_locs = true %}
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        {% if has_locs %}
+                        <tr>
+                          <td class="cohort-label">Location</td>
+                          <td class="cohort-value">{{ loc_titles | join: ", " }}</td>
+                        </tr>
+                        {% else %}
+                        {% if item.where-were-participants-from %}
+                        <tr>
+                          <td class="cohort-label">Location</td>
+                          <td class="cohort-value">{{ item.where-were-participants-from }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endif %}
+                      </table>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  <p class="no-data-msg">No participant cohort details available.</p>
+                  {% endif %}
+
+                  {% if page.inclusion-efforts %}
+                  <div class="inclusion-efforts-section">
+                    <h3>Inclusion efforts</h3>
+                    <div class="tab-rich-content">
+                      {% include case/read_more_text.html text=page.inclusion-efforts id="inclusion" %}
+                    </div>
+                  </div>
+                  {% endif %}
+
+                  {% if page.what-limitations-to-the-project-should-be-noted %}
+                  <div class="limitations-section">
+                    <h3>Limitations</h3>
+                    <div class="tab-rich-content">
+                      {% include case/read_more_text.html text=page.what-limitations-to-the-project-should-be-noted id="limitations" %}
+                    </div>
+                  </div>
+                  {% endif %}
           </div>
 
           <!-- Right Column: Organisers -->
@@ -478,26 +575,26 @@
             {% if total_messages > 0 %}
             {% assign parts = "" | split: "" %}
             {% if recs.size > 0 %}
-              {% capture rec_link %}<a href="#recommendations-start">{{ recs.size }} recommendations</a>{% endcapture %}
-              {% assign parts = parts | push: rec_link %}
+            {% capture rec_link %}<a href="#recommendations-start">{{ recs.size }} recommendations</a>{% endcapture %}
+            {% assign parts = parts | push: rec_link %}
             {% endif %}
             {% if quotes.size > 0 %}
-              {% capture quote_link %}<a href="#quotes-start">{{ quotes.size }} participant quotes</a>{% endcapture %}
-              {% assign parts = parts | push: quote_link %}
+            {% capture quote_link %}<a href="#quotes-start">{{ quotes.size }} participant quotes</a>{% endcapture %}
+            {% assign parts = parts | push: quote_link %}
             {% endif %}
             {% if issues.size > 0 %}
-              {% capture issue_link %}<a href="#issues-start">{{ issues.size }} themes raised (issues)</a>{% endcapture %}
-              {% assign parts = parts | push: issue_link %}
+            {% capture issue_link %}<a href="#issues-start">{{ issues.size }} themes raised (issues)</a>{% endcapture %}
+            {% assign parts = parts | push: issue_link %}
             {% endif %}
 
             <p class="outcomes-intro">
-              We have extracted 
+              We have extracted
               {% if parts.size == 1 %}
-                {{ parts[0] }}
+              {{ parts[0] }}
               {% elsif parts.size == 2 %}
-                {{ parts[0] }} and {{ parts[1] }}
+              {{ parts[0] }} and {{ parts[1] }}
               {% elsif parts.size == 3 %}
-                {{ parts[0] }}, {{ parts[1] }} and {{ parts[2] }}
+              {{ parts[0] }}, {{ parts[1] }} and {{ parts[2] }}
               {% endif %}
               from the project report for you to review here.
               Read the full report to see these in context.

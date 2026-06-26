@@ -259,6 +259,23 @@
     });
   });
 
+  // Tab Switcher Links (e.g. inline links inside paragraph content)
+  const tabSwitcherLinks = document.querySelectorAll('.tab-switcher-link');
+  tabSwitcherLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const targetTab = this.getAttribute('data-tab');
+      const tabBtn = document.querySelector(`.tab-btn[data-target="${targetTab}"]`);
+      if (tabBtn) {
+        tabBtn.click();
+        const tabButtonsContainer = document.querySelector('.tab-buttons-container');
+        if (tabButtonsContainer) {
+          tabButtonsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+
   // 7. Print Draft Preview Logic
   const triggerPrintBtn = document.getElementById('trigger-print-preview-btn');
   const closePrintBtn = document.getElementById('print-cancel-btn');
@@ -360,5 +377,29 @@
       setTimeout(window.runAllOverflowChecks, 50);
     });
   }
+
+  // 8. Read More Toggle Logic
+  const readMoreTriggers = document.querySelectorAll('.read-more-trigger');
+  readMoreTriggers.forEach(trigger => {
+    trigger.addEventListener('click', function () {
+      const container = this.closest('.read-more-container');
+      if (container) {
+        const expandedDiv = container.querySelector('.read-more-expanded');
+        if (expandedDiv) {
+          const isHidden = expandedDiv.style.display === 'none';
+          if (isHidden) {
+            expandedDiv.style.display = 'block';
+            this.textContent = 'Read less';
+            this.setAttribute('aria-expanded', 'true');
+          } else {
+            expandedDiv.style.display = 'none';
+            this.textContent = 'Read more';
+            this.setAttribute('aria-expanded', 'false');
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      }
+    });
+  });
   });
 </script>
