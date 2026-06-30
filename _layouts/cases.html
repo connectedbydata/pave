@@ -23,15 +23,23 @@ layout: default
       {% assign sorted_cases = site.cases | sort: "title" %}
       
       {% assign featured_cases = "" | split: "" %}
-      {% assign regular_cases = "" | split: "" %}
+      {% assign full_cases = "" | split: "" %}
+      {% assign mapping_cases = "" | split: "" %}
+      
       {% for case in sorted_cases %}
-        {% if case.curation-decision == "Featured Full Case" %}
+        {% if case.curation-decision == "Do not include" %}
+          {% continue %}
+        {% endif %}
+        
+        {% if case.curation-decision == "Featured Full Case" or case.curation-decision == "Featured Case" %}
           {% assign featured_cases = featured_cases | push: case %}
+        {% elsif case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
+          {% assign mapping_cases = mapping_cases | push: case %}
         {% else %}
-          {% assign regular_cases = regular_cases | push: case %}
+          {% assign full_cases = full_cases | push: case %}
         {% endif %}
       {% endfor %}
-      {% assign all_cases = featured_cases | concat: regular_cases %}
+      {% assign all_cases = featured_cases | concat: full_cases | concat: mapping_cases %}
 
       {% for case in all_cases %}
         <!-- Gather Methods and Locations for filters -->
@@ -86,8 +94,14 @@ layout: default
           <div class="card-header-section">
             <div class="card-header-text">
               <div class="card-meta-line">
-                {% if case.curation-decision == "Featured Full Case" %}
+                {% if case.curation-decision == "Featured Full Case" or case.curation-decision == "Featured Case" %}
                   <span class="card-featured-badge">★ Featured</span>
+                {% elsif case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
+                  <span class="card-mapping-badge">
+                    <svg class="badge-icon" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>Mapping Entry
+                  </span>
                 {% endif %}
                 <span class="card-year-badge">
                   {{ case.what-year-did-the-project-start }}
@@ -137,11 +151,13 @@ layout: default
             {% endif %}
           </div>
 
-          {% if case.provide-a-brief-description-of-the-project %}
-            <div class="card-description">
-              {{ case.provide-a-brief-description-of-the-project | truncatewords: 28 }}
-            </div>
-          {% endif %}
+          {% unless case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
+            {% if case.provide-a-brief-description-of-the-project %}
+              <div class="card-description">
+                {{ case.provide-a-brief-description-of-the-project | truncatewords: 28 }}
+              </div>
+            {% endif %}
+          {% endunless %}
 
         </div>
       {% endfor %}

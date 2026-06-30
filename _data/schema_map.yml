@@ -21,7 +21,7 @@ tblxVFG1lM7trGD5m:
     fldyT0fI25iZQRBiH:
       name: Curation decision
       type: singleSelect
-      sync: false
+      sync: true
       slug: curation-decision
       choices:
       - Featured Full Case
@@ -332,6 +332,7 @@ tblxVFG1lM7trGD5m:
       - Work
       - Youth
       - Artificial Intelligence
+      - Infrastructure
     fldu2BNJERB7Lc1rq:
       name: Level of engagement
       type: singleSelect
@@ -543,6 +544,7 @@ tblRGGoBamk2WGdUD:
       - Focus Group
       - Forum Theatre
       - Future Workshop
+      - Interviews
       - Notice and Request for Public Comment
       - Opinion Polling
       - Participatory Arts
