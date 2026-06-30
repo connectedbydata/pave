@@ -450,11 +450,41 @@
     currentIndex = 0;
   }
 
+  // Handle entry animation based on stored transition direction
+  const transitionContainer = document.querySelector('.page-nav-transition-container');
+  if (transitionContainer) {
+    const navDirection = sessionStorage.getItem('navDirection');
+    if (navDirection === 'next') {
+      transitionContainer.classList.add('nav-anim-enter-next');
+      void transitionContainer.offsetWidth; // force reflow
+      transitionContainer.classList.remove('nav-anim-enter-next');
+      sessionStorage.removeItem('navDirection');
+    } else if (navDirection === 'prev') {
+      transitionContainer.classList.add('nav-anim-enter-prev');
+      void transitionContainer.offsetWidth; // force reflow
+      transitionContainer.classList.remove('nav-anim-enter-prev');
+      sessionStorage.removeItem('navDirection');
+    }
+  }
+
   function navigateToCase(index) {
     if (navigationList.length <= 1) return;
     const targetIndex = (index + navigationList.length) % navigationList.length;
     const targetCase = navigationList[targetIndex];
-    window.location.href = targetCase.url + window.location.search;
+
+    const direction = index > currentIndex ? 'next' : 'prev';
+    sessionStorage.setItem('navDirection', direction);
+
+    if (transitionContainer) {
+      const outClass = direction === 'next' ? 'nav-anim-out-next' : 'nav-anim-out-prev';
+      transitionContainer.classList.add(outClass);
+      
+      setTimeout(() => {
+        window.location.href = targetCase.url + window.location.search;
+      }, 250);
+    } else {
+      window.location.href = targetCase.url + window.location.search;
+    }
   }
 
   if (navigationList.length > 1) {

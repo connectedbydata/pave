@@ -1,9 +1,6 @@
 ---
 layout: page
-title: About
-redirect_from:
-  - /about/
-  - /about.html
+title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
 ---
 
 > This is Work in Progress to develop the PAIRS PAVE Case Book. See https://pave.pairs.site for details.

@@ -789,5 +789,35 @@ a {
   }
 }
 
+/* Page navigation transitions */
+.page-nav-transition-container {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: translateX(0);
+  will-change: transform, opacity;
+
+  &.nav-anim-out-next {
+    transform: translateX(-80px);
+    opacity: 0;
+  }
+
+  &.nav-anim-out-prev {
+    transform: translateX(80px);
+    opacity: 0;
+  }
+
+  &.nav-anim-enter-next {
+    transform: translateX(80px);
+    opacity: 0;
+    transition: none !important;
+  }
+
+  &.nav-anim-enter-prev {
+    transform: translateX(-80px);
+    opacity: 0;
+    transition: none !important;
+  }
+}
+
 @import "case-study";
 
