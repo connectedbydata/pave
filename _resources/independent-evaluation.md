@@ -1,13 +1,13 @@
 ---
 layout: generic
-title: Independent evaluation
-airtable_id: 95868893de59917d
+title: Independent Evaluation
+airtable_id: 5b1f3bdc5fea6d0d
 slug: independent-evaluation
 # URL
-external_url: https://connectedbydata.org/assets/projects/peoplespanel/People's%20Panel%20on%20AI%20-%20Evaluation%20report%20v5%20FINAL.pdf
+external_url: https://civicdatacooperative.com/app/uploads/2025/07/Evaluation-Report-v3.pdf
 # Cases
 cases:
-- the-peoples-panel-on-ai
+- liverpool-city-region-residents-assembly-on-data-and-ai
 # Select
-select: Other
+select: Evaluation
 ---

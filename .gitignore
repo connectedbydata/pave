@@ -11,4 +11,5 @@ build.log
 preview_app/airtable_cache.json
 scripts/deploy.sh
 __pycache__
+scratch/
 

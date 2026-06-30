@@ -20,9 +20,8 @@
       <!-- Redesigned Tabs Navigation -->
       <div class="tab-buttons-container" role="tablist">
         <button class="tab-btn active" role="tab" aria-selected="true" data-target="tab-what">What</button>
-        <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-who">Who</button>
-        <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-where">Where</button>
-        <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-outcomes">Outcomes</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-who">Who & where</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-target="tab-outcomes">Resources and recommendations</button>
         <button id="trigger-print-preview-btn" class="tab-btn print-trigger-tab-btn"
           style="background-color: #496a40; margin-left: auto; border-radius: 12px 12px 0 0;">
           📄 Print Draft
@@ -41,7 +40,8 @@
           <!-- Left Column: Rich Text Narrative -->
           <div class="tab-left-col">
             <div class="tab-rich-content">
-              {% include case/read_more_text.html text=page.provide-a-brief-description-of-the-project id="description" %}
+              {% include case/read_more_text.html text=page.provide-a-brief-description-of-the-project id="description"
+              %}
 
               {% assign has_facilitation_guide = false %}
               {% assign has_evaluation = false %}
@@ -74,7 +74,9 @@
               {% assign method_img = page.method-image | first %}
               <div class="method-image-container">
                 <figure class="method-image-figure">
-                  <img src="{{ method_img.url | relative_url }}" alt="{% if page.method-image-caption %}{{ page.method-image-caption | escape }}{% else %}Method image{% endif %}" class="method-image-img" loading="lazy">
+                  <img src="{{ method_img.url | relative_url }}"
+                    alt="{% if page.method-image-caption %}{{ page.method-image-caption | escape }}{% else %}Method image{% endif %}"
+                    class="method-image-img" loading="lazy">
                   {% if page.method-image-caption %}
                   <figcaption class="method-image-caption">{{ page.method-image-caption | escape }}</figcaption>
                   {% endif %}
@@ -242,10 +244,10 @@
 
       </div>
 
-      <!-- 2. WHO TAB PANEL -->
+      <!-- 2. WHO & WHERE TAB PANEL -->
       <div class="tab-content-panel" id="tab-who" role="tabpanel">
         <div class="tab-two-columns">
-          <!-- Left Column: Participant Cohorts -->
+          <!-- Left Column: Participant Cohorts & Locations -->
           <div class="tab-left-col">
             {% assign total_people = 0 %}
             {% assign total_cohorts = 0 %}
@@ -389,16 +391,23 @@
 
                   {% if page.what-limitations-to-the-project-should-be-noted %}
                   <div class="limitations-section">
-                    <h3>Limitations</h3>
+                    <h3>Learning and limitations</h3>
                     <div class="tab-rich-content">
-                      {% include case/read_more_text.html text=page.what-limitations-to-the-project-should-be-noted id="limitations" %}
+                      {% include case/read_more_text.html text=page.what-limitations-to-the-project-should-be-noted
+                      id="limitations" %}
                     </div>
                   </div>
                   {% endif %}
+
+
           </div>
 
-          <!-- Right Column: Organisers -->
+          <!-- Right Column: Map & Organisers -->
           <div class="tab-right-col">
+            <div id="case-mini-map" class="case-mini-map" aria-label="Project Engagement Map"
+              style="height: 380px; width: 100%; border-radius: 12px; border: 1px solid rgba(73, 106, 64, 0.15); margin-bottom: 1.5rem;">
+            </div>
+
             <div class="organisers-card">
               <h3>Organisers</h3>
 
@@ -452,92 +461,82 @@
                 </ul>
               </div>
               {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- 3. WHERE TAB PANEL -->
-      <div class="tab-content-panel" id="tab-where" role="tabpanel">
-        <div class="tab-two-columns">
-          <!-- Left Column: Locations Lists -->
-          <div class="tab-left-col">
-            <div class="locations-summary-card">
-              <h3>Locations</h3>
+              <div class="locations-section-wrapper"
+                style="margin-top: 1.5rem; border-top: 1px solid rgba(73, 106, 64, 0.15); padding-top: 1.5rem;">
+                <div class="locations-summary-card">
+                  <h3>Locations</h3>
 
-              <div class="locations-section">
-                <h5>Participant locations</h5>
-                <ul class="locations-bullet-list">
-                  {% assign displayed_locs = "" | split: "" %}
-                  {% if page.participants %}
-                  {% for part_slug in page.participants %}
-                  {% assign part = site.participants | where: "slug", part_slug | first %}
-                  {% if part and part.locations %}
-                  {% for loc_slug in part.locations %}
-                  {% assign loc = site.locations | where: "slug", loc_slug | first %}
-                  {% if loc %}
-                  {% unless displayed_locs contains loc.title %}
-                  {% assign displayed_locs = displayed_locs | push: loc.title %}
-                  <li>{{ loc.title }}</li>
-                  {% endunless %}
-                  {% endif %}
-                  {% endfor %}
-                  {% endif %}
-                  {% endfor %}
-                  {% endif %}
-                  {% if displayed_locs.size == 0 %}
-                  <li>No participant locations specified.</li>
-                  {% endif %}
-                </ul>
+                  <div class="locations-section">
+                    <h5>Participant locations</h5>
+                    <ul class="locations-bullet-list">
+                      {% assign displayed_locs = "" | split: "" %}
+                      {% if page.participants %}
+                      {% for part_slug in page.participants %}
+                      {% assign part = site.participants | where: "slug", part_slug | first %}
+                      {% if part and part.locations %}
+                      {% for loc_slug in part.locations %}
+                      {% assign loc = site.locations | where: "slug", loc_slug | first %}
+                      {% if loc %}
+                      {% unless displayed_locs contains loc.title %}
+                      {% assign displayed_locs = displayed_locs | push: loc.title %}
+                      <li>{{ loc.title }}</li>
+                      {% endunless %}
+                      {% endif %}
+                      {% endfor %}
+                      {% endif %}
+                      {% endfor %}
+                      {% endif %}
+                      {% if displayed_locs.size == 0 %}
+                      <li>No participant locations specified.</li>
+                      {% endif %}
+                    </ul>
+                  </div>
+
+                  <div class="locations-section" style="margin-top: 1rem;">
+                    <h5>Organiser locations</h5>
+                    <ul class="locations-bullet-list">
+                      {% assign displayed_org_locs = "" | split: "" %}
+                      {% assign org_slugs = "" | split: "" %}
+                      {% if page.lead-organisations %}
+                      {% for o in page.lead-organisations %}
+                      {% assign org_slugs = org_slugs | push: o %}
+                      {% endfor %}
+                      {% endif %}
+                      {% if page.involved-organisations %}
+                      {% for o in page.involved-organisations %}
+                      {% assign org_slugs = org_slugs | push: o %}
+                      {% endfor %}
+                      {% endif %}
+                      {% if page.funding-organisations %}
+                      {% for o in page.funding-organisations %}
+                      {% assign org_slugs = org_slugs | push: o %}
+                      {% endfor %}
+                      {% endif %}
+
+                      {% for o_slug in org_slugs %}
+                      {% assign o = site.organisations | where: "slug", o_slug | first %}
+                      {% if o and o.main-location %}
+                      {% for l_slug in o.main-location %}
+                      {% assign loc = site.locations | where: "slug", l_slug | first %}
+                      {% if loc %}
+                      {% unless displayed_org_locs contains loc.title %}
+                      {% assign displayed_org_locs = displayed_org_locs | push: loc.title %}
+                      <li>{{ loc.title }}</li>
+                      {% endunless %}
+                      {% endif %}
+                      {% endfor %}
+                      {% endif %}
+                      {% endfor %}
+                      {% if displayed_org_locs.size == 0 %}
+                      <li>No organiser locations specified.</li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
               </div>
 
-              <div class="locations-section">
-                <h5>Organiser locations</h5>
-                <ul class="locations-bullet-list">
-                  {% assign displayed_org_locs = "" | split: "" %}
-                  {% assign org_slugs = "" | split: "" %}
-                  {% if page.lead-organisations %}
-                  {% for o in page.lead-organisations %}
-                  {% assign org_slugs = org_slugs | push: o %}
-                  {% endfor %}
-                  {% endif %}
-                  {% if page.involved-organisations %}
-                  {% for o in page.involved-organisations %}
-                  {% assign org_slugs = org_slugs | push: o %}
-                  {% endfor %}
-                  {% endif %}
-                  {% if page.funding-organisations %}
-                  {% for o in page.funding-organisations %}
-                  {% assign org_slugs = org_slugs | push: o %}
-                  {% endfor %}
-                  {% endif %}
-
-                  {% for o_slug in org_slugs %}
-                  {% assign o = site.organisations | where: "slug", o_slug | first %}
-                  {% if o and o.main-location %}
-                  {% for l_slug in o.main-location %}
-                  {% assign loc = site.locations | where: "slug", l_slug | first %}
-                  {% if loc %}
-                  {% unless displayed_org_locs contains loc.title %}
-                  {% assign displayed_org_locs = displayed_org_locs | push: loc.title %}
-                  <li>{{ loc.title }}</li>
-                  {% endunless %}
-                  {% endif %}
-                  {% endfor %}
-                  {% endif %}
-                  {% endfor %}
-                  {% if displayed_org_locs.size == 0 %}
-                  <li>No organiser locations specified.</li>
-                  {% endif %}
-                </ul>
-              </div>
             </div>
-          </div>
-
-          <!-- Right Column: Leaflet Map -->
-          <div class="tab-right-col map-column">
-            <div id="case-mini-map" class="case-mini-map" aria-label="Project Engagement Map"
-              style="height: 480px; width: 100%; border-radius: 12px; border: 1px solid rgba(73, 106, 64, 0.15);"></div>
           </div>
         </div>
       </div>
@@ -689,9 +688,8 @@
         <h3 class="learn-more-title">Learn more</h3>
         <div class="learn-more-links">
           <button class="learn-more-btn" data-tab="tab-what">About the project</button>
-          <button class="learn-more-btn" data-tab="tab-who">Who was involved</button>
-          <button class="learn-more-btn" data-tab="tab-where">Where people were from</button>
-          <button class="learn-more-btn" data-tab="tab-outcomes">Recommendations and resource</button>
+          <button class="learn-more-btn" data-tab="tab-who">Who & where</button>
+          <button class="learn-more-btn" data-tab="tab-outcomes">Resources and recommendations</button>
         </div>
       </div>
 
@@ -716,7 +714,7 @@
 
       <div class="case-copyright-statement">
         All images, quotes and materials are copyright their original creators unless otherwise stated. To cite this
-        project, please see the 'Outcomes' tab for suggested reports and citations.
+        project, please see the 'Resources and recommendations' tab for suggested reports and citations.
       </div>
 
     </div>
