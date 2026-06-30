@@ -163,6 +163,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // 5. Card Filtering Logic
   function filterCards() {
     let visibleCount = 0;
+    const visibleSlugs = [];
+
+    let hasActiveFilters = false;
+    Object.keys(activeFilters).forEach(category => {
+      if (activeFilters[category].size > 0) {
+        hasActiveFilters = true;
+      }
+    });
 
     cards.forEach(card => {
       let isMatch = true;
@@ -203,6 +211,10 @@ document.addEventListener('DOMContentLoaded', function() {
           card.style.display = '';
         } else {
           card.style.display = 'flex';
+          const slug = card.getAttribute('data-slug');
+          if (slug) {
+            visibleSlugs.push(slug);
+          }
         }
         visibleCount++;
       } else {
@@ -219,6 +231,26 @@ document.addEventListener('DOMContentLoaded', function() {
     countLabels.forEach(label => {
       label.textContent = visibleCount;
     });
+
+    // Update Explore All Link
+    const exploreWrapper = document.getElementById('explore-all-wrapper');
+    const exploreLink = document.getElementById('explore-all-link');
+    if (exploreWrapper && exploreLink) {
+      if (hasActiveFilters && visibleSlugs.length > 0) {
+        exploreWrapper.style.display = 'inline';
+        const firstVisibleCard = Array.from(cards).find(card => card.classList.contains('case-card') && card.style.display !== 'none');
+        if (firstVisibleCard) {
+          const cardLinkWrapper = firstVisibleCard.querySelector('.card-link-wrapper');
+          if (cardLinkWrapper) {
+            const firstUrl = cardLinkWrapper.getAttribute('href');
+            exploreLink.href = `${firstUrl}?cases=${visibleSlugs.join(',')}`;
+          }
+        }
+      } else {
+        exploreWrapper.style.display = 'none';
+        exploreLink.href = '#';
+      }
+    }
 
     // Handle No Results Message
     if (noResultsMsg) {

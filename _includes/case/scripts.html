@@ -401,5 +401,136 @@
       }
     });
   });
+
+  // 9. Edge Navigation & Swipe Gestures
+  const allCasesList = [
+    {% assign first_item = true %}
+    {% for c in site.cases %}
+      {% if c.curation-decision == "Do not include" %}{% continue %}{% endif %}
+      {% unless first_item %},{% endunless %}
+      {% assign first_item = false %}
+      {
+        slug: "{{ c.slug }}",
+        id: "{{ c.airtable_id }}",
+        title: "{{ c.title | escape }}",
+        type: {% if c.curation-decision == "Featured Full Case" or c.curation-decision == "Featured Case" %}"featured"{% elsif c.curation-decision == "Mapping Entry" or c.curation-decision == "Mapping Entries" %}"mapping"{% else %}"full"{% endif %},
+        url: "{{ c.url | relative_url }}"
+      }
+    {% endfor %}
+  ];
+
+  const currentSlug = "{{ page.slug }}";
+  const currentId = "{{ page.airtable_id }}";
+
+  // Parse custom cases list from URL query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const customCasesParam = urlParams.get('cases') || urlParams.get('explore');
+  let navigationList = [];
+
+  if (customCasesParam) {
+    const identifiers = customCasesParam.split(',');
+    identifiers.forEach(ind => {
+      const trimmed = ind.trim().toLowerCase();
+      const matchedCase = allCasesList.find(c => c.slug.toLowerCase() === trimmed || c.id.toLowerCase() === trimmed);
+      if (matchedCase && !navigationList.some(item => item.slug === matchedCase.slug)) {
+        navigationList.push(matchedCase);
+      }
+    });
+  }
+
+  // If no valid custom cases sequence, build the default list by curation decision type
+  if (navigationList.length === 0) {
+    const currentCase = allCasesList.find(c => c.slug === currentSlug || c.id === currentId);
+    const currentType = currentCase ? currentCase.type : "full";
+    navigationList = allCasesList.filter(c => c.type === currentType);
+  }
+
+  let currentIndex = navigationList.findIndex(c => c.slug === currentSlug || c.id === currentId);
+  if (currentIndex === -1 && navigationList.length > 0) {
+    currentIndex = 0;
+  }
+
+  function navigateToCase(index) {
+    if (navigationList.length <= 1) return;
+    const targetIndex = (index + navigationList.length) % navigationList.length;
+    const targetCase = navigationList[targetIndex];
+    window.location.href = targetCase.url + window.location.search;
+  }
+
+  if (navigationList.length > 1) {
+    const prevCase = navigationList[(currentIndex - 1 + navigationList.length) % navigationList.length];
+    const nextCase = navigationList[(currentIndex + 1) % navigationList.length];
+
+    // Inject left hover navigation zone
+    const leftZone = document.createElement('div');
+    leftZone.className = 'edge-nav-zone nav-zone-left';
+    leftZone.setAttribute('aria-label', `Previous case: ${prevCase.title}`);
+    leftZone.setAttribute('title', `Previous: ${prevCase.title}`);
+    leftZone.innerHTML = `
+      <div class="edge-nav-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </div>
+    `;
+    leftZone.addEventListener('click', () => navigateToCase(currentIndex - 1));
+    document.body.appendChild(leftZone);
+
+    // Inject right hover navigation zone
+    const rightZone = document.createElement('div');
+    rightZone.className = 'edge-nav-zone nav-zone-right';
+    rightZone.setAttribute('aria-label', `Next case: ${nextCase.title}`);
+    rightZone.setAttribute('title', `Next: ${nextCase.title}`);
+    rightZone.innerHTML = `
+      <div class="edge-nav-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+        </svg>
+      </div>
+    `;
+    rightZone.addEventListener('click', () => navigateToCase(currentIndex + 1));
+    document.body.appendChild(rightZone);
+
+    // Swipe Gestures Logic
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    const minSwipeDistance = 75; // pixels minimum
+    const maxVerticalDeviation = 50; // pixels maximum
+
+    document.addEventListener('touchstart', e => {
+      // Ignore swipe events on Leaflet Map container and gallery tracks to prevent conflicts
+      if (e.target.closest('#case-mini-map') || e.target.closest('#gallery-track') || e.target.closest('.leaflet-container')) {
+        touchStartX = 0;
+        touchStartY = 0;
+        return;
+      }
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+      // If start coordinate was reset to 0, ignore the gesture
+      if (touchStartX === 0 && touchStartY === 0) return;
+      
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      
+      const distanceX = touchEndX - touchStartX;
+      const distanceY = touchEndY - touchStartY;
+
+      if (Math.abs(distanceX) > minSwipeDistance && Math.abs(distanceY) < maxVerticalDeviation) {
+        if (distanceX > 0) {
+          // Swipe Right -> Prev
+          navigateToCase(currentIndex - 1);
+        } else {
+          // Swipe Left -> Next
+          navigateToCase(currentIndex + 1);
+        }
+      }
+    }, { passive: true });
+  }
   });
 </script>

@@ -680,5 +680,114 @@ a {
   }
 }
 
+/* Edge navigation next/prev styles */
+.edge-nav-zone {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 100px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  pointer-events: all;
+
+  &.nav-zone-left {
+    left: 0;
+    justify-content: flex-start;
+    padding-left: 1.5rem;
+  }
+
+  &.nav-zone-right {
+    right: 0;
+    justify-content: flex-end;
+    padding-right: 1.5rem;
+  }
+
+  .edge-nav-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(73, 106, 64, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #496a40;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+  }
+
+  &:hover {
+    background-color: rgba(73, 106, 64, 0.03);
+
+    .edge-nav-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* On tablet and mobile viewports, float buttons at bottom corners */
+@media (max-width: 1024px) {
+  .edge-nav-zone {
+    height: auto;
+    bottom: 2rem;
+    top: auto;
+    width: 60px;
+    background: none !important;
+
+    .edge-nav-btn {
+      opacity: 0.9;
+      transform: scale(1);
+      width: 44px;
+      height: 44px;
+      background-color: #ffffff;
+      border: 1px solid rgba(73, 106, 64, 0.2);
+    }
+
+    &.nav-zone-left {
+      left: 1rem;
+      padding-left: 0;
+    }
+
+    &.nav-zone-right {
+      right: 1rem;
+      padding-right: 0;
+    }
+  }
+}
+
+@media print {
+  .edge-nav-zone {
+    display: none !important;
+  }
+}
+
+/* Explore all link styling */
+.explore-all-link {
+  color: #496a40;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-left: 0.25rem;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: #1a2f16;
+    text-decoration: underline;
+  }
+}
+
 @import "case-study";
 

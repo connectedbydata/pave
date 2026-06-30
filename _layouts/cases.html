@@ -15,7 +15,12 @@ layout: default
   <!-- Main Content Grid -->
     <!-- Status Bar -->
     <div class="browse-status-bar">
-      <span class="cases-count-label">Showing <span class="cases-count-num">{{ site.cases.size }}</span> case studies</span>
+      <span class="cases-count-label">
+        Showing <span class="cases-count-num">{{ site.cases.size }}</span> case studies
+        <span id="explore-all-wrapper" style="display: none;">
+          &bull; <a href="#" id="explore-all-link" class="explore-all-link">Explore all</a>
+        </span>
+      </span>
     </div>
 
     <!-- Cards Grid -->
@@ -83,6 +88,7 @@ layout: default
 
         <!-- Render Card -->
         <div class="case-card"
+             data-slug="{{ case.slug }}"
              data-focus="{{ case.what-form-of-ai-is-the-project-about | join: '||' | downcase }}"
              data-methods="{{ unique_methods | join: '||' | downcase }}"
              data-goals="{{ case.project-goals | join: '||' | downcase }}"
