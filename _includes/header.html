@@ -16,7 +16,7 @@
       </label>
 
       <div class="trigger">
-        {%- assign sorted_pages = site.pages | sort: "path" -%}
+        {%- assign sorted_pages = site.pages | sort: "menu_order" -%}
         {%- for my_page in sorted_pages -%}
           {%- if my_page.title and my_page.menus contains 'header' -%}
           <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>

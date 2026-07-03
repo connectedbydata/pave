@@ -3,7 +3,7 @@ layout: default
 title: Videos
 show_banner: false
 permalink: /videos/
-menus: [header]
+menus: []
 ---
 
 <!-- Import Modern Premium Fonts -->

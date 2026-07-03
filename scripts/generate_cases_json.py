@@ -2,6 +2,7 @@
 import os
 import yaml
 import json
+import pycountry_convert as pc
 from pathlib import Path
 
 # Paths
@@ -12,34 +13,7 @@ LOCATIONS_DIR = BASE_DIR / "_locations"
 MESSAGES_DIR = BASE_DIR / "_messages"
 ORGANISATIONS_DIR = BASE_DIR / "_organisations"
 OUTPUT_FILE = BASE_DIR / "assets/data/cases_aggregated.json"
-
-COUNTRY_TO_CONTINENT = {
-    # Africa
-    'AO': 'Africa', 'DZ': 'Africa', 'EG': 'Africa', 'ER': 'Africa', 'GH': 'Africa', 'KE': 'Africa',
-    'LY': 'Africa', 'MA': 'Africa', 'MW': 'Africa', 'NA': 'Africa', 'NG': 'Africa', 'SD': 'Africa',
-    'SO': 'Africa', 'TG': 'Africa', 'TN': 'Africa', 'TZ': 'Africa', 'ZA': 'Africa', 'ZW': 'Africa',
-    # Asia
-    'AE': 'Asia', 'AM': 'Asia', 'BD': 'Asia', 'CN': 'Asia', 'ID': 'Asia', 'IL': 'Asia', 'IN': 'Asia',
-    'JO': 'Asia', 'JP': 'Asia', 'KR': 'Asia', 'KZ': 'Asia', 'LK': 'Asia', 'MN': 'Asia', 'MY': 'Asia',
-    'NP': 'Asia', 'PH': 'Asia', 'PK': 'Asia', 'SA': 'Asia', 'SG': 'Asia', 'SY': 'Asia', 'TW': 'Asia',
-    'UZ': 'Asia', 'VN': 'Asia',
-    # Europe
-    'AD': 'Europe', 'AL': 'Europe', 'AT': 'Europe', 'BE': 'Europe', 'CH': 'Europe', 'CZ': 'Europe',
-    'DE': 'Europe', 'DK': 'Europe', 'EE': 'Europe', 'ES': 'Europe', 'FI': 'Europe', 'FR': 'Europe',
-    'GB': 'Europe', 'GR': 'Europe', 'HR': 'Europe', 'HU': 'Europe', 'IE': 'Europe', 'IS': 'Europe',
-    'IT': 'Europe', 'LT': 'Europe', 'LU': 'Europe', 'LV': 'Europe', 'NL': 'Europe', 'NO': 'Europe',
-    'PL': 'Europe', 'PT': 'Europe', 'RO': 'Europe', 'RU': 'Europe', 'SE': 'Europe', 'SI': 'Europe',
-    'SK': 'Europe', 'UA': 'Europe',
-    # North America
-    'CA': 'North America', 'CR': 'North America', 'CU': 'North America', 'DO': 'North America',
-    'MX': 'North America', 'PA': 'North America', 'US': 'North America', 'VC': 'North America',
-    # South America
-    'AR': 'South America', 'BO': 'South America', 'BR': 'South America', 'CL': 'South America',
-    'CO': 'South America', 'PE': 'South America', 'PY': 'South America', 'UY': 'South America',
-    'VE': 'South America',
-    # Oceania
-    'AU': 'Oceania', 'FJ': 'Oceania', 'KI': 'Oceania', 'NZ': 'Oceania'
-}
+METHODS_MAP_FILE = BASE_DIR / "_data/methods_map.yml"
 
 def clean_int(val):
     if val is None:
@@ -65,6 +39,16 @@ def clean_float(val):
         return float(cleaned)
     except ValueError:
         return 0.0
+
+def get_continent(country_code):
+    if not country_code:
+        return None
+    code_upper = str(country_code).upper().strip()
+    try:
+        continent_code = pc.country_alpha2_to_continent_code(code_upper)
+        return pc.convert_continent_code_to_continent_name(continent_code)
+    except Exception:
+        return None
 
 def load_collection(directory):
     data = {}
@@ -94,6 +78,18 @@ def aggregate():
     messages = load_collection(MESSAGES_DIR)
 
     print(f"Loaded: {len(cases)} cases, {len(participants)} participants, {len(locations)} locations, {len(organisations)} organisations, {len(messages)} messages.")
+
+    # Load methods map
+    methods_map = {}
+    if METHODS_MAP_FILE.exists():
+        try:
+            with open(METHODS_MAP_FILE, "r", encoding="utf-8") as f:
+                methods_map = yaml.safe_load(f) or {}
+        except Exception as e:
+            print(f"Error loading methods map: {e}")
+            
+    deliberated_list = [str(m).strip().lower() for m in methods_map.get("deliberated", []) or []]
+    participated_list = [str(m).strip().lower() for m in methods_map.get("participated", []) or []]
 
     # Pre-index messages by case
     case_to_messages = {}
@@ -181,7 +177,7 @@ def aggregate():
                     country_code = str(loc.get("country-code", "")).upper().strip()
                     if country_code:
                         participant_countries.add(country_code)
-                        continent = COUNTRY_TO_CONTINENT.get(country_code)
+                        continent = get_continent(country_code)
                         if continent:
                             participant_continents.add(continent)
 
@@ -242,10 +238,25 @@ def aggregate():
         elif not isinstance(case_themes, list):
             case_themes = [case_themes]
 
+        # Determine method categories based on methods_map.yml rules
+        method_categories = set()
+        for m in case_methods:
+            m_lower = str(m).strip().lower()
+            if m_lower in deliberated_list:
+                method_categories.add("deliberation")
+            elif m_lower in participated_list:
+                method_categories.add("participation")
+            else:
+                method_categories.add("research")
+
+        if not method_categories:
+            method_categories.add("research")
+
         aggregated_cases.append({
             "title": case.get("title") or case.get("project-title") or case_slug,
             "slug": case_slug,
             "url": case.get("url") or f"/cases/{case_slug}/",
+            "curation_decision": case.get("curation-decision") or "Mapping Entry",
             "themes": case_themes,
             "level_of_engagement": case.get("level-of-engagement") or "",
             "modalities": sorted(list(case_modalities)),
@@ -255,6 +266,7 @@ def aggregate():
             "message_count": message_count,
             "countries": sorted(list(participant_countries)),
             "continents": sorted(list(participant_continents)),
+            "method_categories": sorted(list(method_categories)),
             "points": points
         })
 

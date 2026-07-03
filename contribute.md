@@ -2,7 +2,7 @@
 layout: page
 title: Contribute
 permalink: /contribute/
-menus: [header]
+menus: [footer]
 ---
 
 We welcome further contributions to the case book. 

@@ -3,6 +3,7 @@ layout: default
 title: Map
 permalink: /map/
 menus: [header]
+menu_order: 2
 ---
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -10,924 +11,2025 @@ menus: [header]
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-/* Dashboard Top Statistics Bar Styles */
-.dashboard-stats-grid {
+/* Page Layout */
+.map-alt-layout {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 @media (max-width: 992px) {
-  .dashboard-stats-grid {
+  .map-alt-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar Styling */
+.map-sidebar {
+  background: #ffffff;
+  border: 1px solid rgba(73, 106, 64, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  align-self: start;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(73, 106, 64, 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.sidebar-header h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: 700;
+  color: #1a2f16;
+}
+
+.reset-btn {
+  background: none;
+  border: none;
+  color: #496a40;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s ease;
+  text-decoration: underline;
+}
+
+.reset-btn:hover {
+  color: #1a2f16;
+}
+
+/* Filter Sections */
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section:last-child {
+  margin-bottom: 0;
+}
+
+.filter-section h3 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #556c50;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Scrollbar for touchscreen and overflow scrollable facets */
+.scrollable-facet {
+  max-height: 210px; /* 5 items * 42px height */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 6px;
+  background: #fafbfa;
+  border: 1px solid rgba(73, 106, 64, 0.05);
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.scrollable-facet::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollable-facet::-webkit-scrollbar-track {
+  background: rgba(73, 106, 64, 0.03);
+  border-radius: 3px;
+}
+.scrollable-facet::-webkit-scrollbar-thumb {
+  background: rgba(73, 106, 64, 0.25);
+  border-radius: 3px;
+}
+
+.curation-filter-section {
+  border-bottom: 1px solid rgba(73, 106, 64, 0.08);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.toggle-filter-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(73, 106, 64, 0.03);
+  border: 1px solid rgba(73, 106, 64, 0.08);
+  min-height: 44px;
+}
+
+.filter-label-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #243f1f;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+}
+
+.filter-label-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #496a40;
+  cursor: pointer;
+  margin: 0;
+}
+
+.tag-badge.curation-featured {
+  background-color: rgba(36, 63, 31, 0.08);
+  color: #243f1f;
+}
+
+.tag-badge.curation-full {
+  background-color: rgba(73, 106, 64, 0.08);
+  color: #496a40;
+}
+
+.tag-badge.curation-mapping {
+  background-color: rgba(141, 163, 138, 0.12);
+  color: #627760;
+}
+
+/* Custom DivIcon Marker Styling */
+.custom-map-marker {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-marker-pin {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border: 2.5px solid #ffffff;
+  width: 100%;
+  height: 100%;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Accents per curation level (three shades of green aligned with site theme) */
+.custom-marker-pin.marker-featured {
+  background-color: #243f1f; /* Deep Forest Green */
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(36, 63, 31, 0.4);
+}
+
+.custom-marker-pin.marker-featured:hover {
+  transform: scale(1.15);
+}
+
+.custom-marker-pin.marker-full {
+  background-color: #496a40; /* Brand Green */
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(73, 106, 64, 0.3);
+}
+
+.custom-marker-pin.marker-mapping {
+  background-color: #8da38a; /* Light Sage Green */
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  opacity: 0.85;
+}
+
+.marker-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.marker-icon-wrapper svg {
+  width: 55%;
+  height: 55%;
+  fill: currentColor;
+  display: block;
+}
+
+.custom-marker-pin.marker-mapping .marker-icon-wrapper svg {
+  width: 65%;
+  height: 65%;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #243f1f;
+  cursor: pointer;
+  line-height: 1.4;
+  user-select: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  min-height: 40px; /* Touch target optimized */
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.filter-label:hover {
+  background-color: rgba(73, 106, 64, 0.04);
+}
+
+.filter-label:active {
+  background-color: rgba(73, 106, 64, 0.12); /* Touch response feedback */
+}
+
+.filter-label.active-checked {
+  background-color: rgba(73, 106, 64, 0.08);
+  border-color: rgba(73, 106, 64, 0.15);
+  font-weight: 600;
+}
+
+.filter-label.zero-count {
+  opacity: 0.45;
+}
+
+.filter-label.zero-count input {
+  cursor: not-allowed;
+}
+
+.filter-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  accent-color: #496a40;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.filter-count {
+  color: #7a9476;
+  font-size: 0.75rem;
+  margin-left: auto;
+  font-weight: 500;
+}
+
+/* Dual Range Slider Styling */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+.slider-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background-color: rgba(73, 106, 64, 0.1);
+  border-radius: 5px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.slider-highlight {
+  position: absolute;
+  top: 50%;
+  height: 5px;
+  background-color: #496a40;
+  border-radius: 5px;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.slider-wrapper input[type="range"] {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transform: translateY(-50%);
+  z-index: 3;
+  margin: 0;
+}
+
+.slider-wrapper input[type="range"]::-webkit-slider-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background-color: #496a40;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: transform 0.1s ease;
+}
+
+.slider-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.slider-wrapper input[type="range"]::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background-color: #496a40;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: transform 0.1s ease;
+}
+
+.slider-wrapper input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+.slider-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #496a40;
+}
+
+/* Statistics Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+  .stats-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 600px) {
-  .dashboard-stats-grid {
+@media (max-width: 768px) {
+  .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 .stat-card {
   background: #ffffff;
-  border: 1px solid rgba(73, 106, 64, 0.1);
+  border: 1px solid rgba(73, 106, 64, 0.08);
   border-top: 3px solid #496a40;
   border-radius: 12px;
-  padding: 1.25rem 1rem;
+  padding: 1rem 0.75rem;
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+  transition: all 0.2s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 24px rgba(73, 106, 64, 0.1);
-  border-color: rgba(73, 106, 64, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(73, 106, 64, 0.08);
 }
 
-.stat-card:nth-child(1) { border-top-color: #2196F3; }
-.stat-card:nth-child(2) { border-top-color: #E91E63; }
-.stat-card:nth-child(3) { border-top-color: #9C27B0; }
-.stat-card:nth-child(4) { border-top-color: #FF9800; }
-.stat-card:nth-child(5) { border-top-color: #4CAF50; }
+/* Distinct card tops to look beautiful and premium */
+.stat-card:nth-child(1) { border-top-color: #243f1f; } /* Deep Forest Green */
+.stat-card:nth-child(2) { border-top-color: #496a40; } /* Brand Green */
+.stat-card:nth-child(3) { border-top-color: #7a9476; } /* Muted Sage Green */
+.stat-card:nth-child(4) { border-top-color: #8da38a; } /* Light Sage Green */
+.stat-card:nth-child(5) { border-top-color: #243f1f; } /* Deep Forest Green */
 
-.stat-icon-wrapper {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.stat-icon-wrapper.cases-icon {
-  background-color: rgba(33, 150, 243, 0.1);
-  color: #2196F3;
-}
-.stat-icon-wrapper.countries-icon {
-  background-color: rgba(233, 30, 99, 0.1);
-  color: #E91E63;
-}
-.stat-icon-wrapper.continents-icon {
-  background-color: rgba(156, 39, 176, 0.1);
-  color: #9C27B0;
-}
-.stat-icon-wrapper.participants-icon {
-  background-color: rgba(255, 152, 0, 0.1);
-  color: #FF9800;
-}
-.stat-icon-wrapper.earliest-icon {
-  background-color: rgba(76, 175, 80, 0.1);
-  color: #4CAF50;
-}
+.stat-card:nth-child(1) .stat-icon { background: rgba(36, 63, 31, 0.08); color: #243f1f; }
+.stat-card:nth-child(2) .stat-icon { background: rgba(73, 106, 64, 0.08); color: #496a40; }
+.stat-card:nth-child(3) .stat-icon { background: rgba(122, 148, 118, 0.08); color: #7a9476; }
+.stat-card:nth-child(4) .stat-icon { background: rgba(141, 163, 138, 0.08); color: #8da38a; }
+.stat-card:nth-child(5) .stat-icon { background: rgba(36, 63, 31, 0.08); color: #243f1f; }
 
-.stat-icon-wrapper svg {
-  width: 22px;
-  height: 22px;
+.stat-icon svg {
+  width: 20px;
+  height: 20px;
   fill: currentColor;
 }
 
-.stat-details {
+.stat-info {
   display: flex;
   flex-direction: column;
 }
 
-.stat-value {
+.stat-number {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #1a2f16;
   line-height: 1.2;
 }
 
-.stat-label {
-  font-size: 0.75rem;
+.stat-label-text {
+  font-size: 0.725rem;
   font-weight: 600;
   text-transform: uppercase;
   color: #556c50;
   letter-spacing: 0.02em;
 }
 
-/* Map & Controls Styles */
-.dashboard-controls {
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  padding: 0.75rem 1.25rem;
-  background: #ffffff;
-  border: 1px solid rgba(73, 106, 64, 0.08);
-  border-radius: 12px;
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
-  flex-wrap: wrap;
-}
-
-.dashboard-controls strong {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  color: #1a2f16;
-  font-size: 0.9rem;
-}
-
-.dashboard-controls label {
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #496a40;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: color 0.15s ease;
-}
-
-.dashboard-controls label:hover {
-  color: #1a2f16;
-}
-
-.dashboard-controls label.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: not-allowed;
-}
-
-.dashboard-controls label.disabled input {
-  cursor: not-allowed;
-}
-
-.dashboard-controls input[type="radio"],
-.dashboard-controls input[type="checkbox"] {
-  accent-color: #496a40;
-  cursor: pointer;
-}
-
-/* Custom Marker Cluster Theme Overrides */
-.marker-cluster div {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-}
-
-.dashboard-map-container {
-  height: 600px;
+/* Map Styling */
+.map-alt-container {
+  height: 550px;
   width: 100%;
   border: 1px solid rgba(73, 106, 64, 0.12);
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(73, 106, 64, 0.04);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.02);
   overflow: hidden;
-  margin-top: 0.5rem;
-}
-
-/* Charts Section Styles */
-.dashboard-charts-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
   margin-bottom: 2rem;
+  z-index: 10;
 }
 
-@media (max-width: 860px) {
-  .dashboard-charts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.chart-card {
+/* Dynamic Case Listing Section */
+.cases-list-section {
   background: #ffffff;
   border: 1px solid rgba(73, 106, 64, 0.08);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 8px 24px rgba(73, 106, 64, 0.03);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.01);
+}
+
+.cases-list-section h2 {
+  font-size: 1.25rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(73, 106, 64, 0.08);
+  padding-bottom: 0.5rem;
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.case-item-card {
+  border: 1px solid rgba(73, 106, 64, 0.06);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.15s ease;
+  background: #fbfcfb;
+}
+
+.case-item-card:hover {
+  border-color: rgba(73, 106, 64, 0.2);
+  background: #ffffff;
+  transform: translateX(3px);
+}
+
+.case-item-details {
   display: flex;
   flex-direction: column;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 0.25rem;
+  flex-grow: 1;
 }
 
-.chart-card:hover {
-  box-shadow: 0 12px 32px rgba(73, 106, 64, 0.08);
+.case-item-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a2f16;
 }
 
-.chart-title {
+.case-item-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.775rem;
+  color: #7a9476;
+  flex-wrap: wrap;
+}
+
+.case-item-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tag-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 9999px;
+  background-color: rgba(73, 106, 64, 0.08);
+  color: #496a40;
+}
+
+.case-item-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  min-width: 120px;
+}
+
+.case-stat-num {
   font-family: 'Outfit', sans-serif;
   font-size: 1.15rem;
+  font-weight: 700;
+  color: #496a40;
+}
+
+.case-stat-lbl {
+  font-size: 0.675rem;
+  text-transform: uppercase;
+  color: #7a9476;
+}
+
+/* Map Controls Bar (Segmented control button group + cluster checkbox) */
+.map-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -1rem; /* push it close under the map container */
+  margin-bottom: 2rem;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+  border: 1px solid rgba(73, 106, 64, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.location-view-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.location-toggle-label {
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #1a2f16;
-  margin-top: 0;
-  margin-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(73, 106, 64, 0.08);
-  padding-bottom: 0.75rem;
+  color: #496a40;
+  user-select: none;
+  transition: color 0.2s ease;
 }
 
-.chart-container {
+/* Premium CSS Toggle Switch */
+.switch-container {
   position: relative;
-  width: 100%;
-  height: 300px;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  margin: 0;
 }
 
-.dashboard-legend-card {
+.switch-container input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #496a40; /* Participant theme: Brand Green */
+  transition: .3s;
+  border-radius: 24px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.switch-container input:checked + .switch-slider {
+  background-color: #7a9476; /* Organisation theme: Muted Sage Green */
+}
+
+.switch-container input:checked + .switch-slider:before {
+  transform: translateX(24px);
+}
+
+.cluster-toggle-wrapper label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #496a40;
+  cursor: pointer;
+  user-select: none;
+  min-height: 36px;
+}
+
+.cluster-toggle-wrapper input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #496a40;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Custom Marker Cluster Styling (three shades of brand green) */
+.marker-cluster-small {
+  background-color: rgba(141, 163, 138, 0.4) !important;
+}
+.marker-cluster-small div {
+  background-color: rgba(114, 140, 110, 0.85) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.marker-cluster-medium {
+  background-color: rgba(73, 106, 64, 0.4) !important;
+}
+.marker-cluster-medium div {
+  background-color: rgba(73, 106, 64, 0.9) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.marker-cluster-large {
+  background-color: rgba(36, 63, 31, 0.4) !important;
+}
+.marker-cluster-large div {
+  background-color: rgba(36, 63, 31, 0.95) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.marker-cluster div {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-top: 5px;
+  text-align: center;
+  border-radius: 15px;
+  font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+.marker-cluster span {
+  line-height: 30px;
+}
+
+.geojson-tooltip {
+  background-color: #1a2f16 !important;
+  color: #ffffff !important;
+  border: 1px solid #496a40 !important;
+  border-radius: 6px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 0.85rem !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  padding: 6px 10px !important;
+  opacity: 0.95 !important;
+}
+
+/* Horizontal scale buttons */
+.scale-horizontal-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.scale-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px;
+  background: #ffffff;
+  border: 1.5px solid rgba(73, 106, 64, 0.12);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  text-align: center;
+  min-height: 90px;
+}
+
+.scale-btn input[type="checkbox"] {
+  display: none;
+}
+
+.scale-btn:hover {
+  border-color: rgba(73, 106, 64, 0.35);
+  background-color: rgba(73, 106, 64, 0.02);
+}
+
+.scale-btn.active-checked {
+  background-color: rgba(73, 106, 64, 0.08);
+  border-color: #496a40;
+  box-shadow: 0 2px 8px rgba(73, 106, 64, 0.08);
+}
+
+.scale-btn.zero-count {
+  opacity: 0.45;
+}
+
+.scale-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(73, 106, 64, 0.05);
+  color: #496a40;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+}
+
+.scale-btn.active-checked .scale-icon-box {
+  background: #496a40;
+  color: #ffffff;
+}
+
+.scale-icon-box svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.scale-label-text {
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: #243f1f;
+  margin-bottom: 2px;
+}
+
+.scale-percentage {
+  font-size: 0.675rem;
+  font-weight: 600;
+  color: #7a9476;
+}
+
+.scale-btn.active-checked .scale-percentage {
+  color: #496a40;
+}
+
+/* Bottom filters section */
+.bottom-filters-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 1.25rem;
   background: #ffffff;
   border: 1px solid rgba(73, 106, 64, 0.08);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin-top: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
 }
 
-.dashboard-legend-card h4 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
+.bottom-filter-box h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #243f1f;
   margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: #1a2f16;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(73, 106, 64, 0.08);
+  padding-bottom: 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.dashboard-legend-card p {
+.checkbox-table-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.2rem 0.5rem;
+}
+
+.checkbox-table-grid .filter-label {
+  font-size: 0.75rem;
+  padding: 3px 5px;
+  min-height: 24px;
+  border-radius: 6px;
+}
+
+.checkbox-table-grid.scrollable-facet {
+  height: 220px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.checkbox-table-grid.theme-grid {
+  grid-template-columns: 1fr;
+  gap: 0.2rem;
+  height: 220px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+/* Map Wrapper & Floating Controls */
+.map-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.map-floating-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(73, 106, 64, 0.15);
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 190px;
+}
+
+.location-links-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #7a9476;
+  border-bottom: 1.5px solid rgba(73, 106, 64, 0.08);
+  padding-bottom: 6px;
+  margin-bottom: 2px;
+}
+
+.location-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: #7a9476;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.location-link:hover {
+  color: #496a40;
+}
+
+.location-link.active {
+  color: #496a40;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.location-link-separator {
+  color: rgba(73, 106, 64, 0.25);
+  font-weight: normal;
+  user-select: none;
+}
+
+.map-floating-controls .cluster-toggle-wrapper label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #496a40;
+  cursor: pointer;
   margin: 0;
-  font-size: 0.825rem;
-  color: #556c50;
-  line-height: 1.5;
+  min-height: auto;
 }
 
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 6px;
+.map-floating-controls .cluster-toggle-wrapper input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #496a40;
+  cursor: pointer;
+}
+
+/* Prevent white lines/gaps between Leaflet tiles */
+.leaflet-container {
+  background: #f2efe9 !important; /* Matches default land background color of OSM */
+}
+.leaflet-tile-container img.leaflet-tile {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1) !important;
+  margin: -1px !important;
+  padding: 1px !important;
+  border: 1px solid transparent !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Sidebar Explanation Box */
+.sidebar-explanation-box {
+  background: rgba(73, 106, 64, 0.06);
+  border: 1px solid rgba(73, 106, 64, 0.15);
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #243f1f;
+  margin-top: 1.5rem;
+}
+.sidebar-explanation-box p {
+  margin: 0;
+}
+.sidebar-explanation-highlight {
+  font-weight: 700;
+  color: #496a40;
+}
+
+/* Sidebar Header Collapse Support */
+.toggle-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.toggle-arrow-icon {
+  display: none;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  transition: transform 0.25s ease;
+}
+
+@media (max-width: 992px) {
+  .toggle-trigger {
+    cursor: pointer;
+    width: auto;
+  }
+  
+  .toggle-arrow-icon {
+    display: inline-block;
+  }
+  
+  /* Collapsed state */
+  .map-sidebar.collapsed-filters .filter-section,
+  .map-sidebar.collapsed-filters .sidebar-explanation-box {
+    display: none !important;
+  }
+  
+  .map-sidebar.collapsed-filters .toggle-arrow-icon {
+    transform: rotate(-90deg);
+  }
 }
 </style>
 
-<!-- Top Statistics Bar -->
-<div class="dashboard-stats-grid">
-  <!-- Card 1: Mapped Cases -->
-  <div class="stat-card">
-    <div class="stat-icon-wrapper cases-icon">
-      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+<div class="map-alt-layout">
+  <!-- Left Side Filters -->
+  <aside class="map-sidebar">
+    <!-- Print Brand Logo (hidden by default) -->
+    <div class="sidebar-print-logo" style="display: none; padding: 0.5rem 0; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(73, 106, 64, 0.15);">
+      <img src="{{ '/assets/images/pave-case-book-logo.png' | relative_url }}" alt="PAVE Case Book Logo" style="height: 42px; display: block; max-width: 100%;">
     </div>
-    <div class="stat-details">
-      <span class="stat-value" id="stat-cases">-</span>
-      <span class="stat-label">Mapped Cases</span>
-    </div>
-  </div>
-  
-  <!-- Card 2: Countries -->
-  <div class="stat-card">
-    <div class="stat-icon-wrapper countries-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
-    </div>
-    <div class="stat-details">
-      <span class="stat-value" id="stat-countries">-</span>
-      <span class="stat-label">Countries</span>
-    </div>
-  </div>
 
-  <!-- Card 3: Continents -->
-  <div class="stat-card">
-    <div class="stat-icon-wrapper continents-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+    <div class="sidebar-header">
+      <h2 id="sidebar-toggle-btn" class="toggle-trigger">
+        Filters
+        <svg class="toggle-arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      </h2>
+      <button class="reset-btn" id="reset-all-btn">Reset All</button>
     </div>
-    <div class="stat-details">
-      <span class="stat-value" id="stat-continents">-</span>
-      <span class="stat-label">Continents</span>
-    </div>
-  </div>
 
-  <!-- Card 4: Participants -->
-  <div class="stat-card">
-    <div class="stat-icon-wrapper participants-icon">
-      <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 8 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+    <!-- Case Type Curation Filter -->
+    <div class="filter-section curation-filter-section">
+      <div class="toggle-filter-wrapper">
+        <label class="filter-label-toggle">
+          <input type="checkbox" id="full-cases-only-toggle">
+          Full cases only
+        </label>
+        <span class="filter-count" id="curation-facet-count">(0)</span>
+      </div>
     </div>
-    <div class="stat-details">
-      <span class="stat-value" id="stat-participants">-</span>
-      <span class="stat-label">Participants</span>
+
+    <!-- Participation by scale Filter -->
+    <div class="filter-section scale-filter-section">
+      <h3>Participation by scale</h3>
+      <div class="scale-horizontal-row" id="level-filters">
+        <!-- Community -->
+        <label class="scale-btn" data-value="Community">
+          <input type="checkbox" value="Community">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          </span>
+          <span class="scale-label-text">Community</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+        
+        <!-- National -->
+        <label class="scale-btn" data-value="National">
+          <input type="checkbox" value="National">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+          </span>
+          <span class="scale-label-text">National</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+
+        <!-- Global -->
+        <label class="scale-btn" data-value="Global">
+          <input type="checkbox" value="Global">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.42 3.39 1.63 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.33-.14 2 0 .67.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.42-3.39-1.63-4.33-3.56zm2.95-8H5.08c.94-1.93 2.49-3.14 4.33-3.56-.6 1.11-1.06 2.31-1.38 3.56zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.26 14h-4.52c-.1-.66-.14-1.33-.14-2 0-.67.04-1.34.14-2h4.52c.1.66.14 1.33.14 2 0 .67-.04 1.34-.14 2zm.82 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.94 1.93-2.49 3.14-4.33 3.56zm1.54-5.56c.08-.66.14-1.33.14-2 0-.67-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+          </span>
+          <span class="scale-label-text">Global</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+      </div>
     </div>
-  </div>
 
-  <!-- Card 5: Earliest -->
-  <div class="stat-card">
-    <div class="stat-icon-wrapper earliest-icon">
-      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+    <!-- Type of methods Filter -->
+    <div class="filter-section scale-filter-section">
+      <h3>Participation by method</h3>
+      <div class="scale-horizontal-row" id="methodology-filters">
+        <!-- Deliberation -->
+        <label class="scale-btn" data-value="deliberation">
+          <input type="checkbox" value="deliberation">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/></svg>
+          </span>
+          <span class="scale-label-text">Deliberation</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+        
+        <!-- Participation -->
+        <label class="scale-btn" data-value="participation">
+          <input type="checkbox" value="participation">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 8 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </span>
+          <span class="scale-label-text">Participation</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+
+        <!-- Research -->
+        <label class="scale-btn" data-value="research">
+          <input type="checkbox" value="research">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          </span>
+          <span class="scale-label-text">Research</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+      </div>
     </div>
-    <div class="stat-details">
-      <span class="stat-value" id="stat-earliest">-</span>
-      <span class="stat-label">Earliest Case</span>
+
+    <!-- Modality Filter -->
+    <div class="filter-section scale-filter-section">
+      <h3>Participation by location</h3>
+      <div class="scale-horizontal-row" id="modality-filters">
+        <!-- Offline -->
+        <label class="scale-btn" data-value="Offline">
+          <input type="checkbox" value="Offline">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </span>
+          <span class="scale-label-text">Offline</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+        
+        <!-- Online -->
+        <label class="scale-btn" data-value="Online">
+          <input type="checkbox" value="Online">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+          </span>
+          <span class="scale-label-text">Online</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+
+        <!-- Hybrid -->
+        <label class="scale-btn" data-value="Hybrid">
+          <input type="checkbox" value="Hybrid">
+          <span class="scale-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+          </span>
+          <span class="scale-label-text">Hybrid</span>
+          <span class="scale-percentage">(0%)</span>
+        </label>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- Map View Mode Controls -->
-<div class="dashboard-controls">
-  <strong>View Mode:</strong>
-  <label><input type="radio" name="map-view" value="points" checked> Point View (Orgs & Participants)</label>
-  <label><input type="radio" name="map-view" value="heatmap"> Heat Map (Countries)</label>
-  <span style="border-left: 1px solid rgba(73, 106, 64, 0.15); height: 20px; margin-inline: 0.5rem;"></span>
-  <label id="cluster-toggle-label"><input type="checkbox" id="cluster-toggle" checked> Cluster Nearby Markers</label>
-</div>
+    <!-- Explanation Box -->
+    <div class="sidebar-explanation-box">
+      <p>This map shows participants involved in <span class="sidebar-explanation-highlight" id="explanation-processes-count">82</span> processes that have taken place bringing participatory public inputs into aspects of AI-related research, development, deployment or governance. Processes might involve participants in more than one location, and many involve multiple methods. The data draws on submissions and desk research.</p>
+    </div>
+  </aside>
 
-<!-- Map Container -->
-<div id="map" class="dashboard-map-container"></div>
+  <!-- Right Side Map & Stats -->
+  <main class="map-main">
+    <!-- Top Statistics Bar -->
+    <div class="stats-grid">
+      <!-- Mapped Cases Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" id="stats-cases">0</span>
+          <span class="stat-label-text">Participatory Processes</span>
+        </div>
+      </div>
 
-<!-- Case List Container (Dynamic) -->
-<div id="case-list-container" class="chart-card" style="margin-top: 1.5rem; display: none;">
-  <h3 id="selected-country-name" class="chart-title" style="margin-bottom: 0.75rem; border-bottom: none; padding-bottom: 0;">Cases in [Country]</h3>
-  <ul id="case-list" style="margin: 0; padding-left: 1.25rem; color: #435b3f; line-height: 1.6;"></ul>
+      <!-- Total Engaged Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 8 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" id="stats-participants">0</span>
+          <span class="stat-label-text">Participants Engaged</span>
+        </div>
+      </div>
+      
+      <!-- Countries Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" id="stats-countries">0</span>
+          <span class="stat-label-text">Countries</span>
+        </div>
+      </div>
+
+      <!-- Continents Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" id="stats-continents">0</span>
+          <span class="stat-label-text">Continents</span>
+        </div>
+      </div>
+
+      <!-- Messages Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" id="stats-messages">0</span>
+          <span class="stat-label-text">Recommendations & Issues</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Area Wrapper -->
+    <div class="map-wrapper">
+      <div id="map" class="map-alt-container"></div>
+
+      <!-- Floating Map Controls Overlay (top-right of map) -->
+      <div class="map-floating-controls">
+        <div class="location-links-selector">
+          <button type="button" class="location-link active" id="btn-show-participants">Participants</button>
+          <span class="location-link-separator">|</span>
+          <button type="button" class="location-link" id="btn-show-organisations">Organisations</button>
+        </div>
+        <div class="cluster-toggle-wrapper">
+          <label>
+            <input type="checkbox" id="map-cluster-toggle" checked> Cluster markers
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Methods & Theme Bottom Filters -->
+    <div class="bottom-filters-section">
+      <div class="bottom-filter-box">
+        <h3>Methods</h3>
+        <div class="checkbox-table-grid scrollable-facet" id="methods-filters">
+          <!-- Dynamically populated and sorted -->
+        </div>
+      </div>
+
+      <div class="bottom-filter-box">
+        <h3>Theme</h3>
+        <div class="checkbox-table-grid theme-grid" id="theme-filters">
+          <label class="filter-label"><input type="checkbox" value="Artificial Intelligence"> Artificial Intelligence <span class="filter-count">(0)</span></label>
+          <label class="filter-label"><input type="checkbox" value="Education"> Education <span class="filter-count">(0)</span></label>
+          <label class="filter-label"><input type="checkbox" value="Environment"> Environment <span class="filter-count">(0)</span></label>
+          <label class="filter-label"><input type="checkbox" value="Healthcare"> Healthcare <span class="filter-count">(0)</span></label>
+          <label class="filter-label"><input type="checkbox" value="Infrastructure"> Infrastructure <span class="filter-count">(0)</span></label>
+          <label class="filter-label"><input type="checkbox" value="Safety"> Safety <span class="filter-count">(0)</span></label>
+          <label class="filter-label"><input type="checkbox" value="Work"> Work <span class="filter-count">(0)</span></label>
+          <label class="filter-label"><input type="checkbox" value="Youth"> Youth <span class="filter-count">(0)</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtered Cases List Section -->
+    <div class="cases-list-section">
+      <h2 id="cases-count-header">Cases Mapped</h2>
+      <div class="cases-grid" id="cases-grid-list">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </main>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var map = L.map('map').setView([20, 0], 2);
+document.addEventListener('DOMContentLoaded', () => {
+  // Fix Leaflet tile gap line rendering artifact on Chrome/Safari/HiDPI
+  (function() {
+    var originalInitTile = L.GridLayer.prototype._initTile;
+    L.GridLayer.include({
+      _initTile: function (tile) {
+        originalInitTile.call(this, tile);
+        var tileSize = this.getTileSize();
+        tile.style.width = (tileSize.x + 1) + 'px';
+        tile.style.height = (tileSize.y + 1) + 'px';
+      }
+    });
+  })();
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+  // Collapsible Filters for Narrow Screens
+  const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+  const mapSidebar = document.querySelector('.map-sidebar');
+  if (sidebarToggleBtn && mapSidebar) {
+    // If narrow, default to collapsed on load
+    if (window.innerWidth <= 992) {
+      mapSidebar.classList.add('collapsed-filters');
+    }
+    
+    sidebarToggleBtn.addEventListener('click', () => {
+      if (window.innerWidth <= 992) {
+        mapSidebar.classList.toggle('collapsed-filters');
+      }
+    });
+  }
 
-    var pointLayer = L.layerGroup();
-    var pointClusterGroup = L.markerClusterGroup();
-    var heatmapLayer = L.layerGroup();
+  // Print Mode URL parameter verification
+  if (window.location.search.includes('print')) {
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    const curationSection = document.querySelector('.curation-filter-section');
+    const printLogo = document.querySelector('.sidebar-print-logo');
+    if (sidebarHeader) sidebarHeader.style.display = 'none';
+    if (curationSection) curationSection.style.display = 'none';
+    if (printLogo) printLogo.style.display = 'block';
+  }
 
-    // Data for markers
-    var pointLocations = [
-      {% for case in site.cases %}
-        {% if case.curation-decision == "Do not include" %}{% continue %}{% endif %}
-        {% for org_slug in case.lead-organisations %}
-          {% assign org = site.organisations | where: "slug", org_slug | first %}
-          {% if org %}
-            {% for loc_slug in org.main-location %}
-              {% assign loc = site.locations | where: "slug", loc_slug | first %}
-              {% if loc.latitude and loc.longitude %}
-              {
-                lat: {{ loc.latitude }},
-                lng: {{ loc.longitude }},
-                title: "{{ org.title | escape }}",
-                type: "Organisation",
-                color: "#2196F3",
-                case: "{{ case.title | escape }}",
-                url: "{{ org.url | relative_url }}",
-                caseUrl: "{{ case.url | relative_url }}"
-              },
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-        {% for part_slug in case.participants %}
-          {% assign part = site.participants | where: "slug", part_slug | first %}
-          {% if part %}
-            {% assign loc_titles = "" | split: "," %}
-            {% for l_slug in part.locations %}
-              {% assign l_item = site.locations | where: "slug", l_slug | first %}
-              {% if l_item %}
-                {% assign l_title_escaped = l_item.title | escape %}
-                {% assign loc_titles = loc_titles | push: l_title_escaped %}
-              {% endif %}
-            {% endfor %}
-            {% assign locations_list = loc_titles | join: ", " %}
-            {% for loc_slug in part.locations %}
-              {% assign loc = site.locations | where: "slug", loc_slug | first %}
-              {% if loc.latitude and loc.longitude %}
-              {
-                lat: {{ loc.latitude }},
-                lng: {{ loc.longitude }},
-                title: "{{ part.title | escape }}",
-                type: "Participants",
-                color: "#FF9800",
-                case: "{{ case.title | escape }}",
-                caseUrl: "{{ case.url | relative_url }}",
-                url: "{{ case.url | relative_url }}",
-                count: "{{ part.how-many-people-took-part | escape }}",
-                locationsList: "{{ locations_list }}"
-              },
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
-    ];
+  // 1. Initialise the Map
+  const map = L.map('map').setView([20, 0], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
 
-    // Aggregated data for country highlighting
-    var countryData = {};
-    {% for case in site.cases %}
-      {% if case.curation-decision == "Do not include" %}{% continue %}{% endif %}
-      {% for org_slug in case.lead-organisations %}
-        {% assign org = site.organisations | where: "slug", org_slug | first %}
-        {% if org %}
-          {% for loc_slug in org.main-location %}
-            {% assign loc = site.locations | where: "slug", loc_slug | first %}
-            {% if loc.country-code %}
-              (function() {
-                var code = "{{ loc.country-code }}";
-                var name = "{{ loc.title | escape }}";
-                var caseTitle = "{{ case.title | escape }}";
-                var caseSlug = "{{ case.slug }}";
-                var caseUrl = "{{ case.url | relative_url }}";
-                if (!countryData[code]) { countryData[code] = { count: 0, cases: {}, name: name }; }
-                if (!countryData[code].cases[caseSlug]) {
-                  countryData[code].cases[caseSlug] = { title: caseTitle, url: caseUrl };
-                  countryData[code].count++;
-                }
-              })();
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
+  const markerClusterGroup = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    maxClusterRadius: 40
+  });
+
+  const pointLayer = L.layerGroup();
+  let geojsonData = null;
+  let geojsonLayer = null;
+
+  // 1b. Fetch GeoJSON for country heatmap
+  fetch('https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson')
+    .then(res => res.json())
+    .then(data => {
+      geojsonData = data;
+      if (allCases.length > 0) {
+        updateFiltersAndUI();
+      }
+    })
+    .catch(err => console.error("Error loading GeoJSON for heatmap:", err));
+
+  // Global variables to store loaded data
+  let allCases = [];
+  let methodCounts = {};
+  let activeMapLayer = 'participants';
+  
+  // DOM References
+  const methodsFiltersContainer = document.getElementById('methods-filters');
+  const statsCases = document.getElementById('stats-cases');
+  const statsCountries = document.getElementById('stats-countries');
+  const statsContinents = document.getElementById('stats-continents');
+  const statsParticipants = document.getElementById('stats-participants');
+  const statsMessages = document.getElementById('stats-messages');
+  const casesGridList = document.getElementById('cases-grid-list');
+  const casesCountHeader = document.getElementById('cases-count-header');
+  const resetBtn = document.getElementById('reset-all-btn');
+
+
+
+  // 2. Fetch Aggregated Cases Data
+  fetch('/assets/data/cases_aggregated.json')
+    .then(response => response.json())
+    .then(data => {
+      allCases = data;
       
-      {% for part_slug in case.participants %}
-        {% assign part = site.participants | where: "slug", part_slug | first %}
-        {% if part %}
-          {% for loc_slug in part.locations %}
-            {% assign loc = site.locations | where: "slug", loc_slug | first %}
-            {% if loc.country-code %}
-              (function() {
-                var code = "{{ loc.country-code }}";
-                var name = "{{ loc.title | escape }}";
-                var caseTitle = "{{ case.title | escape }}";
-                var caseSlug = "{{ case.slug }}";
-                var caseUrl = "{{ case.url | relative_url }}";
-                if (!countryData[code]) { countryData[code] = { count: 0, cases: {}, name: name }; }
-                if (!countryData[code].cases[caseSlug]) {
-                  countryData[code].cases[caseSlug] = { title: caseTitle, url: caseUrl };
-                  countryData[code].count++;
-                }
-              })();
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-    {% endfor %}
+      // Compute methods occurrence frequency for sorting and counting
+      computeMethodsFreq();
 
-    // 1. Add markers to standard layer and cluster groups
-    var bounds = L.latLngBounds();
-    pointLocations.forEach(function(loc) {
-        var marker = L.circleMarker([loc.lat, loc.lng], {
-          radius: 8,
-          fillColor: loc.color,
-          color: "#fff",
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 0.8
+      // Listen for checkbox changes (including 'Full cases only' toggle)
+      document.querySelectorAll('.filter-section input[type="checkbox"], .bottom-filters-section input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateFiltersAndUI);
+      });
+
+      // Listen for location link selectors
+      const btnShowParticipants = document.getElementById('btn-show-participants');
+      const btnShowOrganisations = document.getElementById('btn-show-organisations');
+      
+      btnShowParticipants.addEventListener('click', () => {
+        activeMapLayer = 'participants';
+        btnShowParticipants.classList.add('active');
+        btnShowOrganisations.classList.remove('active');
+        updateFiltersAndUI();
+      });
+      
+      btnShowOrganisations.addEventListener('click', () => {
+        activeMapLayer = 'organisations';
+        btnShowOrganisations.classList.add('active');
+        btnShowParticipants.classList.remove('active');
+        updateFiltersAndUI();
+      });
+
+      // Listen for cluster checkbox
+      document.getElementById('map-cluster-toggle').addEventListener('change', updateFiltersAndUI);
+
+      // Initial filter run (draws everything)
+      updateFiltersAndUI();
+    })
+    .catch(error => {
+      console.error("Error loading aggregated cases:", error);
+    });
+
+  // Reset Button logic
+  resetBtn.addEventListener('click', () => {
+    // Uncheck all sidebar and bottom checkboxes
+    document.querySelectorAll('.map-sidebar input[type="checkbox"], .bottom-filters-section input[type="checkbox"]').forEach(cb => cb.checked = false);
+    
+    // Reset map controls
+    document.getElementById('map-cluster-toggle').checked = true;
+    
+    activeMapLayer = 'participants';
+    document.getElementById('btn-show-participants').classList.add('active');
+    document.getElementById('btn-show-organisations').classList.remove('active');
+
+    updateFiltersAndUI();
+  });
+
+  // 3. Methods aggregation
+  function computeMethodsFreq() {
+    methodCounts = {};
+    allCases.forEach(c => {
+      if (c.methods && Array.isArray(c.methods)) {
+        c.methods.forEach(m => {
+          methodCounts[m] = (methodCounts[m] || 0) + 1;
         });
-
-        if (loc.type === "Participants") {
-            var popupText = "";
-            var countVal = loc.count ? loc.count.trim() : "";
-            if (countVal !== "") {
-                popupText = "<strong>" + countVal + "</strong> people took part in a participatory process on AI in <strong>" + loc.locationsList + "</strong> through <a href='" + loc.caseUrl + "'><strong>" + loc.case + "</strong></a>.";
-            } else {
-                popupText = "Participants took part in a participatory process on AI in <strong>" + loc.locationsList + "</strong> through <a href='" + loc.caseUrl + "'><strong>" + loc.case + "</strong></a>.";
-            }
-            marker.bindPopup(popupText);
-        } else {
-            marker.bindPopup("<strong>Lead Organisation:</strong> <a href='" + loc.url + "'><strong>" + loc.title + "</strong></a><br>" + 
-                             "Lead organiser for <a href='" + loc.caseUrl + "'>" + loc.case + "</a>.");
-        }
-                         
-        pointLayer.addLayer(marker);
-        pointClusterGroup.addLayer(marker);
-        bounds.extend([loc.lat, loc.lng]);
+      }
     });
+  }
 
-    // 2. Load and style countries in heatmapLayer
-    fetch('https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson')
-      .then(res => res.json())
-      .then(geojsonData => {
-        L.geoJson(geojsonData, {
-          style: function(feature) {
-            var code = feature.properties.ISO_A2 || feature.properties.iso_a2;
-            var data = countryData[code];
-            return {
-              fillColor: data ? '#E91E63' : 'transparent',
-              weight: data ? 1 : 0,
-              opacity: 1,
-              color: 'white',
-              fillOpacity: data ? Math.min(0.2 + (data.count * 0.2), 0.7) : 0
-            };
-          },
-          onEachFeature: function(feature, layer) {
-            var code = feature.properties.ISO_A2 || feature.properties.iso_a2;
-            var data = countryData[code];
-            if (data) {
-              layer.on('click', function(e) {
-                L.DomEvent.stopPropagation(e);
-                displayCases(data);
-              });
-            }
-          }
-        }).addTo(heatmapLayer);
-      });
-
-    // Initial display selection based on Cluster checkbox
-    var clusterToggle = document.getElementById('cluster-toggle');
-    var clusterToggleLabel = document.getElementById('cluster-toggle-label');
-    var currentPointsLayer = clusterToggle.checked ? pointClusterGroup : pointLayer;
-    currentPointsLayer.addTo(map);
-
-    // Toggle Logic
-    document.querySelectorAll('input[name="map-view"]').forEach(function(radio) {
-      radio.addEventListener('change', function() {
-        if (this.value === 'points') {
-          map.removeLayer(heatmapLayer);
-          
-          currentPointsLayer = clusterToggle.checked ? pointClusterGroup : pointLayer;
-          map.addLayer(currentPointsLayer);
-          
-          clusterToggleLabel.classList.remove('disabled');
-          clusterToggle.disabled = false;
-          
-          document.getElementById('case-list-container').style.display = 'none';
-        } else {
-          map.removeLayer(pointLayer);
-          map.removeLayer(pointClusterGroup);
-          map.addLayer(heatmapLayer);
-          
-          clusterToggleLabel.classList.add('disabled');
-          clusterToggle.disabled = true;
-        }
-      });
-    });
-
-    clusterToggle.addEventListener('change', function() {
-      var viewMode = document.querySelector('input[name="map-view"]:checked').value;
-      if (viewMode === 'points') {
-        map.removeLayer(pointLayer);
-        map.removeLayer(pointClusterGroup);
-        
-        currentPointsLayer = this.checked ? pointClusterGroup : pointLayer;
-        map.addLayer(currentPointsLayer);
+  // 3a. Update Fixed Facet Labels (Modality, Level, Theme)
+  function updateFixedFacetLabels(containerId, countMap) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const labels = container.querySelectorAll('.filter-label');
+    labels.forEach(label => {
+      const input = label.querySelector('input');
+      const value = input.value;
+      const count = countMap[value] || 0;
+      
+      const countSpan = label.querySelector('.filter-count');
+      if (countSpan) {
+        countSpan.innerText = '(' + count + ')';
+      }
+      
+      if (input.checked) {
+        label.classList.add('active-checked');
       } else {
-        currentPointsLayer = this.checked ? pointClusterGroup : pointLayer;
+        label.classList.remove('active-checked');
+      }
+      
+      if (count === 0) {
+        label.classList.add('zero-count');
+      } else {
+        label.classList.remove('zero-count');
+      }
+    });
+  }
+
+  // 3b. Render Methods checkboxes dynamically (sorted, count-filtered, touchscreen-optimized)
+  function updateMethodsCheckboxes(activeCounts, selectedMethods) {
+    const methodsToRender = [];
+    const allMethodNames = new Set([...Object.keys(methodCounts), ...selectedMethods]);
+    
+    allMethodNames.forEach(m => {
+      const count = activeCounts[m] || 0;
+      const isChecked = selectedMethods.includes(m);
+      // Hide methods with count 0 unless they are checked
+      if (count > 0 || isChecked) {
+        methodsToRender.push({ name: m, count: count, checked: isChecked });
       }
     });
 
-    function displayCases(data) {
-      var container = document.getElementById('case-list-container');
-      var title = document.getElementById('selected-country-name');
-      var list = document.getElementById('case-list');
-      
-      title.innerText = "Cases in " + data.name;
-      list.innerHTML = "";
-      
-      Object.values(data.cases).forEach(function(c) {
-        var li = document.createElement('li');
-        var a = document.createElement('a');
-        a.href = c.url;
-        a.innerText = c.title;
-        li.appendChild(a);
-        list.appendChild(li);
-      });
-      
-      container.style.display = "block";
-      container.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    if (pointLocations.length > 0) {
-        map.fitBounds(bounds, { padding: [50, 50] });
-    }
-
-    // ==========================================
-    // DASHBOARD COMPUTATIONS & CHARTS
-    // ==========================================
-
-    const countryToContinent = {
-      // Africa
-      'GH': 'Africa', 'KE': 'Africa', 'TG': 'Africa', 'NG': 'Africa', 'ZA': 'Africa', 'EG': 'Africa', 'MA': 'Africa', 'TZ': 'Africa', 'UG': 'Africa', 'DZ': 'Africa', 'ET': 'Africa',
-      // Europe
-      'AT': 'Europe', 'DE': 'Europe', 'GB': 'Europe', 'LT': 'Europe', 'IT': 'Europe', 'CH': 'Europe', 'FI': 'Europe',
-      'FR': 'Europe', 'ES': 'Europe', 'NL': 'Europe', 'BE': 'Europe', 'SE': 'Europe', 'NO': 'Europe', 'DK': 'Europe',
-      'PL': 'Europe', 'IE': 'Europe', 'PT': 'Europe', 'GR': 'Europe', 'CZ': 'Europe', 'HU': 'Europe', 'RO': 'Europe',
-      // North America
-      'CA': 'North America', 'US': 'North America', 'MX': 'North America', 'CU': 'North America', 'PR': 'North America',
-      // South America
-      'BO': 'South America', 'AR': 'South America', 'BR': 'South America', 'UY': 'South America', 'CO': 'South America', 'CL': 'South America', 'PE': 'South America', 'VE': 'South America', 'EC': 'South America',
-      // Asia
-      'JP': 'Asia', 'IN': 'Asia', 'CN': 'Asia', 'KR': 'Asia', 'SG': 'Asia', 'ID': 'Asia', 'MY': 'Asia', 'TH': 'Asia', 'VN': 'Asia', 'PH': 'Asia', 'PK': 'Asia', 'BD': 'Asia', 'TR': 'Asia', 'IL': 'Asia', 'SA': 'Asia',
-      // Oceania
-      'AU': 'Oceania', 'NZ': 'Oceania', 'FJ': 'Oceania', 'PG': 'Oceania'
-    };
-
-    // Load participants and cases arrays
-    var allParticipants = [
-      {% for part in site.participants %}
-        {% assign linked_case_valid = false %}
-        {% for case_slug in part.cases %}
-          {% assign case_obj = site.cases | where: "slug", case_slug | first %}
-          {% if case_obj and case_obj.curation-decision != "Do not include" %}
-            {% assign linked_case_valid = true %}
-          {% endif %}
-        {% endfor %}
-        {% if linked_case_valid == false %}{% continue %}{% endif %}
-      {
-        slug: {{ part.slug | jsonify }},
-        title: {{ part.title | jsonify }},
-        cases: {{ part.cases | jsonify }},
-        howManyTookPart: "{{ part.how-many-people-took-part | escape }}",
-        methods: {{ part.which-of-the-following-methods-were-used-to | jsonify }},
-        locations: [
-          {% for loc_slug in part.locations %}
-            {% assign loc = site.locations | where: "slug", loc_slug | first %}
-            {% if loc %}
-            {
-              slug: {{ loc.slug | jsonify }},
-              name: {{ loc.name | default: loc.title | jsonify }},
-              countryCode: {{ loc.country-code | jsonify }}
-            },
-            {% endif %}
-          {% endfor %}
-        ]
-      },
-      {% endfor %}
-    ];
-
-    var allCases = [
-      {% for case in site.cases %}
-      {% if case.curation-decision == "Do not include" %}{% continue %}{% endif %}
-      {
-        slug: {{ case.slug | jsonify }},
-        title: {{ case.title | jsonify }},
-        url: {{ case.url | relative_url | jsonify }},
-        startYear: "{{ case.what-year-did-the-project-start | escape }}",
-        concludeYear: "{{ case.what-year-did-the-project-conclude | escape }}"
-      },
-      {% endfor %}
-    ];
-
-    // Compute Stats
-    var totalCases = allCases.length;
-    var countriesSet = new Set();
-    var continentsSet = new Set();
-    var totalParticipants = 0;
-
-    allParticipants.forEach(function(part) {
-        // Sum participants count
-        if (part.howManyTookPart) {
-            var cleanedNum = part.howManyTookPart.replace(/,/g, '').trim();
-            var num = parseInt(cleanedNum);
-            if (!isNaN(num)) {
-                totalParticipants += num;
-            }
-        }
-
-        // Collect countries and continents
-        if (part.locations && Array.isArray(part.locations)) {
-            part.locations.forEach(function(loc) {
-                if (loc.countryCode) {
-                    var code = loc.countryCode.toUpperCase();
-                    countriesSet.add(code);
-                    
-                    var continent = countryToContinent[code];
-                    if (continent) {
-                        continentsSet.add(continent);
-                    }
-                }
-            });
-        }
-    });
-
-    // Find Earliest Case Year
-    var earliestYear = Infinity;
-    allCases.forEach(function(c) {
-        if (c.startYear) {
-            var yr = parseInt(c.startYear);
-            if (!isNaN(yr) && yr < earliestYear) {
-                earliestYear = yr;
-            }
-        }
-    });
-    if (earliestYear === Infinity) {
-        earliestYear = "N/A";
-    }
-
-    // Populate Top Stats DOM
-    document.getElementById('stat-cases').innerText = totalCases;
-    document.getElementById('stat-countries').innerText = countriesSet.size > 0 ? countriesSet.size : "-";
-    document.getElementById('stat-continents').innerText = continentsSet.size > 0 ? continentsSet.size : "-";
-    document.getElementById('stat-participants').innerText = totalParticipants > 0 ? totalParticipants.toLocaleString() : "-";
-    document.getElementById('stat-earliest').innerText = earliestYear;
-
-    // Calculate Methods used across cases
-    var methodCounts = {};
-    var caseMethods = {}; // caseSlug -> Set of methods used in this case
-
-    allParticipants.forEach(function(part) {
-        var methods = part.methods || [];
-        var cases = part.cases || [];
-        
-        cases.forEach(function(caseSlug) {
-            if (!caseMethods[caseSlug]) {
-                caseMethods[caseSlug] = new Set();
-            }
-            methods.forEach(function(method) {
-                caseMethods[caseSlug].add(method);
-            });
-        });
-    });
-
-    // Count cases per method
-    Object.values(caseMethods).forEach(function(methodsSet) {
-        methodsSet.forEach(function(method) {
-            methodCounts[method] = (methodCounts[method] || 0) + 1;
-        });
-    });
-
-    // Sort methods by frequency
-    var sortedMethods = Object.keys(methodCounts).map(function(method) {
-        return { name: method, count: methodCounts[method] };
-    }).sort(function(a, b) {
+    // Sort: checked ones first, then by count descending, then alphabetical
+    methodsToRender.sort((a, b) => {
+      if (a.checked !== b.checked) {
+        return a.checked ? -1 : 1;
+      }
+      if (b.count !== a.count) {
         return b.count - a.count;
+      }
+      return a.name.localeCompare(b.name);
     });
 
-    // Limit to 6 items + others
-    var displayMethods = [];
-    if (sortedMethods.length > 6) {
-        displayMethods = sortedMethods.slice(0, 6);
-        var remainingDistinctCount = sortedMethods.length - 6;
-        if (remainingDistinctCount > 0) {
-            displayMethods.push({ name: remainingDistinctCount + ' other methods', count: 0 });
-        }
+    methodsFiltersContainer.innerHTML = '';
+    methodsToRender.forEach(method => {
+      const label = document.createElement('label');
+      label.className = 'filter-label' + (method.checked ? ' active-checked' : '') + (method.count === 0 ? ' zero-count' : '');
+      
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.value = method.name;
+      input.checked = method.checked;
+      input.addEventListener('change', updateFiltersAndUI);
+
+      const spanText = document.createTextNode(' ' + method.name);
+      
+      const countSpan = document.createElement('span');
+      countSpan.className = 'filter-count';
+      countSpan.innerText = '(' + method.count + ')';
+
+      label.appendChild(input);
+      label.appendChild(spanText);
+      label.appendChild(countSpan);
+      
+      methodsFiltersContainer.appendChild(label);
+    });
+
+    // Adjust scrollable class dynamically
+    if (methodsToRender.length > 5) {
+      methodsFiltersContainer.classList.add('scrollable-facet');
     } else {
-        displayMethods = sortedMethods;
+      methodsFiltersContainer.classList.remove('scrollable-facet');
+    }
+  }
+
+  // 3d. Update Scale Facet Labels as percentages
+  function updateScalePercentageLabels(containerId, countMap, totalCount) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const buttons = container.querySelectorAll('.scale-btn');
+    buttons.forEach(btn => {
+      const input = btn.querySelector('input');
+      const value = input.value;
+      const count = countMap[value] || 0;
+      
+      const pct = totalCount > 0 ? Math.round((count / totalCount) * 100) : 0;
+      const pctSpan = btn.querySelector('.scale-percentage');
+      if (pctSpan) {
+        pctSpan.innerText = '(' + pct + '%)';
+      }
+      
+      if (input.checked) {
+        btn.classList.add('active-checked');
+      } else {
+        btn.classList.remove('active-checked');
+      }
+      
+      if (count === 0) {
+        btn.classList.add('zero-count');
+      } else {
+        btn.classList.remove('zero-count');
+      }
+    });
+  }
+
+
+
+  // 5. Filter application
+  function updateFiltersAndUI() {
+    // Collect active filter choices
+    const fullCasesOnly = document.getElementById('full-cases-only-toggle').checked;
+    const selectedMods = Array.from(document.querySelectorAll('#modality-filters input:checked')).map(cb => cb.value);
+    const selectedLevels = Array.from(document.querySelectorAll('#level-filters input:checked')).map(cb => cb.value);
+    const selectedMethodsCats = Array.from(document.querySelectorAll('#methodology-filters input:checked')).map(cb => cb.value);
+    const selectedThemes = Array.from(document.querySelectorAll('#theme-filters input:checked')).map(cb => cb.value);
+    const selectedMethods = Array.from(document.querySelectorAll('#methods-filters input:checked')).map(cb => cb.value);
+ 
+    // Helpers to check match
+    const matchesCuration = (c) => !fullCasesOnly || (c.curation_decision === 'Featured Full Case' || c.curation_decision === 'Full Case');
+    const matchesModality = (c, mods) => mods.length === 0 || (c.modalities && c.modalities.some(m => mods.includes(m)));
+    const matchesLevel = (c, levels) => levels.length === 0 || levels.includes(c.level_of_engagement);
+    const matchesMethodCategory = (c, cats) => cats.length === 0 || (c.method_categories && c.method_categories.some(cat => cats.includes(cat)));
+    const matchesTheme = (c, themes) => themes.length === 0 || (c.themes && c.themes.some(t => themes.includes(t)));
+    const matchesMethod = (c, meths) => meths.length === 0 || (c.methods && c.methods.some(m => meths.includes(m)));
+ 
+    // Filter Cases Array (Matches all filters)
+    const filteredCases = allCases.filter(c => 
+      matchesCuration(c) &&
+      matchesModality(c, selectedMods) &&
+      matchesLevel(c, selectedLevels) &&
+      matchesMethodCategory(c, selectedMethodsCats) &&
+      matchesTheme(c, selectedThemes) &&
+      matchesMethod(c, selectedMethods)
+    );
+
+    // --- ORTHOGONAL FACET COUNTS ---
+
+    // 0. Curation Toggle count (shows count of Featured/Full cases matching other active filters)
+    const casesForCuration = allCases.filter(c =>
+      matchesModality(c, selectedMods) &&
+      matchesLevel(c, selectedLevels) &&
+      matchesMethodCategory(c, selectedMethodsCats) &&
+      matchesTheme(c, selectedThemes) &&
+      matchesMethod(c, selectedMethods)
+    );
+    const fullCasesCount = casesForCuration.filter(c => c.curation_decision === 'Featured Full Case' || c.curation_decision === 'Full Case').length;
+    document.getElementById('curation-facet-count').innerText = '(' + fullCasesCount + ')';
+
+    // 1. Modality counts (ignore Modality filter)
+    const casesForModality = allCases.filter(c =>
+      matchesCuration(c) &&
+      matchesLevel(c, selectedLevels) &&
+      matchesMethodCategory(c, selectedMethodsCats) &&
+      matchesTheme(c, selectedThemes) &&
+      matchesMethod(c, selectedMethods)
+    );
+    const modalityCounts = { "Offline": 0, "Online": 0, "Hybrid": 0 };
+    casesForModality.forEach(c => {
+      if (c.modalities) {
+        c.modalities.forEach(m => {
+          if (m in modalityCounts) modalityCounts[m]++;
+        });
+      }
+    });
+
+    // 2. Level counts (ignore Level filter)
+    const casesForLevel = allCases.filter(c =>
+      matchesCuration(c) &&
+      matchesModality(c, selectedMods) &&
+      matchesMethodCategory(c, selectedMethodsCats) &&
+      matchesTheme(c, selectedThemes) &&
+      matchesMethod(c, selectedMethods)
+    );
+    const levelCounts = { "Community": 0, "National": 0, "Professional": 0, "Global": 0 };
+    casesForLevel.forEach(c => {
+      if (c.level_of_engagement in levelCounts) {
+        levelCounts[c.level_of_engagement]++;
+      }
+    });
+
+    // 2b. Methodology counts (ignore Methodology filter)
+    const casesForMethodology = allCases.filter(c =>
+      matchesCuration(c) &&
+      matchesModality(c, selectedMods) &&
+      matchesLevel(c, selectedLevels) &&
+      matchesTheme(c, selectedThemes) &&
+      matchesMethod(c, selectedMethods)
+    );
+    const methodologyCounts = { "deliberation": 0, "participation": 0, "research": 0 };
+    casesForMethodology.forEach(c => {
+      if (c.method_categories) {
+        c.method_categories.forEach(cat => {
+          if (cat in methodologyCounts) {
+            methodologyCounts[cat]++;
+          }
+        });
+      }
+    });
+
+    // 3. Theme counts (ignore Theme filter)
+    const casesForTheme = allCases.filter(c =>
+      matchesCuration(c) &&
+      matchesModality(c, selectedMods) &&
+      matchesLevel(c, selectedLevels) &&
+      matchesMethodCategory(c, selectedMethodsCats) &&
+      matchesMethod(c, selectedMethods)
+    );
+    const themeCounts = {
+      "Artificial Intelligence": 0, "Education": 0, "Environment": 0,
+      "Healthcare": 0, "Infrastructure": 0, "Safety": 0, "Work": 0, "Youth": 0
+    };
+    casesForTheme.forEach(c => {
+      if (c.themes) {
+        c.themes.forEach(t => {
+          if (t in themeCounts) themeCounts[t]++;
+        });
+      }
+    });
+
+    // 4. Method counts (ignore Method filter)
+    const casesForMethod = allCases.filter(c =>
+      matchesCuration(c) &&
+      matchesModality(c, selectedMods) &&
+      matchesLevel(c, selectedLevels) &&
+      matchesMethodCategory(c, selectedMethodsCats) &&
+      matchesTheme(c, selectedThemes)
+    );
+    const activeMethodCounts = {};
+    casesForMethod.forEach(c => {
+      if (c.methods) {
+        c.methods.forEach(m => {
+          activeMethodCounts[m] = (activeMethodCounts[m] || 0) + 1;
+        });
+      }
+    });
+
+    // Update checkbox labels & dynamic lists
+    updateScalePercentageLabels('modality-filters', modalityCounts, casesForModality.length);
+    updateScalePercentageLabels('level-filters', levelCounts, casesForLevel.length);
+    updateScalePercentageLabels('methodology-filters', methodologyCounts, casesForMethodology.length);
+    updateFixedFacetLabels('theme-filters', themeCounts);
+    updateMethodsCheckboxes(activeMethodCounts, selectedMethods);
+
+    // Update Stats, Map, and Case list
+    updateStatistics(filteredCases);
+    updateMapPoints(filteredCases);
+    updateCaseListUI(filteredCases);
+  }
+
+  function updateStatistics(filteredCases) {
+    const countriesSet = new Set();
+    const continentsSet = new Set();
+    let totalParticipantsCount = 0;
+    let totalMessagesCount = 0;
+
+    filteredCases.forEach(c => {
+      if (c.countries) c.countries.forEach(co => countriesSet.add(co));
+      if (c.continents) c.continents.forEach(con => continentsSet.add(con));
+      totalParticipantsCount += c.total_participants || 0;
+      totalMessagesCount += c.message_count || 0;
+    });
+
+    // Animate stats counter transitions for a premium look
+    animateCounter(statsCases, filteredCases.length);
+    animateCounter(statsParticipants, totalParticipantsCount, '> ');
+    animateCounter(statsCountries, countriesSet.size);
+    animateCounter(statsContinents, continentsSet.size);
+    animateCounter(statsMessages, totalMessagesCount, '> ');
+
+    // Update explanation box dynamic process count
+    const explanationCountSpan = document.getElementById('explanation-processes-count');
+    if (explanationCountSpan) {
+      explanationCountSpan.innerText = filteredCases.length;
+    }
+  }
+
+  function animateCounter(element, targetValue, prefix = '') {
+    const startVal = parseInt(element.innerText.replace(/[^0-9]/g, '')) || 0;
+    if (startVal === targetValue) {
+      element.innerText = prefix + targetValue.toLocaleString();
+      return;
+    }
+    
+    const duration = 400; // ms
+    const startTime = performance.now();
+
+    function step(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Ease out cubic
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const currentVal = Math.floor(startVal + easeProgress * (targetValue - startVal));
+      
+      element.innerText = prefix + currentVal.toLocaleString();
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        element.innerText = prefix + targetValue.toLocaleString();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function updateMapPoints(filteredCases) {
+    // Clear both layers
+    markerClusterGroup.clearLayers();
+    pointLayer.clearLayers();
+
+    // Get current map settings
+    const mapLayerView = activeMapLayer;
+    const clusterMarkers = document.getElementById('map-cluster-toggle').checked;
+
+    const bounds = L.latLngBounds();
+    let pointCount = 0;
+
+    // SVG icon helper by curation type
+    function getCurationIconSvg(decision) {
+      if (decision === 'Featured Full Case') {
+        // Star
+        return `<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+      } else if (decision === 'Full Case') {
+        // Magnifying Glass
+        return `<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>`;
+      } else {
+        // Map Pin
+        return `<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
+      }
     }
 
-    // Calculate Initiative Timeline
-    var timelineCounts = {};
-    allCases.forEach(function(c) {
-        if (c.startYear) {
-            var yr = parseInt(c.startYear);
-            if (!isNaN(yr)) {
-                timelineCounts[yr] = (timelineCounts[yr] || 0) + 1;
+    filteredCases.forEach(c => {
+      if (c.points && Array.isArray(c.points)) {
+        c.points.forEach(point => {
+          // Filter point type
+          if (mapLayerView === 'participants' && point.type !== 'Participants') return;
+          if (mapLayerView === 'organisations' && point.type !== 'Organisation') return;
+
+          const decision = c.curation_decision || 'Mapping Entry';
+          let badgeClass = 'mapping';
+          let size = 18;
+          if (decision === 'Featured Full Case') {
+            badgeClass = 'featured';
+            size = 36;
+          } else if (decision === 'Full Case') {
+            badgeClass = 'full';
+            size = 26;
+          }
+
+          const svgIcon = getCurationIconSvg(decision);
+          const iconHtml = `
+            <div class="custom-marker-pin marker-${badgeClass} marker-type-${point.type.toLowerCase()}">
+              <span class="marker-icon-wrapper">${svgIcon}</span>
+            </div>
+          `;
+
+          const customIcon = L.divIcon({
+            className: 'custom-map-marker',
+            html: iconHtml,
+            iconSize: [size, size],
+            iconAnchor: [size / 2, size / 2]
+          });
+
+          const marker = L.marker([point.lat, point.lng], { icon: customIcon });
+
+          // Bind relevant popup text
+          let popupText = '';
+          if (point.type === 'Participants') {
+            const countVal = point.count ? String(point.count).trim() : '';
+            const parsedCount = parseInt(countVal.replace(/,/g, ''));
+            const countText = (!isNaN(parsedCount)) ? `<strong>${parsedCount.toLocaleString()}</strong> people` : 'Participants';
+            
+            const locations = point.locations_list ? point.locations_list.split(',').map(s => s.trim()).filter(Boolean) : [];
+            
+            if (locations.length > 5) {
+              const markerCountry = point.location_name || '';
+              const otherCountries = locations.filter(name => name !== markerCountry);
+              const firstFourOthers = otherCountries.slice(0, 4);
+              const remainingCount = otherCountries.length - firstFourOthers.length;
+              const pluralSuffix = remainingCount === 1 ? 'country' : 'countries';
+              
+              const countriesText = `${markerCountry ? `<strong>${markerCountry}</strong>` : ''}${firstFourOthers.length > 0 ? `, ${firstFourOthers.map(c => `<strong>${c}</strong>`).join(', ')}` : ''}, and <strong>${remainingCount}</strong> more ${pluralSuffix}`;
+              
+              popupText = `${countText} took part in this process on AI in ${countriesText} through <a href="${c.url}"><strong>${c.title}</strong></a>.`;
+            } else {
+              popupText = `${countText} took part in a participatory process on AI in <strong>${point.locations_list}</strong> through <a href="${c.url}"><strong>${c.title}</strong></a>.`;
             }
+          } else {
+            popupText = `<strong>Lead Organisation:</strong> <a href="${point.url}"><strong>${point.title}</strong></a><br>Lead organiser for <a href="${c.url}">${c.title}</a>.`;
+          }
+
+          marker.bindPopup(popupText);
+          
+          if (clusterMarkers) {
+            markerClusterGroup.addLayer(marker);
+          } else {
+            pointLayer.addLayer(marker);
+          }
+          
+          bounds.extend([point.lat, point.lng]);
+          pointCount++;
+        });
+      }
+    });
+
+    // Ensure only the active layer group is attached to the map
+    map.removeLayer(markerClusterGroup);
+    map.removeLayer(pointLayer);
+
+    if (clusterMarkers) {
+      map.addLayer(markerClusterGroup);
+    } else {
+      map.addLayer(pointLayer);
+    }
+
+    // Auto-fit bounds if we have points
+    if (pointCount > 0) {
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 12 });
+    }
+
+    // Render the heatmap layer behind markers
+    updateHeatmap(filteredCases);
+  }
+
+  function updateHeatmap(filteredCases) {
+    if (!geojsonData) return;
+
+    // Calculate country counts from filteredCases
+    const countryCounts = {};
+    filteredCases.forEach(c => {
+      if (c.countries) {
+        c.countries.forEach(code => {
+          const upperCode = code.toUpperCase();
+          countryCounts[upperCode] = (countryCounts[upperCode] || 0) + 1;
+        });
+      }
+    });
+
+    // Helper to get green scale colors
+    function getCountryColor(count) {
+      if (!count || count === 0) return 'transparent';
+      if (count === 1) return '#8da38a'; // Sage Green
+      if (count === 2) return '#496a40'; // Brand Green
+      return '#243f1f'; // Deep Forest Green
+    }
+
+    // If layer already exists, remove it from map
+    if (geojsonLayer) {
+      map.removeLayer(geojsonLayer);
+    }
+
+    // Recreate geojson layer with active styles
+    geojsonLayer = L.geoJson(geojsonData, {
+      style: function(feature) {
+        const code = (feature.properties.ISO_A2 || feature.properties.iso_a2 || '').toUpperCase();
+        const count = countryCounts[code] || 0;
+        return {
+          fillColor: getCountryColor(count),
+          weight: count > 0 ? 1 : 0.5,
+          opacity: count > 0 ? 0.7 : 0.15,
+          color: '#ffffff',
+          fillOpacity: count > 0 ? 0.45 + Math.min(count * 0.08, 0.35) : 0
+        };
+      },
+      onEachFeature: function(feature, layer) {
+        const code = (feature.properties.ISO_A2 || feature.properties.iso_a2 || '').toUpperCase();
+        const count = countryCounts[code] || 0;
+        const countryName = feature.properties.NAME || feature.properties.name || code;
+        if (count > 0) {
+          layer.bindTooltip(`<strong>${countryName}</strong>: ${count} case${count === 1 ? '' : 's'}`, {
+            sticky: true,
+            className: 'geojson-tooltip'
+          });
         }
+      }
     });
 
-    // Sort years chronologically
-    var sortedYears = Object.keys(timelineCounts).map(Number).sort(function(a, b) {
-        return a - b;
-    });
+    geojsonLayer.addTo(map);
+    geojsonLayer.bringToBack();
+  }
 
-    // Configure Chart.js Theme Defaults to match site fonts
-    if (window.Chart) {
-        Chart.defaults.font.family = "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-        Chart.defaults.color = '#556c50';
+  function updateCaseListUI(filteredCases) {
+    casesCountHeader.innerText = filteredCases.length + ' Participatory Processes Mapped';
+    casesGridList.innerHTML = '';
 
-        // 1. Methods Used Chart
-        var methodsCtx = document.getElementById('methods-chart').getContext('2d');
-        var methodsLabels = displayMethods.map(function(item) { return item.name; });
-        var methodsData = displayMethods.map(function(item) { return item.count; });
-
-        new Chart(methodsCtx, {
-            type: 'bar',
-            data: {
-                labels: methodsLabels,
-                datasets: [{
-                    label: 'Cases Using Method',
-                    data: methodsData,
-                    backgroundColor: 'rgba(73, 106, 64, 0.75)',
-                    borderColor: '#496a40',
-                    borderWidth: 1,
-                    borderRadius: 6,
-                    barThickness: 18
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#1a2f16',
-                        titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        padding: 10,
-                        cornerRadius: 8,
-                        displayColors: false
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(73, 106, 64, 0.06)'
-                        },
-                        ticks: {
-                            precision: 0
-                        }
-                    },
-                    y: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-
-        // 2. Timeline of Initiatives Chart
-        var timelineCtx = document.getElementById('timeline-chart').getContext('2d');
-        var timelineLabels = sortedYears;
-        var timelineData = sortedYears.map(function(yr) { return timelineCounts[yr]; });
-
-        var gradient = timelineCtx.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, 'rgba(73, 106, 64, 0.35)');
-        gradient.addColorStop(1, 'rgba(73, 106, 64, 0.00)');
-
-        new Chart(timelineCtx, {
-            type: 'line',
-            data: {
-                labels: timelineLabels,
-                datasets: [{
-                    label: 'Initiatives Started',
-                    data: timelineData,
-                    borderColor: '#496a40',
-                    borderWidth: 3,
-                    backgroundColor: gradient,
-                    fill: true,
-                    tension: 0.35,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#496a40',
-                    pointBorderWidth: 2,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    pointHoverBackgroundColor: '#496a40',
-                    pointHoverBorderColor: '#ffffff',
-                    pointHoverBorderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#1a2f16',
-                        titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        padding: 10,
-                        cornerRadius: 8,
-                        displayColors: false
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(73, 106, 64, 0.06)'
-                        },
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                }
-            }
-        });
+    if (filteredCases.length === 0) {
+      casesGridList.innerHTML = '<div style="color: #7a9476; text-align: center; padding: 2rem; font-style: italic;">No cases match the selected filters. Click "Reset All" to clear filters.</div>';
+      return;
     }
+
+    filteredCases.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'case-item-card';
+
+      const details = document.createElement('div');
+      details.className = 'case-item-details';
+
+      const titleLink = document.createElement('a');
+      titleLink.href = c.url;
+      titleLink.className = 'case-item-title';
+      titleLink.innerText = c.title;
+      details.appendChild(titleLink);
+
+      const meta = document.createElement('div');
+      meta.className = 'case-item-meta';
+
+      // Case Type badge
+      const curationVal = c.curation_decision || 'Mapping Entry';
+      let badgeClass = 'mapping';
+      let badgeLabel = 'Mapping';
+      if (curationVal === 'Featured Full Case') {
+        badgeClass = 'featured';
+        badgeLabel = 'Featured';
+      } else if (curationVal === 'Full Case') {
+        badgeClass = 'full';
+        badgeLabel = 'Full Case';
+      }
+
+      const curationSpan = document.createElement('span');
+      curationSpan.innerHTML = `<span class="tag-badge curation-${badgeClass}">${badgeLabel}</span>`;
+      meta.appendChild(curationSpan);
+
+      // Level badge
+      if (c.level_of_engagement) {
+        const levelSpan = document.createElement('span');
+        levelSpan.innerHTML = `<span class="tag-badge">${c.level_of_engagement} Scope</span>`;
+        meta.appendChild(levelSpan);
+      }
+
+      // Modalities list
+      if (c.modalities && c.modalities.length > 0) {
+        const modalitiesSpan = document.createElement('span');
+        modalitiesSpan.innerText = 'Modality: ' + c.modalities.join(', ');
+        meta.appendChild(modalitiesSpan);
+      }
+
+      // Themes tags
+      if (c.themes && c.themes.length > 0) {
+        const themesSpan = document.createElement('span');
+        themesSpan.innerText = 'Theme: ' + c.themes.join(', ');
+        meta.appendChild(themesSpan);
+      }
+
+      details.appendChild(meta);
+      card.appendChild(details);
+
+      const stats = document.createElement('div');
+      stats.className = 'case-item-stats';
+
+      if (c.total_participants > 0) {
+        const pNum = document.createElement('div');
+        pNum.className = 'case-stat-num';
+        pNum.innerText = c.total_participants.toLocaleString();
+        
+        const pLbl = document.createElement('div');
+        pLbl.className = 'case-stat-lbl';
+        pLbl.innerText = 'Participants';
+        
+        stats.appendChild(pNum);
+        stats.appendChild(pLbl);
+      } else {
+        const pNum = document.createElement('div');
+        pNum.className = 'case-stat-num';
+        pNum.style.color = '#7a9476';
+        pNum.innerText = '-';
+        
+        const pLbl = document.createElement('div');
+        pLbl.className = 'case-stat-lbl';
+        pLbl.innerText = 'Participants';
+        
+        stats.appendChild(pNum);
+        stats.appendChild(pLbl);
+      }
+
+      card.appendChild(stats);
+      casesGridList.appendChild(card);
+    });
+  }
 });
 </script>
-
-<!-- Bottom Dashboard Charts Section -->
-<div class="dashboard-charts-grid">
-  <!-- Chart Card 1: Methods -->
-  <div class="chart-card">
-    <h3 class="chart-title">Methods Used Across Cases</h3>
-    <div class="chart-container">
-      <canvas id="methods-chart"></canvas>
-    </div>
-  </div>
-  
-  <!-- Chart Card 2: Timeline -->
-  <div class="chart-card">
-    <h3 class="chart-title">Timeline of Initiatives</h3>
-    <div class="chart-container">
-      <canvas id="timeline-chart"></canvas>
-    </div>
-  </div>
-</div>
-
-<!-- Legend Card -->
-<div class="dashboard-legend-card">
-  <h4>Legend</h4>
-  <p style="margin-bottom: 0.5rem;">
-    <span class="legend-dot" style="background:#2196F3;"></span> Lead Organisations &nbsp;&nbsp;&nbsp;
-    <span class="legend-dot" style="background:#FF9800;"></span> Participants &nbsp;&nbsp;&nbsp;
-    <span class="legend-dot" style="background:#E91E63; opacity: 0.6;"></span> Countries with engagement (Heat-map)
-  </p>
-  <p><small style="color: #7a9476; font-style: italic;">Click on a highlighted country in Heat Map view mode to list its associated cases below the map.</small></p>
-</div>
-
