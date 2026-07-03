@@ -255,7 +255,7 @@ def aggregate():
         aggregated_cases.append({
             "title": case.get("title") or case.get("project-title") or case_slug,
             "slug": case_slug,
-            "url": case.get("url") or f"/cases/{case_slug}/",
+            "url": case.get("url") or f"/cases/{case_slug}.html",
             "curation_decision": case.get("curation-decision") or "Mapping Entry",
             "themes": case_themes,
             "level_of_engagement": case.get("level-of-engagement") or "",
