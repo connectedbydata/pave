@@ -712,10 +712,20 @@
       </div>
       {% endif %}
 
+      <br>
+
       <div class="case-copyright-statement">
         All images, quotes and materials are copyright their original creators unless otherwise stated. To cite this
         project, please see the 'Resources and recommendations' tab for suggested reports and citations.
       </div>
+
+      <br>
+
+      {% if page.redirect_from %}
+      <div class="case-permalink-statement">
+        <strong>Permalink:</strong> <a href="{{ site.url }}{{ site.baseurl }}{{ page.redirect_from | first }}">{{ site.url }}{{ site.baseurl }}{{ page.redirect_from | first }}</a>
+      </div>
+      {% endif %}
 
     </div>
   </div>

@@ -1,11 +1,18 @@
 ---
 layout: default
-title: Messages Presentation
-permalink: /messages/run/
+title: Messages Presentation (Detailed)
+permalink: /messages/run-alt/
 show_banner: false
 ---
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 <style>
+  :root {
+    --banner-height: 10vh;
+  }
+
   /* 1. Hide default Jekyll theme header & footer on slideshow page for immersive view */
   .site-header, .site-footer {
     display: none !important;
@@ -37,23 +44,51 @@ show_banner: false
     background: linear-gradient(135deg, #496a40 0%, #375030 100%);
   }
 
-  /* Top Minimalist Header Overlay (Controls) */
-  .top-header-overlay {
+  /* Header Banner Layout */
+  .header-banner {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    display: flex;
+    height: 10vh;
+    min-height: 10vh;
+    background: rgba(10, 16, 8, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem 2rem;
+    padding: 0.5rem 2rem;
     box-sizing: border-box;
-    z-index: 100;
-    pointer-events: none;
+    z-index: 110;
+    pointer-events: auto;
   }
 
-  .top-header-overlay * {
-    pointer-events: auto;
+  .header-left {
+    justify-self: start;
+    display: flex;
+    align-items: center;
+  }
+
+  .header-right {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+  }
+
+  .header-banner-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.2rem, 3vh, 1.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    margin: 0;
+    text-align: center;
+    justify-self: center;
+    line-height: 1.2;
   }
 
   /* Back Link */
@@ -94,8 +129,9 @@ show_banner: false
   /* Controls Section */
   .right-controls {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
   }
 
   /* Autoplay Capsule */
@@ -237,7 +273,7 @@ show_banner: false
   /* Static/Fixed Header Info & Logo (Stays static unless changing) */
   .fixed-top-header {
     position: absolute;
-    top: 6.5rem;
+    top: calc(3rem + var(--banner-height));
     left: 4.5rem;
     right: 4.5rem;
     display: flex;
@@ -303,7 +339,7 @@ show_banner: false
     flex-shrink: 0;
     position: relative;
     box-sizing: border-box;
-    padding: 11rem 4.5rem 5rem 4.5rem;
+    padding: calc(7.5rem + var(--banner-height)) 4.5rem 5rem 4.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -347,7 +383,7 @@ show_banner: false
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    max-width: 1100px;
+    max-width: 1200px;
     width: 100%;
     margin: 0 auto;
     z-index: 5;
@@ -359,35 +395,37 @@ show_banner: false
     align-items: center;
     gap: 0.65rem;
     margin-bottom: 0.85rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 
   .quote-icon-open {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(3rem, 6vh, 5rem);
-    color: #8fa68b;
+    font-size: clamp(3.5rem, 7vh, 6rem);
+    color: #c3e4be;
     line-height: 1;
     font-weight: 700;
   }
 
   .quote-type {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(1.4rem, 2.5vh, 2rem);
+    font-size: clamp(1.4rem, 2.8vh, 2.1rem);
     font-weight: 700;
-    color: #8fa68b;
+    color: #c3e4be;
     letter-spacing: 0.02em;
   }
 
   .quote-body {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(1.35rem, 2.8vh, 2.25rem); /* Constrained to prevent overlap with titles */
-    font-weight: 600;
-    line-height: 1.4;
+    font-size: clamp(1.6rem, 3.4vh, 2.75rem); /* Significantly larger to be prominent */
+    font-weight: 700;
+    line-height: 1.35;
     color: #ffffff;
     margin-bottom: 1.5rem;
     text-align: left;
     max-height: 48vh; /* Ensure quote fits and doesn't push into headers */
     overflow-y: auto;
     padding-right: 0.5rem;
+    text-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
   }
 
   /* Custom subtle scrollbar for scrollable quotes */
@@ -407,69 +445,50 @@ show_banner: false
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 
   .quote-icon-close {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(2.5rem, 5vh, 4rem);
-    color: #8fa68b;
+    font-size: clamp(3rem, 6vh, 5rem);
+    color: #c3e4be;
     line-height: 1;
     font-weight: 700;
     margin-top: 0.15rem;
   }
 
   .quote-credit {
-    font-size: clamp(0.9rem, 1.8vh, 1.2rem);
-    font-weight: 500;
-    color: #8fa68b;
+    font-size: clamp(1rem, 2.2vh, 1.35rem);
+    font-weight: 600;
+    color: #c3e4be;
     line-height: 1.4;
   }
 
-  /* Slide Navigation Controls (Bottom Right) */
-  .nav-controls-container {
-    position: absolute;
-    bottom: 2.5rem;
-    right: 3rem;
-    display: flex;
-    gap: 0.75rem;
-    z-index: 100;
-  }
 
-  .nav-circle-btn {
-    width: 2.85rem;
-    height: 2.85rem;
-    border-radius: 50%;
-    background-color: #ffffff;
-    color: #496a40;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
 
-  .nav-circle-btn:hover {
-    transform: scale(1.08);
-    background-color: #f3f4f6;
-  }
-
-  .nav-circle-btn svg {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  /* QR Code Widget (Bottom Left) */
-  .qr-widget {
+  .bottom-left-panel {
     position: absolute;
     bottom: 2rem;
     left: 3rem;
+    right: 15rem; /* leave space for right nav buttons at bottom right */
     z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    pointer-events: none;
+  }
+
+  .bottom-left-panel * {
+    pointer-events: auto;
+  }
+
+  /* QR Code Widget & Map Widget */
+  .qr-widget, .map-widget {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+    flex-shrink: 0;
     opacity: 1;
     transition: opacity 0.35s ease;
   }
@@ -483,7 +502,7 @@ show_banner: false
     display: block;
   }
 
-  .qr-label {
+  .qr-label, .map-label {
     font-size: 0.65rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.55);
@@ -491,13 +510,107 @@ show_banner: false
     text-transform: uppercase;
   }
 
+  /* Case Metadata Widget */
+  .case-meta-widget {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    max-width: 800px;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+  }
+
+  .case-meta-widget.fading {
+    opacity: 0;
+  }
+
+  .case-stats-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.4rem, 2.8vh, 2.2rem); /* Large stats text, matching case study title size */
+    font-weight: 700;
+    line-height: 1.25;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .case-stats-text .stats-light {
+    font-weight: 300;
+    opacity: 0.85;
+  }
+
+  .mini-map-container {
+    width: 240px;
+    height: 128px; /* Same height as QR code */
+    border-radius: 8px; /* Match QR code border radius */
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    background: #142011;
+  }
+
+  #mini-map {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+  }
+
+  /* Tooltip customization */
+  .leaflet-tooltip.mini-map-tooltip {
+    background-color: rgba(20, 32, 17, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    padding: 0.25rem 0.5rem;
+  }
+
+  .leaflet-tooltip-top.mini-map-tooltip::before {
+    border-top-color: rgba(20, 32, 17, 0.95);
+  }
+
   /* Responsive Styling */
+  @media (max-width: 1200px) {
+    .bottom-left-panel {
+      right: 12rem;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .header-banner {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+      gap: 0.75rem;
+      height: auto;
+      min-height: 10vh;
+      padding: 1rem 1.5rem;
+    }
+    .header-banner-text {
+      grid-row: 1;
+      font-size: clamp(1.1rem, 3.2vh, 1.6rem);
+      margin-bottom: 0.25rem;
+    }
+    .header-left {
+      grid-row: 2;
+      justify-self: flex-start;
+    }
+    .header-right {
+      grid-row: 2;
+      justify-self: flex-end;
+    }
+  }
+
   @media (max-width: 992px) {
     .slide-item {
-      padding: 13rem 3rem 4rem 3rem;
+      padding: calc(9rem + var(--banner-height)) 3rem 4rem 3rem;
     }
     .fixed-top-header {
-      top: 6.5rem;
+      top: calc(3rem + var(--banner-height));
       left: 3rem;
       right: 3rem;
     }
@@ -505,51 +618,91 @@ show_banner: false
       font-size: 1.8rem;
     }
     .quote-body {
-      font-size: 1.75rem;
+      font-size: 2.1rem;
+    }
+    .bottom-left-panel {
+      right: 10rem;
+      gap: 1rem;
+    }
+    .case-stats-text {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .map-widget {
+      display: none;
+    }
+    .bottom-left-panel {
+      right: 8rem;
+      left: 2rem;
+      bottom: 2rem;
+    }
+    .case-stats-text {
+      font-size: 1.25rem;
     }
   }
 
   @media (max-width: 768px) {
-    .top-header-overlay {
-      padding: 1rem;
-      flex-direction: column;
-      align-items: stretch;
+    .header-banner {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
       gap: 0.75rem;
+      padding: 1rem;
+      height: auto;
+      min-height: 10vh;
+    }
+    .header-banner-text {
+      grid-row: 1;
+      font-size: 1.1rem;
+    }
+    .header-left {
+      grid-row: 2;
+      justify-self: center;
+    }
+    .header-right {
+      grid-row: 3;
+      justify-self: center;
+      width: 100%;
     }
     .right-controls {
-      justify-content: space-between;
+      flex-direction: column;
       width: 100%;
+      gap: 0.5rem;
+      justify-content: space-between;
     }
     .autoplay-capsule {
       flex: 1;
       justify-content: space-between;
       padding: 0.35rem 0.85rem;
       gap: 0.5rem;
+      width: 100%;
     }
     .progress-bar-container {
       width: 60px;
     }
     .case-select-capsule {
       padding: 0.35rem 0.85rem;
+      width: 100%;
     }
     .case-select {
       max-width: none;
       width: 100%;
     }
     .back-to-cases {
-      align-self: flex-start;
+      align-self: center;
       padding: 0.4rem 1rem;
       font-size: 0.8rem;
     }
     .fixed-top-header {
-      top: 10rem;
+      top: calc(5rem + var(--banner-height));
       left: 1.5rem;
       right: 1.5rem;
       flex-direction: column-reverse;
       gap: 0.75rem;
     }
     .slide-item {
-      padding: 18rem 1.5rem 6rem 1.5rem;
+      padding: calc(11.5rem + var(--banner-height)) 1.5rem 6rem 1.5rem;
     }
     .slide-case-title {
       font-size: 1.45rem;
@@ -562,98 +715,75 @@ show_banner: false
       height: 2.75rem;
       align-self: flex-end;
     }
-    .quote-type {
-      font-size: 1.35rem;
-    }
-    .quote-icon-open {
-      font-size: 2.6rem;
-    }
-    .quote-body {
-      font-size: 1.35rem;
-      line-height: 1.45;
-    }
-    .quote-icon-close {
-      font-size: 2.2rem;
-    }
-    .quote-credit {
-      font-size: 0.88rem;
-    }
-    .bg-layer-halftone {
-      width: 120vw;
-      height: 120vw;
-      bottom: -72vw;
-      right: -72vw;
-    }
-    .nav-controls-container {
-      bottom: 1.5rem;
-      right: 1.5rem;
-    }
-    .nav-circle-btn {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
   }
 </style>
 
 <div class="slideshow-container" id="slideshow-container">
-  <!-- Top Minimalist Header Overlay -->
-  <div class="top-header-overlay">
-    <!-- Back to Messages -->
-    <a href="{{ '/messages/' | relative_url }}" class="back-to-cases" title="Back to Messages">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-      <span>Back to Messages</span>
-    </a>
+  <!-- Top Header Banner & Navigation Controls -->
+  <div class="header-banner">
+    <!-- Left: Back Button -->
+    <div class="header-left">
+      <a href="{{ '/messages/' | relative_url }}" class="back-to-cases" title="Back to Messages">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Back to Messages</span>
+      </a>
+    </div>
 
-    <!-- Controls capsule & case selector -->
-    <div class="right-controls">
-      <!-- Autoplay capsule -->
-      <div class="autoplay-capsule">
-        <button class="play-pause-btn" id="play-pause-btn" aria-label="Pause Autoplay">
-          <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-          </svg>
-          <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-        </button>
+    <!-- Center: Title -->
+    <h1 class="header-banner-text">What are people around the world saying about AI?</h1>
 
-        <select id="speed-select" class="speed-select" aria-label="Autoplay Speed">
-          <option value="14000">Slow (14s)</option>
-          <option value="10000">Medium (10s)</option>
-          <option value="7000" selected>Fast (7s)</option>
-        </select>
+    <!-- Right: Controls & Drop-down -->
+    <div class="header-right">
+      <div class="right-controls">
+        <!-- Autoplay capsule -->
+        <div class="autoplay-capsule">
+          <button class="play-pause-btn" id="play-pause-btn" aria-label="Pause Autoplay">
+            <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </button>
 
-        <button class="shuffle-btn" id="shuffle-btn" aria-label="Toggle Random Order" title="Toggle Random Order">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 3 21 3 21 8"></polyline>
-            <line x1="4" y1="20" x2="21" y2="3"></line>
-            <polyline points="21 16 21 21 16 21"></polyline>
-            <line x1="15" y1="15" x2="21" y2="21"></line>
-            <line x1="4" y1="4" x2="9" y2="9"></line>
-          </svg>
-        </button>
+          <select id="speed-select" class="speed-select" aria-label="Autoplay Speed">
+            <option value="14000">Slow (14s)</option>
+            <option value="10000" selected>Medium (10s)</option>
+            <option value="7000">Fast (7s)</option>
+          </select>
 
-        <div class="progress-bar-container">
-          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+          <button class="shuffle-btn" id="shuffle-btn" aria-label="Toggle Random Order" title="Toggle Random Order">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 3 21 3 21 8"></polyline>
+              <line x1="4" y1="20" x2="21" y2="3"></line>
+              <polyline points="21 16 21 21 16 21"></polyline>
+              <line x1="15" y1="15" x2="21" y2="21"></line>
+              <line x1="4" y1="4" x2="9" y2="9"></line>
+            </svg>
+          </button>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+          </div>
+
+          <div class="slide-counter" id="slide-counter">1 / 1</div>
         </div>
 
-        <div class="slide-counter" id="slide-counter">1 / 1</div>
-      </div>
-
-      <!-- Case Selection Capsule -->
-      <div class="case-select-capsule">
-        <select id="case-select" class="case-select" aria-label="Select Case Study">
-          {% assign opt_case_index = 0 %}
-          {% for case in site.cases %}
-            {% if case.messages %}
-              <option value="{{ opt_case_index }}">{{ case.title | escape }}</option>
-              {% assign opt_case_index = opt_case_index | plus: 1 %}
-            {% endif %}
-          {% endfor %}
-        </select>
+        <!-- Case Selection Capsule -->
+        <div class="case-select-capsule">
+          <select id="case-select" class="case-select" aria-label="Select Case Study">
+            {% assign opt_case_index = 0 %}
+            {% for case in site.cases %}
+              {% if case.messages %}
+                <option value="{{ opt_case_index }}">{{ case.title | escape }}</option>
+                {% assign opt_case_index = opt_case_index | plus: 1 %}
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -697,12 +827,164 @@ show_banner: false
               {% endif %}
             {% endif %}
 
+            {% assign deliberating_people = 0 %}
+            {% assign total_deliberating_person_hours = 0 %}
+            {% assign deliberating_people_with_hours = 0 %}
+
+            {% assign participating_people = 0 %}
+            {% assign total_participating_person_hours = 0 %}
+            {% assign participating_people_with_hours = 0 %}
+
+            {% assign contributing_people = 0 %}
+            {% assign other_people = 0 %}
+
+            {% assign has_collective_intelligence = false %}
+            {% assign has_non_delib_participated = false %}
+            {% assign has_non_delib_contributed = false %}
+
+            {% for part_slug in case.participants %}
+              {% assign part = site.participants | where: "slug", part_slug | first %}
+              {% if part %}
+                {% assign is_deliberative_group = false %}
+                {% assign is_participated_group = false %}
+                {% assign is_contributed_group = false %}
+                
+                {% for method in part.which-of-the-following-methods-were-used-to %}
+                  {% if method == "Collective Intelligence Process" %}
+                    {% assign has_collective_intelligence = true %}
+                  {% endif %}
+                  {% if site.data.methods_map.deliberated contains method %}
+                    {% assign is_deliberative_group = true %}
+                  {% endif %}
+                  {% if site.data.methods_map.participated contains method %}
+                    {% assign is_participated_group = true %}
+                  {% endif %}
+                  {% if site.data.methods_map.contributed contains method %}
+                    {% assign is_contributed_group = true %}
+                  {% endif %}
+                {% endfor %}
+
+                {% if is_deliberative_group %}
+                  {% if part.how-many-people-took-part %}
+                    {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+                    {% assign deliberating_people = deliberating_people | plus: p_count %}
+                    
+                    {% if part.on-average-how-many-hours-did-each-participant %}
+                      {% assign p_hours = part.on-average-how-many-hours-did-each-participant | plus: 0 %}
+                      {% assign group_hours = p_count | times: p_hours %}
+                      {% assign total_deliberating_person_hours = total_deliberating_person_hours | plus: group_hours %}
+                      {% assign deliberating_people_with_hours = deliberating_people_with_hours | plus: p_count %}
+                    {% endif %}
+                  {% endif %}
+                {% elsif is_participated_group %}
+                  {% assign has_non_delib_participated = true %}
+                  {% if part.how-many-people-took-part %}
+                    {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+                    {% assign participating_people = participating_people | plus: p_count %}
+                    
+                    {% if part.on-average-how-many-hours-did-each-participant %}
+                      {% assign p_hours = part.on-average-how-many-hours-did-each-participant | plus: 0 %}
+                      {% assign group_hours = p_count | times: p_hours %}
+                      {% assign total_participating_person_hours = total_participating_person_hours | plus: group_hours %}
+                      {% assign participating_people_with_hours = participating_people_with_hours | plus: p_count %}
+                    {% endif %}
+                  {% endif %}
+                {% elsif is_contributed_group %}
+                  {% assign has_non_delib_contributed = true %}
+                  {% if part.how-many-people-took-part %}
+                    {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+                    {% assign contributing_people = contributing_people | plus: p_count %}
+                  {% endif %}
+                {% else %}
+                  {% if part.how-many-people-took-part %}
+                    {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+                    {% assign other_people = other_people | plus: p_count %}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% assign avg_delib_hours = 0 %}
+            {% assign avg_delib_hours_display = "" %}
+            {% if deliberating_people_with_hours > 0 %}
+              {% assign raw_avg_delib_hours = total_deliberating_person_hours | times: 1.0 | divided_by: deliberating_people_with_hours %}
+              {% assign rounded_delib = raw_avg_delib_hours | round: 1 | append: "" %}
+              {% if rounded_delib contains ".0" %}
+                {% assign delib_parts = rounded_delib | split: "." %}
+                {% assign avg_delib_hours_display = delib_parts[0] %}
+              {% else %}
+                {% assign avg_delib_hours_display = rounded_delib %}
+              {% endif %}
+              {% assign avg_delib_hours = raw_avg_delib_hours %}
+            {% endif %}
+
+            {% assign avg_part_hours = 0 %}
+            {% assign avg_part_hours_display = "" %}
+            {% if participating_people_with_hours > 0 %}
+              {% assign raw_avg_part_hours = total_participating_person_hours | times: 1.0 | divided_by: participating_people_with_hours %}
+              {% assign rounded_part = raw_avg_part_hours | round: 1 | append: "" %}
+              {% if rounded_part contains ".0" %}
+                {% assign part_parts = rounded_part | split: "." %}
+                {% assign avg_part_hours_display = part_parts[0] %}
+              {% else %}
+                {% assign avg_part_hours_display = rounded_part %}
+              {% endif %}
+              {% assign avg_part_hours = raw_avg_part_hours %}
+            {% endif %}
+
+            {% assign non_delib_people = participating_people | plus: contributing_people | plus: other_people %}
+            {% assign non_delib_verb = "participated" %}
+            {% if has_non_delib_participated %}
+              {% assign non_delib_verb = "participated" %}
+            {% elsif has_non_delib_contributed %}
+              {% if has_collective_intelligence %}
+                {% assign non_delib_verb = "contributed to a collective intelligence process" %}
+              {% else %}
+                {% assign non_delib_verb = "contributed" %}
+              {% endif %}
+            {% endif %}
+
+            {% assign start_year = case.what-year-did-the-project-start %}
+            {% assign end_year = case.what-year-did-the-project-conclude %}
+            {% assign year_text = "" %}
+
+            {% if start_year and end_year %}
+              {% if start_year == end_year %}
+                {% assign year_text = "In " | append: start_year %}
+              {% else %}
+                {% assign year_text = "Between " | append: start_year | append: " and " | append: end_year %}
+              {% endif %}
+            {% elsif start_year %}
+              {% assign year_text = "In " | append: start_year %}
+            {% elsif end_year %}
+              {% assign year_text = "In " | append: end_year %}
+            {% endif %}
+
+            {% capture stats_text %}{% if year_text != "" %}<span class="stats-light">{{ year_text }}</span> {% endif %}{% if deliberating_people > 0 and non_delib_people > 0 %}{% if non_delib_people > 0 %}{{ non_delib_people }} participants{% else %}participants{% endif %} {{ non_delib_verb }}{% if non_delib_verb == "participated" and avg_part_hours > 0 %} over the course of {{ avg_part_hours_display }} hours{% endif %} and {% if deliberating_people > 0 %}{{ deliberating_people }}{% else %}others{% endif %} deliberated{% if avg_delib_hours > 0 %} over the course of {{ avg_delib_hours_display }} hours{% endif %} <span class="stats-light">to explore issues related to AI.</span>{% elsif deliberating_people > 0 %}{% if deliberating_people > 0 %}{{ deliberating_people }} participants{% else %}participants{% endif %} deliberated{% if avg_delib_hours > 0 %} over the course of {{ avg_delib_hours_display }} hours{% endif %} <span class="stats-light">to explore issues related to AI.</span>{% else %}{% if non_delib_people > 0 %}{{ non_delib_people }} participants{% else %}participants{% endif %} {{ non_delib_verb }}{% if non_delib_verb == "participated" and avg_part_hours > 0 %} over the course of {{ avg_part_hours_display }} hours{% endif %} <span class="stats-light">to explore issues related to AI.</span>{% endif %}{% endcapture %}
+
+            {% assign loc_array = "" | split: "" %}
+            {% for part_slug in case.participants %}
+              {% assign part = site.participants | where: "slug", part_slug | first %}
+              {% if part %}
+                {% for loc_slug in part.locations %}
+                  {% assign loc = site.locations | where: "slug", loc_slug | first %}
+                  {% if loc.latitude and loc.longitude %}
+                    {% capture loc_json %}{"lat":{{ loc.latitude }},"lng":{{ loc.longitude }},"name":"{{ loc.title | escape }}"}{% endcapture %}
+                    {% assign loc_array = loc_array | push: loc_json %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+            {% assign unique_locs = loc_array | uniq %}
+
             <div class="slide-item" 
                  data-slide-index="{{ slide_index }}"
                  data-case-index="{{ case_index }}"
                  data-case-title="{{ case.title | escape }} ({{case.what-year-did-the-project-start}} - {{case.what-year-did-the-project-conclude}})"
                  data-case-subtitle="{{ case.describe-the-subject-matter-in-your-own-words-one | escape }}"
                  data-case-url="{{ '/c/' | append: case.airtable_id | append: '/' | absolute_url }}"
+                 data-case-stats="{{ stats_text | escape }}"
+                 data-case-locations='[{{ unique_locs | join: "," }}]'
                  {% if bg_url %}data-bg-image="{{ bg_url | relative_url }}"{% endif %}>
 
               <!-- Center: Quote / Recommendation Body -->
@@ -731,26 +1013,43 @@ show_banner: false
     {% endfor %}
   </div>
 
-  <!-- QR Code Widget (Bottom Left) -->
-  <div class="qr-widget" id="qr-widget">
-    <div id="qr-code"></div>
-    <span class="qr-label">Scan to view case</span>
+  <!-- Bottom Left Panel -->
+  <div class="bottom-left-panel">
+    <!-- QR Code Widget -->
+    <div class="qr-widget" id="qr-widget">
+      <div id="qr-code"></div>
+      <span class="qr-label">Scan to view case</span>
+    </div>
+
+    <!-- Mini-Map Widget (Stays floating, does not fade out) -->
+    <div class="map-widget" id="map-widget">
+      <div class="mini-map-container">
+        <div id="mini-map"></div>
+      </div>
+      <span class="map-label">Participant Locations</span>
+    </div>
+
+    <!-- Case Stats Widget (Fades out/in) -->
+    <div class="case-meta-widget" id="case-meta-widget">
+      <p class="case-stats-text" id="case-stats-text"></p>
+    </div>
   </div>
 
-  <!-- Navigation Controls (Bottom Right) -->
-  <div class="nav-controls-container">
-    <button class="nav-circle-btn" id="prev-btn" aria-label="Previous slide">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
+  <!-- Edge Navigation Zones (Hover & Click to change slides) -->
+  <div class="edge-nav-zone nav-zone-left" id="prev-btn" aria-label="Previous slide" title="Previous Slide">
+    <div class="edge-nav-btn">
+      <svg viewBox="0 0 24 24">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
       </svg>
-    </button>
-    <button class="nav-circle-btn" id="next-btn" aria-label="Next slide">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
+    </div>
+  </div>
+
+  <div class="edge-nav-zone nav-zone-right" id="next-btn" aria-label="Next slide" title="Next Slide">
+    <div class="edge-nav-btn">
+      <svg viewBox="0 0 24 24">
+        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
       </svg>
-    </button>
+    </div>
   </div>
 </div>
 
@@ -760,6 +1059,17 @@ show_banner: false
 <!-- Slideshow Logic Engine -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // Spacing calculation helper for dynamic header banner height
+  function adjustHeaderSpacing() {
+    const banner = document.querySelector('.header-banner');
+    if (banner) {
+      const height = banner.offsetHeight;
+      document.documentElement.style.setProperty('--banner-height', `${height}px`);
+    }
+  }
+  adjustHeaderSpacing();
+  window.addEventListener('resize', adjustHeaderSpacing);
+
   const container = document.getElementById('slideshow-container');
   const track = document.getElementById('slides-track');
   const slides = document.querySelectorAll('.slide-item');
@@ -855,31 +1165,107 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Counter display
   slideCounter.innerText = `1 / ${totalSlides}`;
 
-  // QR Code widget
+  // QR Code & Mini-Map widget
   const qrWidget = document.getElementById('qr-widget');
   const qrCodeEl = document.getElementById('qr-code');
+  const caseMetaWidget = document.getElementById('case-meta-widget');
+  const caseStatsTextEl = document.getElementById('case-stats-text');
+  
   let qrInstance = null;
   let qrCurrentUrl = null;
+  let miniMap = null;
+  let markerGroup = null;
 
-  function updateQRCode(url) {
-    if (!url || url === qrCurrentUrl) return;
-    qrCurrentUrl = url;
+  function initMiniMap() {
+    const miniMapEl = document.getElementById('mini-map');
+    if (!miniMapEl) return;
+    
+    miniMap = L.map('mini-map', {
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      boxZoom: false
+    });
 
-    // Fade out
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(miniMap);
+
+    markerGroup = L.layerGroup().addTo(miniMap);
+  }
+
+  function updateQRCodeAndStats(url, statsText, locations) {
+    if (!url) return;
+
+    // 1. Update Mini Map immediately with smooth pan/zoom transition
+    if (miniMap && markerGroup) {
+      markerGroup.clearLayers();
+      miniMap.invalidateSize();
+      
+      if (locations && locations.length > 0) {
+        let bounds = [];
+        locations.forEach(loc => {
+          if (loc.lat && loc.lng) {
+            const marker = L.circleMarker([loc.lat, loc.lng], {
+              color: '#ffffff',
+              fillColor: '#ffd700',
+              fillOpacity: 0.8,
+              radius: 6,
+              weight: 1.5
+            });
+            marker.bindTooltip(loc.name, {
+              direction: 'top',
+              className: 'mini-map-tooltip'
+            });
+            marker.addTo(markerGroup);
+            bounds.push([loc.lat, loc.lng]);
+          }
+        });
+
+        if (bounds.length > 0) {
+          if (bounds.length === 1) {
+            miniMap.setView(bounds[0], 5, { animate: true, duration: 0.8 });
+          } else {
+            miniMap.fitBounds(bounds, { padding: [15, 15], animate: true, duration: 0.8 });
+          }
+        }
+      } else {
+        // World view fallback if no locations
+        miniMap.setView([20, 0], 1, { animate: true, duration: 0.8 });
+      }
+    }
+
+    // 2. Fade out QR and Stats text
     qrWidget.classList.add('fading');
+    if (caseMetaWidget) caseMetaWidget.classList.add('fading');
+
     setTimeout(() => {
-      // Clear previous QR
-      qrCodeEl.innerHTML = '';
-      qrInstance = new QRCode(qrCodeEl, {
-        text: url,
-        width: 128,
-        height: 128,
-        colorDark: '#ffffff',
-        colorLight: 'rgba(0,0,0,0)',
-        correctLevel: QRCode.CorrectLevel.L
-      });
-      // Fade back in
+      // 3. Update QR
+      if (url !== qrCurrentUrl) {
+        qrCurrentUrl = url;
+        qrCodeEl.innerHTML = '';
+        qrInstance = new QRCode(qrCodeEl, {
+          text: url,
+          width: 128,
+          height: 128,
+          colorDark: '#ffffff',
+          colorLight: 'rgba(0,0,0,0)',
+          correctLevel: QRCode.CorrectLevel.L
+        });
+      }
+
+      // 4. Update Stats Text
+      if (caseStatsTextEl) {
+        caseStatsTextEl.innerHTML = statsText;
+      }
+
+      // Fade back in QR and Stats
       qrWidget.classList.remove('fading');
+      if (caseMetaWidget) caseMetaWidget.classList.remove('fading');
     }, 300);
   }
 
@@ -921,8 +1307,16 @@ document.addEventListener('DOMContentLoaded', () => {
       // Cross-fade the fixed background layer
       crossFadeBackground(imageUrl);
 
-      // Update QR code for this case
-      updateQRCode(activeSlide.dataset.caseUrl);
+      // Parse case locations
+      let locations = [];
+      try {
+        locations = JSON.parse(activeSlide.dataset.caseLocations || '[]');
+      } catch (e) {
+        console.error("Error parsing case locations JSON:", e);
+      }
+
+      // Update QR code and stats next to it
+      updateQRCodeAndStats(activeSlide.dataset.caseUrl, activeSlide.dataset.caseStats, locations);
 
       // Fade out/in the case title block
       if (caseInfoEl) {
@@ -1077,9 +1471,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Initialize with random order by default
+  setRandomOrder(true);
+
   // Initialize the first dropdown value, fixed header content & QR code
-  if (slides[0]) {
-    const initialSlide = slides[0];
+  if (totalSlides > 0) {
+    const initialSlide = slides[orderArray[orderPosition]];
     const initialCaseIndex = parseInt(initialSlide.dataset.caseIndex);
     const initialTitle = initialSlide.dataset.caseTitle;
     const initialSubtitle = initialSlide.dataset.caseSubtitle;
@@ -1093,7 +1490,20 @@ document.addEventListener('DOMContentLoaded', () => {
     currentCaseIndex = initialCaseIndex;
 
     updateCaseSelect(initialCaseIndex);
-    updateQRCode(initialSlide.dataset.caseUrl);
+
+    // Initialize mini-map
+    initMiniMap();
+
+    // Parse case locations
+    let initialLocations = [];
+    try {
+      initialLocations = JSON.parse(initialSlide.dataset.caseLocations || '[]');
+    } catch (e) {
+      console.error("Error parsing case locations JSON:", e);
+    }
+
+    // Update QR code and case stats
+    updateQRCodeAndStats(initialSlide.dataset.caseUrl, initialSlide.dataset.caseStats, initialLocations);
 
     // Set initial background image
     const initialBgLayer = activeBgLayer === 'a' ? bgLayerA : bgLayerB;

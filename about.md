@@ -5,7 +5,7 @@ permalink: /about/
 menus: [header]
 ---
 
-**Suggested citation:** Susan Oman, Emily Rempel, Erin McCloskey, Tim Davies, Octavia Field Reid, Canning Malkin (2006) PAVE (Public AI Voice and Engagement) Case Book Rationale. The University of Sheffield. [https://doi.org/10.15131/shef.data.32840456](https://doi.org/10.15131/shef.data.32840456) 
+> **Suggested citation:** Susan Oman, Emily Rempel, Erin McCloskey, Tim Davies, Octavia Field Reid, Canning Malkin (2006) PAVE (Public AI Voice and Engagement) Case Book Rationale. The University of Sheffield. [https://doi.org/10.15131/shef.data.32840456](https://doi.org/10.15131/shef.data.32840456) 
 
 (Please check links/resources to identify appropriate citations for individual cases.)
 

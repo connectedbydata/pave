@@ -61,6 +61,9 @@ menus: [header]
   }
 
   .messages-cta-action {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     flex-shrink: 0;
     z-index: 5;
   }
@@ -68,6 +71,7 @@ menus: [header]
   .btn-launch-presentation {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.65rem;
     background-color: #ffffff;
     color: #496a40 !important;
@@ -81,6 +85,28 @@ menus: [header]
 
   .btn-launch-presentation:hover {
     background-color: #f3f7f2;
+    transform: scale(1.03);
+    text-decoration: none !important;
+  }
+
+  .btn-launch-presentation-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    background-color: transparent;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+    padding: 0.85rem 1.75rem;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+  }
+
+  .btn-launch-presentation-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.8);
     transform: scale(1.03);
     text-decoration: none !important;
   }
@@ -213,7 +239,7 @@ menus: [header]
     .messages-cta-content {
       max-width: 100%;
     }
-    .btn-launch-presentation {
+    .btn-launch-presentation, .btn-launch-presentation-secondary {
       justify-content: center;
       width: 100%;
     }
@@ -245,6 +271,13 @@ menus: [header]
             <path d="M8 5v14l11-7z"/>
           </svg>
           <span>Launch Presentation</span>
+        </a>
+        <a href="{{ '/messages/run-alt/' | relative_url }}" class="btn-launch-presentation-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span>Detailed View (with Map)</span>
         </a>
       </div>
     </div>

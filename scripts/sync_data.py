@@ -7,6 +7,7 @@ import hashlib
 from dotenv import load_dotenv
 from pyairtable import Api
 from pathlib import Path
+import argparse
 
 # Load environment variables
 load_dotenv()
@@ -40,8 +41,14 @@ TABLE_NAMES = list(TABLE_CONFIG.keys())
 ATTACHMENT_DIR = Path("assets/attachments")
 
 # Sync Settings
-FILTER_FIELD_ID = "fldrM6RRk8easAxSq"  # Default: Workflow: Status
-FILTER_VALUES = ["Completed"]           # Only sync records with these status values
+FILTER_WORKFLOW_STATUS_FIELD_ID = "fldrM6RRk8easAxSq"  # Default: Workflow: Status
+FILTER_WORKFLOW_STATUS_VALUES = ["Completed","Draft","Nomination","Submission"]            # Sync records matching these status values (empty list to disable)
+
+FILTER_CURATION_DECISION_FIELD_ID = "fldyT0fI25iZQRBiH" # Default: Curation decision
+FILTER_CURATION_DECISION_VALUES = ["Featured Full Case", "Full Case", "Mapping Entry"] # Sync records matching these curation decisions (empty list to disable)
+
+# Logical operator to combine filters when both are active: "AND" or "OR"
+FILTER_OPERATOR = "AND"
 
 def slugify(text):
     text = str(text).lower()
@@ -168,6 +175,44 @@ def annotate_yaml(yaml_str, field_map):
     return "\n".join(new_lines)
 
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Sync Airtable data to markdown files with filter options.")
+    parser.add_argument(
+        "--workflow-status", 
+        help="Comma-separated list of workflow status values to filter by (default: Completed). Use 'none' or '' to disable."
+    )
+    parser.add_argument(
+        "--curation-decision", 
+        help="Comma-separated list of curation decision values to filter by (default: Featured Full Case, Full Case, Mapping Entry). Use 'none' or '' to disable."
+    )
+    parser.add_argument(
+        "--operator", 
+        choices=["AND", "OR"], 
+        default=FILTER_OPERATOR,
+        help=f"Logical operator to combine filters when both are active (default: {FILTER_OPERATOR})"
+    )
+    args = parser.parse_args()
+
+    # Determine workflow status values to filter by
+    if args.workflow_status is not None:
+        if args.workflow_status.lower() in ("none", ""):
+            workflow_values = []
+        else:
+            workflow_values = [s.strip() for s in args.workflow_status.split(",") if s.strip()]
+    else:
+        workflow_values = FILTER_WORKFLOW_STATUS_VALUES
+
+    # Determine curation decision values to filter by
+    if args.curation_decision is not None:
+        if args.curation_decision.lower() in ("none", ""):
+            curation_values = []
+        else:
+            curation_values = [s.strip() for s in args.curation_decision.split(",") if s.strip()]
+    else:
+        curation_values = FILTER_CURATION_DECISION_VALUES
+
+    operator = args.operator
+
     schema_map = load_schema_map()
     
     # Map all field slugs and IDs to names for comment addition
@@ -219,14 +264,39 @@ def main():
     
     if case_table_id and case_table_id in all_tables_data:
         for rec_id, fields in all_tables_data[case_table_id].items():
-            # Apply filtering
-            if FILTER_FIELD_ID:
-                current_status = fields.get(FILTER_FIELD_ID)
-                if isinstance(current_status, list):
-                    if not any(s in FILTER_VALUES for s in current_status):
-                        continue
-                elif current_status not in FILTER_VALUES:
-                    continue
+            # Check Workflow Status match
+            workflow_match = True
+            if FILTER_WORKFLOW_STATUS_FIELD_ID and workflow_values:
+                current_status = fields.get(FILTER_WORKFLOW_STATUS_FIELD_ID)
+                status_list = current_status if isinstance(current_status, list) else ([current_status] if current_status is not None else [])
+                workflow_match = any(s in workflow_values for s in status_list)
+
+            # Check Curation Decision match
+            curation_match = True
+            if FILTER_CURATION_DECISION_FIELD_ID and curation_values:
+                current_curation = fields.get(FILTER_CURATION_DECISION_FIELD_ID)
+                curation_list = current_curation if isinstance(current_curation, list) else ([current_curation] if current_curation is not None else [])
+                curation_match = any(s in curation_values for s in curation_list)
+
+            # Combine filters based on operator
+            has_workflow_filter = bool(FILTER_WORKFLOW_STATUS_FIELD_ID and workflow_values)
+            has_curation_filter = bool(FILTER_CURISION_DECISION_FIELD_ID if 'FILTER_CURISION_DECISION_FIELD_ID' in globals() else FILTER_CURATION_DECISION_FIELD_ID and curation_values)
+
+            if has_workflow_filter and has_curation_filter:
+                if operator == "AND":
+                    keep = workflow_match and curation_match
+                else:
+                    keep = workflow_match or curation_match
+            elif has_workflow_filter:
+                keep = workflow_match
+            elif has_curation_filter:
+                keep = curation_match
+            else:
+                keep = True
+
+            if not keep:
+                continue
+
             active_case_ids.add(rec_id)
 
     # 2. Recursively find all reachable non-case records
@@ -325,6 +395,13 @@ def main():
         print(f"  {sync_count} records processed for {table_name}.")
 
     print(f"Sync complete!")
+    
+    # Run the cases aggregation compilation
+    try:
+        from generate_cases_json import aggregate
+        aggregate()
+    except Exception as e:
+        print(f"Warning: Failed to run generate_cases_json aggregation: {e}")
 
 if __name__ == "__main__":
     main()

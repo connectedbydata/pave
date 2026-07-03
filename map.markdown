@@ -358,6 +358,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Data for markers
     var pointLocations = [
       {% for case in site.cases %}
+        {% if case.curation-decision == "Do not include" %}{% continue %}{% endif %}
         {% for org_slug in case.lead-organisations %}
           {% assign org = site.organisations | where: "slug", org_slug | first %}
           {% if org %}
@@ -415,6 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Aggregated data for country highlighting
     var countryData = {};
     {% for case in site.cases %}
+      {% if case.curation-decision == "Do not include" %}{% continue %}{% endif %}
       {% for org_slug in case.lead-organisations %}
         {% assign org = site.organisations | where: "slug", org_slug | first %}
         {% if org %}
@@ -614,6 +616,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load participants and cases arrays
     var allParticipants = [
       {% for part in site.participants %}
+        {% assign linked_case_valid = false %}
+        {% for case_slug in part.cases %}
+          {% assign case_obj = site.cases | where: "slug", case_slug | first %}
+          {% if case_obj and case_obj.curation-decision != "Do not include" %}
+            {% assign linked_case_valid = true %}
+          {% endif %}
+        {% endfor %}
+        {% if linked_case_valid == false %}{% continue %}{% endif %}
       {
         slug: {{ part.slug | jsonify }},
         title: {{ part.title | jsonify }},
@@ -638,6 +648,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var allCases = [
       {% for case in site.cases %}
+      {% if case.curation-decision == "Do not include" %}{% continue %}{% endif %}
       {
         slug: {{ case.slug | jsonify }},
         title: {{ case.title | jsonify }},

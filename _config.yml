@@ -23,7 +23,7 @@ email: pairs@pairs.site
 description: >- # this means to ignore newlines until "baseurl:"
   Towards a Citizens Track on AI Governance
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://connectedbydata.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 
 github_username:  connectedbydata
 

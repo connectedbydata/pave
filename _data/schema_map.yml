@@ -322,7 +322,7 @@ tblxVFG1lM7trGD5m:
     fldI9y7Klo4V9og94:
       name: Theme
       type: multipleSelects
-      sync: false
+      sync: true
       slug: theme
       choices:
       - Education
@@ -336,7 +336,7 @@ tblxVFG1lM7trGD5m:
     fldu2BNJERB7Lc1rq:
       name: Level of engagement
       type: singleSelect
-      sync: false
+      sync: true
       slug: level-of-engagement
       choices:
       - Professional
