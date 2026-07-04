@@ -5014,6 +5014,26 @@
     "organisations": []
   },
   {
+    "title": "Deliberative Polling on Utilizing AI to Enhance Information Integrity",
+    "slug": "deliberative-polling-on-utilizing-ai-to-enhance-information-integrity",
+    "url": "/cases/deliberative-polling-on-utilizing-ai-to-enhance-information-integrity.html",
+    "curation_decision": "Mapping Entry",
+    "themes": [],
+    "level_of_engagement": "",
+    "modalities": [],
+    "methods": [],
+    "total_participants": 0,
+    "average_hours": 0.0,
+    "message_count": 0,
+    "countries": [],
+    "continents": [],
+    "method_categories": [
+      "research"
+    ],
+    "participants": [],
+    "organisations": []
+  },
+  {
     "title": "Nationwide Deliberation on Use of AI in High Schools",
     "slug": "nationwide-deliberation-on-use-of-ai-in-high-schools",
     "url": "/cases/nationwide-deliberation-on-use-of-ai-in-high-schools.html",
@@ -6389,8 +6409,10 @@
     "slug": "institutional-deliberative-democracy-for-educational-ai-ethics",
     "url": "/cases/institutional-deliberative-democracy-for-educational-ai-ethics.html",
     "curation_decision": "Mapping Entry",
-    "themes": [],
-    "level_of_engagement": "",
+    "themes": [
+      "Education"
+    ],
+    "level_of_engagement": "Community",
     "modalities": [],
     "methods": [],
     "total_participants": 0,

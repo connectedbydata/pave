@@ -486,6 +486,45 @@ menu_order: 2
   z-index: 10;
 }
 
+/* Map Loader Spinner Overlay */
+.map-loader-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 550px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  border: 1px solid rgba(73, 106, 64, 0.12);
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.map-loader-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.map-loader-spinner {
+  width: 45px;
+  height: 45px;
+  border: 3.5px solid rgba(73, 106, 64, 0.15);
+  border-left-color: #496a40;
+  border-radius: 50%;
+  animation: map-loader-spin 0.85s linear infinite;
+}
+
+@keyframes map-loader-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Dynamic Case Listing Section */
 .cases-list-section {
   background: #ffffff;
@@ -1231,6 +1270,11 @@ menu_order: 2
     <div class="map-wrapper">
       <div id="map" class="map-alt-container"></div>
 
+      <!-- Map Loading Spinner -->
+      <div id="map-loader" class="map-loader-overlay">
+        <div class="map-loader-spinner"></div>
+      </div>
+
       <!-- Floating Map Controls Overlay (top-right of map) -->
       <div class="map-floating-controls">
         <div class="location-links-selector">
@@ -1245,7 +1289,7 @@ menu_order: 2
         </div>
         <div class="shading-toggle-wrapper">
           <label>
-            <input type="checkbox" id="map-shading-toggle"> Country shading
+            <input type="checkbox" id="map-shading-toggle" checked> Country shading
           </label>
         </div>
       </div>
@@ -1410,7 +1454,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Reset map controls
     document.getElementById('map-cluster-toggle').checked = false;
-    document.getElementById('map-shading-toggle').checked = false;
+    document.getElementById('map-shading-toggle').checked = true;
     
     activeMapLayer = 'participants';
     document.getElementById('btn-show-participants').classList.add('active');
@@ -1689,6 +1733,12 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStatistics(filteredCases);
     updateMapPoints(filteredCases);
     updateCaseListUI(filteredCases);
+
+    // Hide loader overlay
+    const mapLoader = document.getElementById('map-loader');
+    if (mapLoader) {
+      mapLoader.classList.add('fade-out');
+    }
   }
 
   function updateStatistics(filteredCases) {

@@ -755,7 +755,7 @@ show_banner: false
             <option value="7000">Fast (7s)</option>
           </select>
 
-          <button class="shuffle-btn" id="shuffle-btn" aria-label="Toggle Random Order" title="Toggle Random Order">
+          <button class="shuffle-btn active" id="shuffle-btn" aria-label="Toggle Random Order" title="Toggle Random Order">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="16 3 21 3 21 8"></polyline>
               <line x1="4" y1="20" x2="21" y2="3"></line>
@@ -775,6 +775,9 @@ show_banner: false
         <!-- Case Selection Capsule -->
         <div class="case-select-capsule">
           <select id="case-select" class="case-select" aria-label="Select Case Study">
+            <option value="featured" selected>Featured messages</option>
+            <option value="all">All messages</option>
+            <option value="disabled" disabled>-- Specific case (Selecte below) --</option>
             {% assign opt_case_index = 0 %}
             {% for case in site.cases %}
               {% if case.messages %}
@@ -980,6 +983,7 @@ show_banner: false
             <div class="slide-item" 
                  data-slide-index="{{ slide_index }}"
                  data-case-index="{{ case_index }}"
+                 data-featured="{% if message.featured and message.featured.size > 0 %}true{% else %}false{% endif %}"
                  data-case-title="{{ case.title | escape }} ({{case.what-year-did-the-project-start}} - {{case.what-year-did-the-project-conclude}})"
                  data-case-subtitle="{{ case.describe-the-subject-matter-in-your-own-words-one | escape }}"
                  data-case-url="{{ '/c/' | append: case.airtable_id | append: '/' | absolute_url }}"
@@ -1096,7 +1100,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isPlaying = true;
   let currentCaseIndex = -1;
 
-  let isRandom = false;
+  let isRandom = true;
   let orderArray = Array.from({ length: totalSlides }, (_, i) => i);
   let orderPosition = 0;
 
@@ -1118,22 +1122,98 @@ document.addEventListener('DOMContentLoaded', () => {
     track.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
   }
 
+  function applyFilter() {
+    const filterValue = caseSelect ? caseSelect.value : 'featured';
+    
+    // 1. Determine active indexes
+    let activeIndexes = [];
+    if (filterValue === 'featured') {
+      for (let i = 0; i < totalSlides; i++) {
+        if (slides[i].dataset.featured === 'true') {
+          activeIndexes.push(i);
+        }
+      }
+    } else if (filterValue === 'all') {
+      activeIndexes = Array.from({ length: totalSlides }, (_, i) => i);
+    } else {
+      // Specific case index
+      const selectedCaseIndex = parseInt(filterValue);
+      for (let i = 0; i < totalSlides; i++) {
+        if (parseInt(slides[i].dataset.caseIndex) === selectedCaseIndex) {
+          activeIndexes.push(i);
+        }
+      }
+    }
+
+    // Handle edge case: if no slides match
+    if (activeIndexes.length === 0) {
+      activeIndexes = Array.from({ length: totalSlides }, (_, i) => i);
+    }
+
+    // Hide all slides first, then show only active slides
+    slides.forEach((slide, idx) => {
+      if (activeIndexes.includes(idx)) {
+        slide.style.display = '';
+      } else {
+        slide.style.display = 'none';
+      }
+    });
+
+    // 2. Set orderArray based on isRandom and activeIndexes
+    if (isRandom) {
+      const currentSlideIdx = orderArray[orderPosition];
+      let pool = [...activeIndexes];
+      let firstVal = null;
+      if (currentSlideIdx !== undefined && pool.includes(currentSlideIdx)) {
+        firstVal = currentSlideIdx;
+        pool = pool.filter(v => v !== currentSlideIdx);
+      }
+      shuffleArray(pool);
+      if (firstVal !== null) {
+        orderArray = [firstVal, ...pool];
+      } else {
+        orderArray = pool;
+      }
+      orderPosition = 0;
+    } else {
+      const currentSlideIdx = orderArray[orderPosition];
+      orderArray = [...activeIndexes];
+      if (currentSlideIdx !== undefined && orderArray.includes(currentSlideIdx)) {
+        orderPosition = orderArray.indexOf(currentSlideIdx);
+      } else {
+        orderPosition = 0;
+      }
+    }
+
+    applyDOMOrder();
+    
+    if (orderArray.length > 0) {
+      goToSlide(orderArray[orderPosition]);
+    }
+  }
+
   function setRandomOrder(randomize) {
     isRandom = randomize;
     if (isRandom) {
       shuffleBtn.classList.add('active');
       const currentVal = orderArray[orderPosition];
-      const remaining = Array.from({ length: totalSlides }, (_, i) => i).filter(v => v !== currentVal);
+      const activeIndexes = [...orderArray];
+      const remaining = activeIndexes.filter(v => v !== currentVal);
       shuffleArray(remaining);
       orderArray = [currentVal, ...remaining];
       orderPosition = 0;
     } else {
       shuffleBtn.classList.remove('active');
       const currentVal = orderArray[orderPosition];
-      orderArray = Array.from({ length: totalSlides }, (_, i) => i);
+      const activeIndexesSorted = [...orderArray].sort((a, b) => a - b);
+      orderArray = activeIndexesSorted;
       orderPosition = orderArray.indexOf(currentVal);
     }
     applyDOMOrder();
+
+    if (orderArray.length > 0) {
+      slideCounter.innerText = `${orderPosition + 1} / ${orderArray.length}`;
+    }
   }
 
   // Background cross-fade layer references
@@ -1271,7 +1351,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateCaseSelect(caseIndex) {
     if (caseSelect) {
-      caseSelect.value = caseIndex;
+      if (caseSelect.value !== 'featured' && caseSelect.value !== 'all') {
+        caseSelect.value = caseIndex;
+      }
     }
   }
 
@@ -1288,7 +1370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Transition slides track horizontally using orderPosition for a single slide transition
     track.style.transform = `translateX(-${orderPosition * 100}vw)`;
-    slideCounter.innerText = `${currentIndex + 1} / ${totalSlides}`;
+    slideCounter.innerText = `${orderPosition + 1} / ${orderArray.length}`;
     
     // Update case info elements with transitions when case changes
     const activeSlide = slides[currentIndex];
@@ -1342,13 +1424,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function goToNextSlide() {
     let nextPosition = orderPosition + 1;
-    if (nextPosition >= totalSlides) nextPosition = 0;
+    if (nextPosition >= orderArray.length) nextPosition = 0;
     goToSlide(orderArray[nextPosition]);
   }
 
   function goToPrevSlide() {
     let prevPosition = orderPosition - 1;
-    if (prevPosition < 0) prevPosition = totalSlides - 1;
+    if (prevPosition < 0) prevPosition = orderArray.length - 1;
     goToSlide(orderArray[prevPosition]);
   }
 
@@ -1418,18 +1500,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle Case Dropdown selection changes
   if (caseSelect) {
     caseSelect.addEventListener('change', () => {
-      const selectedCaseIndex = parseInt(caseSelect.value);
-      // Find the first slide index for this case
-      let targetSlideIndex = -1;
-      for (let i = 0; i < slides.length; i++) {
-        if (parseInt(slides[i].dataset.caseIndex) === selectedCaseIndex) {
-          targetSlideIndex = i;
-          break;
-        }
-      }
-      if (targetSlideIndex !== -1) {
-        goToSlide(targetSlideIndex);
-      }
+      applyFilter();
     });
   }
 
@@ -1471,53 +1542,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Initialize with random order by default
-  setRandomOrder(true);
+  // Initialize mini-map first
+  initMiniMap();
 
-  // Initialize the first dropdown value, fixed header content & QR code
+  // Initialize with filter and random order by default
   if (totalSlides > 0) {
-    const initialSlide = slides[orderArray[orderPosition]];
-    const initialCaseIndex = parseInt(initialSlide.dataset.caseIndex);
-    const initialTitle = initialSlide.dataset.caseTitle;
-    const initialSubtitle = initialSlide.dataset.caseSubtitle;
-    const initialImageUrl = initialSlide.dataset.bgImage;
-
-    const titleEl = document.getElementById('fixed-case-title');
-    const subtitleEl = document.getElementById('fixed-case-subtitle');
-
-    if (titleEl) titleEl.textContent = initialTitle;
-    if (subtitleEl) subtitleEl.textContent = initialSubtitle;
-    currentCaseIndex = initialCaseIndex;
-
-    updateCaseSelect(initialCaseIndex);
-
-    // Initialize mini-map
-    initMiniMap();
-
-    // Parse case locations
-    let initialLocations = [];
-    try {
-      initialLocations = JSON.parse(initialSlide.dataset.caseLocations || '[]');
-    } catch (e) {
-      console.error("Error parsing case locations JSON:", e);
-    }
-
-    // Update QR code and case stats
-    updateQRCodeAndStats(initialSlide.dataset.caseUrl, initialSlide.dataset.caseStats, initialLocations);
-
-    // Set initial background image
-    const initialBgLayer = activeBgLayer === 'a' ? bgLayerA : bgLayerB;
-    if (initialImageUrl) {
-      initialBgLayer.classList.add('has-image');
-      initialBgLayer.style.backgroundImage = 'linear-gradient(rgba(20, 32, 17, 0.45), rgba(20, 32, 17, 0.65)), url(' + initialImageUrl + ')';
-      initialBgLayer.style.backgroundSize = 'cover';
-      initialBgLayer.style.backgroundPosition = 'center';
-      initialBgLayer.style.opacity = '0.6';
-    } else {
-      initialBgLayer.classList.remove('has-image');
-      initialBgLayer.style.backgroundImage = 'none';
-      initialBgLayer.style.opacity = '0.28';
-    }
+    applyFilter();
   }
 });
 </script>

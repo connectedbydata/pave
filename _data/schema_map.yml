@@ -299,6 +299,30 @@ tblxVFG1lM7trGD5m:
       type: count
       sync: false
       slug: messages-extracted-for-case
+    fldI9y7Klo4V9og94:
+      name: Theme
+      type: multipleSelects
+      sync: true
+      slug: theme
+      choices:
+      - Education
+      - Healthcare
+      - Environment
+      - Social media
+      - Safety
+      - Work
+      - Youth
+      - Artificial Intelligence
+      - Infrastructure
+      - Language
+      - Identity
+      - Research
+      - Public Services
+      - Justice
+      - Privacy
+      - Culture
+      - Cities
+      - Internet governance
     fld1OZQxueUn0wzfB:
       name: E-mail Draft
       type: formula
@@ -319,20 +343,6 @@ tblxVFG1lM7trGD5m:
       type: createdTime
       sync: false
       slug: created
-    fldI9y7Klo4V9og94:
-      name: Theme
-      type: multipleSelects
-      sync: true
-      slug: theme
-      choices:
-      - Education
-      - Healthcare
-      - Environment
-      - Safety
-      - Work
-      - Youth
-      - Artificial Intelligence
-      - Infrastructure
     fldu2BNJERB7Lc1rq:
       name: Level of engagement
       type: singleSelect
@@ -662,6 +672,16 @@ tblu6lFzOdgEQKGC4:
       slug: cases
       options:
         linkedTableId: tblxVFG1lM7trGD5m
+    fldlhyHCoKJtoJDiP:
+      name: Featured Video / Resource
+      type: checkbox
+      sync: true
+      slug: featured-video-resource
+    flddEQ9B6cVeo4Uq2:
+      name: Video notes
+      type: singleLineText
+      sync: false
+      slug: video-notes
 tbl3Id3C9tKcFcnKm:
   name: Method Codelist
   primaryFieldId: fldlR2XVxIybX907z
@@ -716,3 +736,19 @@ tblZ5YZLljxHXapOF:
       slug: cases
       options:
         linkedTableId: tblxVFG1lM7trGD5m
+    fld5MhXGTJTxJlDBl:
+      name: Featured (Theme)
+      type: multipleSelects
+      sync: true
+      slug: featured
+      choices:
+      - Global
+      - AI Literacy
+      - Work
+      - Participation
+      - AI for Good
+      - Governance
+      - Social Media
+      - Safety
+      - Education
+      - AI development
