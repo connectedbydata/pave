@@ -13,6 +13,14 @@ menu_order: 2
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
 <style>
+/* Page content wrapper override for map */
+.page-content .wrapper {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-inline: 1rem !important;
+  box-sizing: border-box !important;
+}
+
 /* Page Layout */
 .map-alt-layout {
   display: grid;
@@ -503,6 +511,12 @@ menu_order: 2
   border-radius: 16px;
   border: 1px solid rgba(73, 106, 64, 0.12);
   transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .map-alt-container, .map-loader-overlay {
+    height: 350px !important;
+  }
 }
 
 .map-loader-overlay.fade-out {
@@ -1361,7 +1375,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Initialise the Map
 
-  const map = L.map('map').setView([20, 0], 2);
+  const isMobile = window.innerWidth <= 768;
+  const map = L.map('map', {
+    minZoom: 1,
+    maxZoom: 15
+  }).setView([20, 0], isMobile ? 1 : 2);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);

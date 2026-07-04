@@ -644,76 +644,161 @@ show_banner: false
   }
 
   @media (max-width: 768px) {
+    /* Slim down top header banner */
     .header-banner {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto;
-      gap: 0.75rem;
-      padding: 1rem;
-      height: auto;
-      min-height: 10vh;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      height: 60px !important;
+      min-height: 60px !important;
     }
     .header-banner-text {
       grid-row: 1;
-      font-size: 1.1rem;
+      font-size: 0.85rem !important;
+      text-align: right;
+      justify-self: end;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
     .header-left {
-      grid-row: 2;
-      justify-self: center;
+      grid-row: 1;
+      justify-self: start;
     }
+    
+    /* Relocate controls to bottom fixed panel */
     .header-right {
-      grid-row: 3;
-      justify-self: center;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      background: rgba(10, 16, 8, 0.95) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 0.75rem 1rem !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 1002 !important;
       width: 100%;
+      box-sizing: border-box;
+      justify-self: stretch;
     }
     .right-controls {
-      flex-direction: column;
-      width: 100%;
-      gap: 0.5rem;
-      justify-content: space-between;
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.5rem !important;
+      width: 100% !important;
     }
     .autoplay-capsule {
-      flex: 1;
-      justify-content: space-between;
-      padding: 0.35rem 0.85rem;
-      gap: 0.5rem;
-      width: 100%;
+      display: inline-flex !important;
+      align-items: center !important;
+      padding: 0.25rem 0.5rem !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 20px !important;
+      gap: 0.35rem !important;
+      max-width: 100% !important;
     }
     .progress-bar-container {
-      width: 60px;
+      width: 50px !important;
+    }
+    .shuffle-btn {
+      padding: 0.35rem !important;
+      height: 30px !important;
+      width: 30px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
     .case-select-capsule {
-      padding: 0.35rem 0.85rem;
-      width: 100%;
+      flex: 1 1 100% !important; /* Wrap to its own full width row */
+      margin-top: 0.25rem !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 0 !important;
     }
     .case-select {
-      max-width: none;
-      width: 100%;
+      width: 100% !important;
+      max-width: 100% !important;
+      font-size: 0.8rem !important;
+      padding: 0.35rem 0.75rem !important;
     }
     .back-to-cases {
       align-self: center;
-      padding: 0.4rem 1rem;
-      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.75rem;
+      white-space: nowrap;
     }
+    
+    /* Position case info/titles closer to top */
     .fixed-top-header {
-      top: calc(5rem + var(--banner-height));
-      left: 1.5rem;
-      right: 1.5rem;
-      flex-direction: column-reverse;
-      gap: 0.75rem;
-    }
-    .slide-item {
-      padding: calc(11.5rem + var(--banner-height)) 1.5rem 6rem 1.5rem;
+      top: 75px !important;
+      left: 1.5rem !important;
+      right: 1.5rem !important;
     }
     .slide-case-title {
-      font-size: 1.45rem;
+      font-size: 1.2rem !important;
     }
     .slide-case-subtitle {
-      font-size: 0.85rem;
+      font-size: 0.75rem !important;
     }
     .slide-pave-logo {
-      width: 2.75rem;
-      height: 2.75rem;
-      align-self: flex-end;
+      width: 2.2rem !important;
+      height: 2.2rem !important;
+    }
+    
+    /* Quote styling and container spacing */
+    .slide-item {
+      padding: 170px 1.5rem 120px 1.5rem !important;
+    }
+    .quote-body {
+      font-size: 1.5rem !important;
+      line-height: 1.45 !important;
+    }
+    .quote-type {
+      font-size: 0.7rem !important;
+    }
+    .quote-credit {
+      font-size: 0.75rem !important;
+    }
+
+    /* Position stats text as a pill above the bottom bar */
+    .bottom-left-panel {
+      left: 1rem !important;
+      right: 1rem !important;
+      bottom: 75px !important; /* place just above bottom control bar */
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      background: none !important;
+      box-shadow: none !important;
+      pointer-events: none !important;
+    }
+    .qr-widget, .map-widget {
+      display: none !important; /* hide qr code and map on mobile */
+    }
+    .case-meta-widget {
+      background: rgba(10, 16, 8, 0.85) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.4rem 0.85rem !important;
+      border-radius: 8px !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      pointer-events: auto !important;
+    }
+    .case-stats-text {
+      font-size: 0.8rem !important;
+      line-height: 1.35 !important;
+      margin: 0 !important;
+      text-shadow: none !important;
     }
   }
 </style>
@@ -1371,9 +1456,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Transition slides track horizontally using orderPosition for a single slide transition
     track.style.transform = `translateX(-${orderPosition * 100}vw)`;
     slideCounter.innerText = `${orderPosition + 1} / ${orderArray.length}`;
+
+    // Adjust font size dynamically for long quotes to prevent overflow/overlap
+    const activeSlide = slides[currentIndex];
+    const quoteBody = activeSlide.querySelector('.quote-body');
+    if (quoteBody) {
+      const textLength = quoteBody.textContent.trim().length;
+      let fontSize = '2.5rem'; // Default desktop size
+      
+      if (window.innerWidth <= 768) {
+        // Mobile sizes
+        if (textLength > 300) {
+          fontSize = '1.05rem';
+        } else if (textLength > 200) {
+          fontSize = '1.2rem';
+        } else if (textLength > 100) {
+          fontSize = '1.4rem';
+        } else {
+          fontSize = '1.65rem';
+        }
+      } else {
+        // Desktop sizes
+        if (textLength > 300) {
+          fontSize = '1.5rem';
+        } else if (textLength > 200) {
+          fontSize = '1.85rem';
+        } else if (textLength > 100) {
+          fontSize = '2.15rem';
+        }
+      }
+      quoteBody.style.fontSize = fontSize;
+    }
     
     // Update case info elements with transitions when case changes
-    const activeSlide = slides[currentIndex];
     const caseIndex = parseInt(activeSlide.dataset.caseIndex);
     const title = activeSlide.dataset.caseTitle;
     const subtitle = activeSlide.dataset.caseSubtitle;

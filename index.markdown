@@ -82,6 +82,7 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
   .page-content .wrapper {
     max-width: 1200px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
   }
   
   .page-content .wrapper {
@@ -199,8 +200,10 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
 
   .globe-container {
     position: relative;
-    width: 380px;
-    height: 380px;
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 1 / 1;
+    height: auto;
     border-radius: 50%;
     cursor: grab;
   }
@@ -336,8 +339,7 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
       padding: 1.75rem;
     }
     .globe-container {
-      width: 300px;
-      height: 300px;
+      max-width: 300px;
     }
   }
 </style>

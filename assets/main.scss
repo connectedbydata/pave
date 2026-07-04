@@ -12,6 +12,22 @@
   width: 80% !important;
 }
 
+@media screen and (max-width: 800px) {
+  .site-header .wrapper,
+  .site-footer .wrapper,
+  .page-content .wrapper,
+  .wrapper {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-inline: 1.5rem !important;
+    box-sizing: border-box !important;
+  }
+}
+
+html, body {
+  overflow-x: hidden !important;
+}
+
 .page-content {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
@@ -76,7 +92,7 @@ a {
   float: none !important;
   margin-left: auto !important;
 
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 801px) {
     line-height: normal !important;
 
     .trigger {
@@ -105,6 +121,78 @@ a {
     }
   }
 }
+
+/* Mid-width navigation optimization: downscale link margins and font size between 800px and 950px */
+@media screen and (max-width: 950px) and (min-width: 801px) {
+  .site-nav .page-link {
+    margin-left: 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Force mobile menu configuration on viewports under 800px instead of default 600px */
+@media screen and (max-width: 800px) {
+  .site-nav {
+    position: absolute !important;
+    top: 9px !important;
+    right: 15px !important;
+    background-color: #fdfdfd !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 5px !important;
+    text-align: right !important;
+    z-index: 9999 !important;
+    float: none !important;
+    margin-left: 0 !important;
+
+    .menu-icon {
+      display: block !important;
+      float: right;
+      width: 36px;
+      height: 26px;
+      line-height: 0;
+      padding-top: 10px;
+      text-align: center;
+      cursor: pointer;
+      
+      svg {
+        fill: #496a40;
+      }
+    }
+
+    .nav-trigger {
+      display: none !important;
+    }
+
+    label[for="nav-trigger"] {
+      display: block !important;
+      float: right;
+      width: 36px;
+      height: 36px;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .trigger {
+      clear: both;
+      display: none !important;
+    }
+
+    input:checked ~ .trigger {
+      display: block !important;
+      padding-bottom: 5px;
+    }
+
+    .page-link {
+      display: block !important;
+      margin-left: 20px !important;
+      margin-right: 0 !important;
+      padding: 5px 10px !important;
+      font-size: 0.85rem !important;
+      text-align: right;
+    }
+  }
+}
+
 
 // Custom Green Button
 .btn, .btn-primary {

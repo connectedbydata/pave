@@ -941,6 +941,63 @@ menus: []
   .leaflet-tooltip-top.mini-map-tooltip::before {
     border-top-color: #1a2f16;
   }
+
+  /* Responsive Design Overrides */
+  @media (max-width: 768px) {
+    /* Hide playlist sidebar completely */
+    .playlist-sidebar {
+      display: none !important;
+    }
+    
+    /* Expand right content to full-width and let it flow */
+    .playlist-main-content {
+      width: 100% !important;
+      padding: 1rem !important;
+      gap: 1.5rem !important;
+      height: auto !important;
+      overflow-y: visible !important;
+      box-sizing: border-box !important;
+    }
+    
+    .video-playlist-layout {
+      flex-direction: column !important;
+      height: auto !important;
+      overflow-y: auto !important;
+    }
+    
+    /* Reformat case details card to hide QR code and map */
+    .case-details-footer {
+      flex-direction: column !important;
+      width: 100% !important;
+      padding: 1.25rem !important;
+      gap: 1rem !important;
+      box-sizing: border-box !important;
+    }
+    
+    .case-details-widgets {
+      display: none !important; /* Hide QR code and map on mobile */
+    }
+    
+    .case-details-info {
+      width: 100% !important;
+    }
+    
+    /* Ensure gallery grid titles and spacing fit mobile well */
+    .gallery-grids-section {
+      padding: 0 !important;
+    }
+    
+    .browse-title {
+      font-size: 1.5rem !important;
+    }
+    
+    /* Adjust play buttons / aspect wrapper for mobile screens */
+    .close-video-btn {
+      width: 32px !important;
+      height: 32px !important;
+      font-size: 1.1rem !important;
+    }
+  }
 </style>
 
 <!-- Playlist behavior scripting -->
