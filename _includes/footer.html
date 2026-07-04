@@ -12,21 +12,21 @@
         <ul class="contact-list">
           <li class="p-name">
             {%- if site.author -%}
-              {{ site.author | escape }}
+            {{ site.author | escape }}
             {%- else -%}
-              {{ site.title | escape }}
+            {{ site.title | escape }}
             {%- endif -%}
-            </li>
-            {%- if site.email -%}
-            <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-            {%- endif -%}
-            
-            {%- assign sorted_pages = site.pages | sort: "path" -%}
-            {%- for my_page in sorted_pages -%}
-              {%- if my_page.title and my_page.menus contains 'footer' -%}
-              <li><a href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a></li>
-              {%- endif -%}
-            {%- endfor -%}
+          </li>
+          {%- if site.email -%}
+          <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          {%- endif -%}
+
+          {%- assign sorted_pages = site.pages | sort: "path" -%}
+          {%- for my_page in sorted_pages -%}
+          {%- if my_page.title and my_page.menus contains 'footer' -%}
+          <li><a href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a></li>
+          {%- endif -%}
+          {%- endfor -%}
         </ul>
       </div>
 
@@ -37,6 +37,33 @@
       <div class="footer-col footer-col-3">
         <p>{{- site.description | escape -}}</p>
       </div>
+    </div>
+
+    <div class="footer-partners-section">
+      <p class="footer-partners-title">A collaboration between</p>
+      <div class="footer-partners-list">
+        <a class="footer-partner-logo-link" href="https://pairs.site" target="_blank" rel="noopener">
+          <img src="{{ "/assets/logos/pairs.png" | relative_url }}" alt="PAIRS">
+        </a>
+        <a class="footer-partner-logo-link" href="https://connectedbydata.org/" target="_blank" rel="noopener">
+          <img src="{{ "/assets/logos/cbd.png" | relative_url }}" alt="Connected by Data">
+        </a>
+        <a class="footer-partner-logo-link" href="https://adalovelaceinstitute.org/" target="_blank" rel="noopener">
+          <img src="{{ "/assets/logos/ada.png" | relative_url }}" alt="Ada Lovelace Institute">
+        </a>
+        <a class="footer-partner-logo-link" href="https://iswe.org/" target="_blank" rel="noopener">
+          <img src="{{ "/assets/logos/iswe.png" | relative_url }}" alt="ISWE Foundation">
+        </a>
+        <a class="footer-partner-logo-link" href="https://sheffield.ac.uk/machine-intelligence" target="_blank"
+          rel="noopener">
+          <img src="{{ "/assets/logos/sheffield_cmi.png" | relative_url }}"
+            alt="University of Sheffield | Centre for Machine Intelligence">
+        </a>
+      </div>
+      <p></p>
+      <p class="footer-partners-title">In support of a <a href="https://www.citizens-track.org">Citizens Track on AI
+          Governance</a></p>
+
     </div>
 
   </div>
