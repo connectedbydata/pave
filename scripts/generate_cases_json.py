@@ -126,7 +126,8 @@ def aggregate():
         max_average_hours = 0.0
         participant_countries = set()
         participant_continents = set()
-        points = []
+        case_participants = []
+        case_organisations = []
 
         # Process participants
         for p_slug in linked_part_slugs:
@@ -169,6 +170,7 @@ def aggregate():
                     p_loc_titles.append(loc.get("title") or loc.get("name") or l_slug)
             locations_list_str = ", ".join(p_loc_titles)
 
+            p_points = []
             for l_slug in p_loc_slugs:
                 loc = locations.get(l_slug)
                 if loc and loc.get("latitude") and loc.get("longitude"):
@@ -181,16 +183,19 @@ def aggregate():
                         if continent:
                             participant_continents.add(continent)
 
-                    points.append({
+                    p_points.append({
                         "lat": lat,
                         "lng": lng,
-                        "location_name": loc.get("title") or loc.get("name") or l_slug,
-                        "title": part.get("title") or part.get("name") or "Participant Group",
-                        "type": "Participants",
-                        "color": "#FF9800",
-                        "count": part.get("how-many-people-took-part") or "",
-                        "locations_list": locations_list_str
+                        "location_name": loc.get("title") or loc.get("name") or l_slug
                     })
+            
+            if p_points:
+                case_participants.append({
+                    "title": part.get("title") or part.get("name") or "Participant Group",
+                    "count": part.get("how-many-people-took-part") or "",
+                    "locations_list": locations_list_str,
+                    "locations": p_points
+                })
 
         # Process organisations
         for o_slug in linked_org_slugs:
@@ -200,21 +205,26 @@ def aggregate():
             o_loc_slugs = org.get("main-location", [])
             if not isinstance(o_loc_slugs, list):
                 o_loc_slugs = [o_loc_slugs]
+            
+            o_points = []
             for l_slug in o_loc_slugs:
                 loc = locations.get(l_slug)
                 if loc and loc.get("latitude") and loc.get("longitude"):
                     lat = clean_float(loc.get("latitude"))
                     lng = clean_float(loc.get("longitude"))
                     
-                    points.append({
+                    o_points.append({
                         "lat": lat,
                         "lng": lng,
-                        "location_name": loc.get("title") or loc.get("name") or l_slug,
-                        "title": org.get("name") or org.get("title") or "Lead Organisation",
-                        "type": "Organisation",
-                        "color": "#2196F3",
-                        "url": f"/organisations/{o_slug}/"
+                        "location_name": loc.get("title") or loc.get("name") or l_slug
                     })
+            
+            if o_points:
+                case_organisations.append({
+                    "title": org.get("name") or org.get("title") or "Lead Organisation",
+                    "url": f"/organisations/{o_slug}/",
+                    "locations": o_points
+                })
 
         # Count recommendations and issues
         case_messages = []
@@ -267,7 +277,8 @@ def aggregate():
             "countries": sorted(list(participant_countries)),
             "continents": sorted(list(participant_continents)),
             "method_categories": sorted(list(method_categories)),
-            "points": points
+            "participants": case_participants,
+            "organisations": case_organisations
         })
 
     # Ensure output directory exists

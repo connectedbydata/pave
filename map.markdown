@@ -665,7 +665,8 @@ menu_order: 2
   transform: translateX(24px);
 }
 
-.cluster-toggle-wrapper label {
+.cluster-toggle-wrapper label,
+.shading-toggle-wrapper label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -677,7 +678,8 @@ menu_order: 2
   min-height: 36px;
 }
 
-.cluster-toggle-wrapper input[type="checkbox"] {
+.cluster-toggle-wrapper input[type="checkbox"],
+.shading-toggle-wrapper input[type="checkbox"] {
   width: 18px;
   height: 18px;
   accent-color: #496a40;
@@ -944,7 +946,8 @@ menu_order: 2
   user-select: none;
 }
 
-.map-floating-controls .cluster-toggle-wrapper label {
+.map-floating-controls .cluster-toggle-wrapper label,
+.map-floating-controls .shading-toggle-wrapper label {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -956,7 +959,8 @@ menu_order: 2
   min-height: auto;
 }
 
-.map-floating-controls .cluster-toggle-wrapper input[type="checkbox"] {
+.map-floating-controls .cluster-toggle-wrapper input[type="checkbox"],
+.map-floating-controls .shading-toggle-wrapper input[type="checkbox"] {
   width: 14px;
   height: 14px;
   margin: 0;
@@ -964,18 +968,6 @@ menu_order: 2
   cursor: pointer;
 }
 
-/* Prevent white lines/gaps between Leaflet tiles */
-.leaflet-container {
-  background: #f2efe9 !important; /* Matches default land background color of OSM */
-}
-.leaflet-tile-container img.leaflet-tile {
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1) !important;
-  margin: -1px !important;
-  padding: 1px !important;
-  border: 1px solid transparent !important;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
 
 /* Sidebar Explanation Box */
 .sidebar-explanation-box {
@@ -1248,7 +1240,12 @@ menu_order: 2
         </div>
         <div class="cluster-toggle-wrapper">
           <label>
-            <input type="checkbox" id="map-cluster-toggle" checked> Cluster markers
+            <input type="checkbox" id="map-cluster-toggle"> Cluster markers
+          </label>
+        </div>
+        <div class="shading-toggle-wrapper">
+          <label>
+            <input type="checkbox" id="map-shading-toggle"> Country shading
           </label>
         </div>
       </div>
@@ -1290,18 +1287,7 @@ menu_order: 2
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Fix Leaflet tile gap line rendering artifact on Chrome/Safari/HiDPI
-  (function() {
-    var originalInitTile = L.GridLayer.prototype._initTile;
-    L.GridLayer.include({
-      _initTile: function (tile) {
-        originalInitTile.call(this, tile);
-        var tileSize = this.getTileSize();
-        tile.style.width = (tileSize.x + 1) + 'px';
-        tile.style.height = (tileSize.y + 1) + 'px';
-      }
-    });
-  })();
+
 
   // Collapsible Filters for Narrow Screens
   const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
@@ -1330,6 +1316,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 1. Initialise the Map
+
   const map = L.map('map').setView([20, 0], 2);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -1405,8 +1392,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFiltersAndUI();
       });
 
-      // Listen for cluster checkbox
+      // Listen for cluster and shading checkboxes
       document.getElementById('map-cluster-toggle').addEventListener('change', updateFiltersAndUI);
+      document.getElementById('map-shading-toggle').addEventListener('change', updateFiltersAndUI);
 
       // Initial filter run (draws everything)
       updateFiltersAndUI();
@@ -1421,7 +1409,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.map-sidebar input[type="checkbox"], .bottom-filters-section input[type="checkbox"]').forEach(cb => cb.checked = false);
     
     // Reset map controls
-    document.getElementById('map-cluster-toggle').checked = true;
+    document.getElementById('map-cluster-toggle').checked = false;
+    document.getElementById('map-shading-toggle').checked = false;
     
     activeMapLayer = 'participants';
     document.getElementById('btn-show-participants').classList.add('active');
@@ -1785,75 +1774,103 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     filteredCases.forEach(c => {
-      if (c.points && Array.isArray(c.points)) {
-        c.points.forEach(point => {
-          // Filter point type
-          if (mapLayerView === 'participants' && point.type !== 'Participants') return;
-          if (mapLayerView === 'organisations' && point.type !== 'Organisation') return;
+      const decision = c.curation_decision || 'Mapping Entry';
+      let badgeClass = 'mapping';
+      let size = 18;
+      if (decision === 'Featured Full Case') {
+        badgeClass = 'featured';
+        size = 36;
+      } else if (decision === 'Full Case') {
+        badgeClass = 'full';
+        size = 26;
+      }
 
-          const decision = c.curation_decision || 'Mapping Entry';
-          let badgeClass = 'mapping';
-          let size = 18;
-          if (decision === 'Featured Full Case') {
-            badgeClass = 'featured';
-            size = 36;
-          } else if (decision === 'Full Case') {
-            badgeClass = 'full';
-            size = 26;
-          }
+      const svgIcon = getCurationIconSvg(decision);
 
-          const svgIcon = getCurationIconSvg(decision);
-          const iconHtml = `
-            <div class="custom-marker-pin marker-${badgeClass} marker-type-${point.type.toLowerCase()}">
-              <span class="marker-icon-wrapper">${svgIcon}</span>
-            </div>
-          `;
+      // Render Participant points
+      if (mapLayerView === 'participants' && c.participants) {
+        c.participants.forEach(part => {
+          if (!part.locations) return;
+          part.locations.forEach(loc => {
+            const iconHtml = `
+              <div class="custom-marker-pin marker-${badgeClass} marker-type-participants">
+                <span class="marker-icon-wrapper">${svgIcon}</span>
+              </div>
+            `;
+            const customIcon = L.divIcon({
+              className: 'custom-map-marker',
+              html: iconHtml,
+              iconSize: [size, size],
+              iconAnchor: [size / 2, size / 2]
+            });
+            const marker = L.marker([loc.lat, loc.lng], { icon: customIcon });
 
-          const customIcon = L.divIcon({
-            className: 'custom-map-marker',
-            html: iconHtml,
-            iconSize: [size, size],
-            iconAnchor: [size / 2, size / 2]
-          });
-
-          const marker = L.marker([point.lat, point.lng], { icon: customIcon });
-
-          // Bind relevant popup text
-          let popupText = '';
-          if (point.type === 'Participants') {
-            const countVal = point.count ? String(point.count).trim() : '';
+            const countVal = part.count ? String(part.count).trim() : '';
             const parsedCount = parseInt(countVal.replace(/,/g, ''));
             const countText = (!isNaN(parsedCount)) ? `<strong>${parsedCount.toLocaleString()}</strong> people` : 'Participants';
             
-            const locations = point.locations_list ? point.locations_list.split(',').map(s => s.trim()).filter(Boolean) : [];
+            const locations = part.locations_list ? part.locations_list.split(',').map(s => s.trim()).filter(Boolean) : [];
+            let popupText = '';
             
             if (locations.length > 5) {
-              const markerCountry = point.location_name || '';
+              const markerCountry = loc.location_name || '';
               const otherCountries = locations.filter(name => name !== markerCountry);
               const firstFourOthers = otherCountries.slice(0, 4);
               const remainingCount = otherCountries.length - firstFourOthers.length;
               const pluralSuffix = remainingCount === 1 ? 'country' : 'countries';
               
-              const countriesText = `${markerCountry ? `<strong>${markerCountry}</strong>` : ''}${firstFourOthers.length > 0 ? `, ${firstFourOthers.map(c => `<strong>${c}</strong>`).join(', ')}` : ''}, and <strong>${remainingCount}</strong> more ${pluralSuffix}`;
+              const countriesText = `${markerCountry ? `<strong>${markerCountry}</strong>` : ''}${firstFourOthers.length > 0 ? `, ${firstFourOthers.map(cc => `<strong>${cc}</strong>`).join(', ')}` : ''}, and <strong>${remainingCount}</strong> more ${pluralSuffix}`;
               
               popupText = `${countText} took part in this process on AI in ${countriesText} through <a href="${c.url}"><strong>${c.title}</strong></a>.`;
             } else {
-              popupText = `${countText} took part in a participatory process on AI in <strong>${point.locations_list}</strong> through <a href="${c.url}"><strong>${c.title}</strong></a>.`;
+              popupText = `${countText} took part in a participatory process on AI in <strong>${part.locations_list}</strong> through <a href="${c.url}"><strong>${c.title}</strong></a>.`;
             }
-          } else {
-            popupText = `<strong>Lead Organisation:</strong> <a href="${point.url}"><strong>${point.title}</strong></a><br>Lead organiser for <a href="${c.url}">${c.title}</a>.`;
-          }
 
-          marker.bindPopup(popupText);
-          
-          if (clusterMarkers) {
-            markerClusterGroup.addLayer(marker);
-          } else {
-            pointLayer.addLayer(marker);
-          }
-          
-          bounds.extend([point.lat, point.lng]);
-          pointCount++;
+            marker.bindPopup(popupText);
+            
+            if (clusterMarkers) {
+              markerClusterGroup.addLayer(marker);
+            } else {
+              pointLayer.addLayer(marker);
+            }
+            
+            bounds.extend([loc.lat, loc.lng]);
+            pointCount++;
+          });
+        });
+      }
+
+      // Render Organisation points
+      if (mapLayerView === 'organisations' && c.organisations) {
+        c.organisations.forEach(org => {
+          if (!org.locations) return;
+          org.locations.forEach(loc => {
+            const iconHtml = `
+              <div class="custom-marker-pin marker-${badgeClass} marker-type-organisation">
+                <span class="marker-icon-wrapper">${svgIcon}</span>
+              </div>
+            `;
+            const customIcon = L.divIcon({
+              className: 'custom-map-marker',
+              html: iconHtml,
+              iconSize: [size, size],
+              iconAnchor: [size / 2, size / 2]
+            });
+            const marker = L.marker([loc.lat, loc.lng], { icon: customIcon });
+
+            const popupText = `<strong>Lead Organisation:</strong> <a href="${org.url}"><strong>${org.title}</strong></a><br>Lead organiser for <a href="${c.url}">${c.title}</a>.`;
+
+            marker.bindPopup(popupText);
+            
+            if (clusterMarkers) {
+              markerClusterGroup.addLayer(marker);
+            } else {
+              pointLayer.addLayer(marker);
+            }
+            
+            bounds.extend([loc.lat, loc.lng]);
+            pointCount++;
+          });
         });
       }
     });
@@ -1878,7 +1895,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateHeatmap(filteredCases) {
-    if (!geojsonData) return;
+    const showShading = document.getElementById('map-shading-toggle').checked;
+
+    // If layer already exists, remove it from map
+    if (geojsonLayer) {
+      map.removeLayer(geojsonLayer);
+    }
+
+    if (!showShading || !geojsonData) return;
 
     // Calculate country counts from filteredCases
     const countryCounts = {};
@@ -1897,11 +1921,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (count === 1) return '#8da38a'; // Sage Green
       if (count === 2) return '#496a40'; // Brand Green
       return '#243f1f'; // Deep Forest Green
-    }
-
-    // If layer already exists, remove it from map
-    if (geojsonLayer) {
-      map.removeLayer(geojsonLayer);
     }
 
     // Recreate geojson layer with active styles
