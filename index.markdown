@@ -77,8 +77,14 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
     background: transparent !important;
   }
   
+  .site-header .wrapper,
+  .site-footer .wrapper,
   .page-content .wrapper {
     max-width: 1200px !important;
+    width: 100% !important;
+  }
+  
+  .page-content .wrapper {
     padding-top: 1.5rem !important;
     padding-bottom: 4rem !important;
   }
