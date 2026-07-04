@@ -6,173 +6,175 @@ layout: default
   <!-- Header Row -->
   <div class="browse-header-row">
     <h1 class="browse-title" id="main-cases-title">
-      <span class="cases-count-num">{{ site.cases.size }}</span> case studies
+      Browse case book entries
     </h1>
   </div>
 
   {% include filters_panel.html %}
 
   <!-- Main Content Grid -->
-    <!-- Status Bar -->
-    <div class="browse-status-bar">
-      <span class="cases-count-label">
-        Showing <span class="cases-count-num">{{ site.cases.size }}</span> case studies
-        <span id="explore-all-wrapper" style="display: none;">
-          &bull; <a href="#" id="explore-all-link" class="explore-all-link">Explore all</a>
-        </span>
+  <!-- Status Bar -->
+  <div class="browse-status-bar">
+    <span class="cases-count-label">
+      Showing <span class="cases-count-num">{{ site.cases.size }}</span> case studies
+      <span id="explore-all-wrapper" style="display: none;">
+        &bull; <a href="#" id="explore-all-link" class="explore-all-link">Explore all</a>
       </span>
-    </div>
+    </span>
+  </div>
 
-    <!-- Cards Grid -->
-    <div class="cases-grid" id="cases-grid">
-      {% assign sorted_cases = site.cases | sort: "title" %}
-      
-      {% assign featured_cases = "" | split: "" %}
-      {% assign full_cases = "" | split: "" %}
-      {% assign mapping_cases = "" | split: "" %}
-      
-      {% for case in sorted_cases %}
-        {% if case.curation-decision == "Do not include" %}
-          {% continue %}
-        {% endif %}
-        
-        {% if case.curation-decision == "Featured Full Case" or case.curation-decision == "Featured Case" %}
-          {% assign featured_cases = featured_cases | push: case %}
-        {% elsif case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
-          {% assign mapping_cases = mapping_cases | push: case %}
-        {% else %}
-          {% assign full_cases = full_cases | push: case %}
-        {% endif %}
-      {% endfor %}
-      {% assign all_cases = featured_cases | concat: full_cases | concat: mapping_cases %}
+  <!-- Cards Grid -->
+  <div class="cases-grid" id="cases-grid">
+    {% assign sorted_cases = site.cases | sort: "title" %}
 
-      {% for case in all_cases %}
-        <!-- Gather Methods and Locations for filters -->
-        {% assign unique_methods = "" | split: "" %}
-        {% assign unique_locations = "" | split: "" %}
-        
-        {% if case.participants %}
-          {% for part_slug in case.participants %}
-            {% assign part = site.participants | where: "slug", part_slug | first %}
-            {% if part %}
-              {% if part.which-of-the-following-methods-were-used-to %}
-                {% for method in part.which-of-the-following-methods-were-used-to %}
-                  {% unless unique_methods contains method %}
-                    {% assign unique_methods = unique_methods | push: method %}
-                  {% endunless %}
-                {% endfor %}
-              {% endif %}
-              {% if part.locations %}
-                {% for loc_slug in part.locations %}
-                  {% assign loc = site.locations | where: "slug", loc_slug | first %}
-                  {% if loc and loc.country-code %}
-                    {% unless unique_locations contains loc.country-code %}
-                      {% assign unique_locations = unique_locations | push: loc.country-code %}
-                    {% endunless %}
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
+    {% assign featured_cases = "" | split: "" %}
+    {% assign full_cases = "" | split: "" %}
+    {% assign mapping_cases = "" | split: "" %}
+
+    {% for case in sorted_cases %}
+    {% if case.curation-decision == "Do not include" %}
+    {% continue %}
+    {% endif %}
+
+    {% if case.curation-decision == "Featured Full Case" or case.curation-decision == "Featured Case" %}
+    {% assign featured_cases = featured_cases | push: case %}
+    {% elsif case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
+    {% assign mapping_cases = mapping_cases | push: case %}
+    {% else %}
+    {% assign full_cases = full_cases | push: case %}
+    {% endif %}
+    {% endfor %}
+    {% assign all_cases = featured_cases | concat: full_cases | concat: mapping_cases %}
+
+    {% for case in all_cases %}
+    <!-- Gather Methods and Locations for filters -->
+    {% assign unique_methods = "" | split: "" %}
+    {% assign unique_locations = "" | split: "" %}
+
+    {% if case.participants %}
+    {% for part_slug in case.participants %}
+    {% assign part = site.participants | where: "slug", part_slug | first %}
+    {% if part %}
+    {% if part.which-of-the-following-methods-were-used-to %}
+    {% for method in part.which-of-the-following-methods-were-used-to %}
+    {% unless unique_methods contains method %}
+    {% assign unique_methods = unique_methods | push: method %}
+    {% endunless %}
+    {% endfor %}
+    {% endif %}
+    {% if part.locations %}
+    {% for loc_slug in part.locations %}
+    {% assign loc = site.locations | where: "slug", loc_slug | first %}
+    {% if loc and loc.country-code %}
+    {% unless unique_locations contains loc.country-code %}
+    {% assign unique_locations = unique_locations | push: loc.country-code %}
+    {% endunless %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <!-- Get Card Thumbnail URL -->
+    {% assign thumb_url = nil %}
+    {% if case.photos-and-images and case.photos-and-images.size > 0 %}
+    {% if case.photos-and-images[0].thumbnails.large %}
+    {% assign thumb_url = case.photos-and-images[0].thumbnails.large.url %}
+    {% else %}
+    {% assign thumb_url = case.photos-and-images[0].url %}
+    {% endif %}
+    {% endif %}
+
+    <!-- Render Card -->
+    <div class="case-card" data-slug="{{ case.slug }}"
+      data-focus="{{ case.what-form-of-ai-is-the-project-about | join: '||' | downcase }}"
+      data-methods="{{ unique_methods | join: '||' | downcase }}"
+      data-goals="{{ case.project-goals | join: '||' | downcase }}"
+      data-locations="{{ unique_locations | join: '||' | downcase }}">
+
+      <!-- Click overlay -->
+      <a href="{{ case.url | relative_url }}" class="card-link-wrapper"
+        aria-label="Read case study: {{ case.title | escape }}"></a>
+
+      <div class="card-header-section">
+        <div class="card-header-text">
+          <div class="card-meta-line">
+            {% if case.curation-decision == "Featured Full Case" or case.curation-decision == "Featured Case" %}
+            <span class="card-featured-badge">★ Featured</span>
+            {% elsif case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
+            <span class="card-mapping-badge">
+              <svg class="badge-icon" viewBox="0 0 24 24">
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              </svg>Mapping Entry
+            </span>
             {% endif %}
-          {% endfor %}
-        {% endif %}
-
-        <!-- Get Card Thumbnail URL -->
-        {% assign thumb_url = nil %}
-        {% if case.photos-and-images and case.photos-and-images.size > 0 %}
-          {% if case.photos-and-images[0].thumbnails.large %}
-            {% assign thumb_url = case.photos-and-images[0].thumbnails.large.url %}
-          {% else %}
-            {% assign thumb_url = case.photos-and-images[0].url %}
-          {% endif %}
-        {% endif %}
-
-        <!-- Render Card -->
-        <div class="case-card"
-             data-slug="{{ case.slug }}"
-             data-focus="{{ case.what-form-of-ai-is-the-project-about | join: '||' | downcase }}"
-             data-methods="{{ unique_methods | join: '||' | downcase }}"
-             data-goals="{{ case.project-goals | join: '||' | downcase }}"
-             data-locations="{{ unique_locations | join: '||' | downcase }}">
-          
-          <!-- Click overlay -->
-          <a href="{{ case.url | relative_url }}" class="card-link-wrapper" aria-label="Read case study: {{ case.title | escape }}"></a>
-          
-          <div class="card-header-section">
-            <div class="card-header-text">
-              <div class="card-meta-line">
-                {% if case.curation-decision == "Featured Full Case" or case.curation-decision == "Featured Case" %}
-                  <span class="card-featured-badge">★ Featured</span>
-                {% elsif case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
-                  <span class="card-mapping-badge">
-                    <svg class="badge-icon" viewBox="0 0 24 24">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                    </svg>Mapping Entry
-                  </span>
-                {% endif %}
-                <span class="card-year-badge">
-                  {{ case.what-year-did-the-project-start }}
-                  {% if case.what-year-did-the-project-conclude and case.what-year-did-the-project-conclude != case.what-year-did-the-project-start %}
-                    &ndash; {{ case.what-year-did-the-project-conclude }}
-                  {% endif %}
-                </span>
-              </div>
-
-              <h3 class="card-title">
-                <a href="{{ case.url | relative_url }}">{{ case.title | escape }}</a>
-              </h3>
-            </div>
-
-            {% if thumb_url %}
-              <div class="card-thumbnail-box">
-                <img src="{{ thumb_url | relative_url }}" alt="Thumbnail for {{ case.title | escape }}" loading="lazy">
-              </div>
-            {% endif %}
+            <span class="card-year-badge">
+              {{ case.what-year-did-the-project-start }}
+              {% if case.what-year-did-the-project-conclude and case.what-year-did-the-project-conclude !=
+              case.what-year-did-the-project-start %}
+              &ndash; {{ case.what-year-did-the-project-conclude }}
+              {% endif %}
+            </span>
           </div>
 
-          <!-- Specs block -->
-          <div class="card-specs">
-            {% if case.what-form-of-ai-is-the-project-about and case.what-form-of-ai-is-the-project-about.size > 0 %}
-              <div class="spec-row">
-                <span class="spec-label">Focus</span>
-                <span class="spec-value">{{ case.what-form-of-ai-is-the-project-about | join: ', ' }}</span>
-              </div>
-            {% endif %}
-
-            {% if unique_methods.size > 0 %}
-              <div class="spec-row">
-                <span class="spec-label">Methods</span>
-                <span class="spec-value">{{ unique_methods | join: ', ' }}</span>
-              </div>
-            {% endif %}
-
-            {% if unique_locations.size > 0 %}
-              <div class="spec-row">
-                <span class="spec-label">Locations</span>
-                <span class="spec-value">
-                  {% for code in unique_locations %}
-                    {% include country_name.html code=code %}{% unless forloop.last %}, {% endunless %}
-                  {% endfor %}
-                </span>
-              </div>
-            {% endif %}
-          </div>
-
-          {% unless case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
-            {% if case.provide-a-brief-description-of-the-project %}
-              <div class="card-description">
-                {{ case.provide-a-brief-description-of-the-project | truncatewords: 28 }}
-              </div>
-            {% endif %}
-          {% endunless %}
-
+          <h3 class="card-title">
+            <a href="{{ case.url | relative_url }}">{{ case.title | escape }}</a>
+          </h3>
         </div>
-      {% endfor %}
 
-      <!-- Dynamic No Results Message -->
-      <div class="no-results-message" id="no-results-msg">
-        No case studies match your active filters. Try removing some filters or search terms.
+        {% if thumb_url %}
+        <div class="card-thumbnail-box">
+          <img src="{{ thumb_url | relative_url }}" alt="Thumbnail for {{ case.title | escape }}" loading="lazy">
+        </div>
+        {% endif %}
       </div>
+
+      <!-- Specs block -->
+      <div class="card-specs">
+        {% if case.what-form-of-ai-is-the-project-about and case.what-form-of-ai-is-the-project-about.size > 0 %}
+        <div class="spec-row">
+          <span class="spec-label">Focus</span>
+          <span class="spec-value">{{ case.what-form-of-ai-is-the-project-about | join: ', ' }}</span>
+        </div>
+        {% endif %}
+
+        {% if unique_methods.size > 0 %}
+        <div class="spec-row">
+          <span class="spec-label">Methods</span>
+          <span class="spec-value">{{ unique_methods | join: ', ' }}</span>
+        </div>
+        {% endif %}
+
+        {% if unique_locations.size > 0 %}
+        <div class="spec-row">
+          <span class="spec-label">Locations</span>
+          <span class="spec-value">
+            {% for code in unique_locations %}
+            {% include country_name.html code=code %}{% unless forloop.last %}, {% endunless %}
+            {% endfor %}
+          </span>
+        </div>
+        {% endif %}
+      </div>
+
+      {% unless case.curation-decision == "Mapping Entry" or case.curation-decision == "Mapping Entries" %}
+      {% if case.provide-a-brief-description-of-the-project %}
+      <div class="card-description">
+        {{ case.provide-a-brief-description-of-the-project | truncatewords: 28 }}
+      </div>
+      {% endif %}
+      {% endunless %}
+
     </div>
+    {% endfor %}
+
+    <!-- Dynamic No Results Message -->
+    <div class="no-results-message" id="no-results-msg">
+      No case studies match your active filters. Try removing some filters or search terms.
+    </div>
+  </div>
 
 </div>
 

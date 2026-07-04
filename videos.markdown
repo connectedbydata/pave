@@ -6,994 +6,969 @@ permalink: /videos/
 menus: []
 ---
 
-<!-- Import Modern Premium Fonts -->
+<!-- Import Modern Premium Fonts and Libraries -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
-{% assign video_count = 0 %}
-{% for res in site.resources %}
-  {% if res.select == "Video" %}
-    {% assign video_count = video_count | plus: 1 %}
-  {% endif %}
-{% endfor %}
-
-<div class="video-gallery-container cases-index-page">
-  <div class="browse-header-row">
-    <h1 class="browse-title" id="main-cases-title">
-      <span class="cases-count-num">{{ video_count }}</span> project videos
-    </h1>
-  </div>
-
-  {% include filters_panel.html %}
-
-  <!-- Status Bar -->
-  <div class="browse-status-bar">
-    <span class="cases-count-label">Showing <span class="cases-count-num">{{ video_count }}</span> videos</span>
-  </div>
-
-  <!-- Video Grid List -->
-  <main class="video-grid" id="video-grid">
-    {% for res in site.resources %}
-      {% if res.select == "Video" %}
-        <!-- Retrieve case metadata for current resource -->
-        {% assign res_focus = "" | split: "||" %}
-        {% assign res_methods = "" | split: "||" %}
-        {% assign res_goals = "" | split: "||" %}
-        {% assign res_locations = "" | split: "||" %}
-        {% assign res_cases = "" | split: "||" %}
-
-        {% for case_slug in res.cases %}
-          {% for c in site.cases %}
-            {% if c.slug == case_slug %}
-              {% assign res_cases = res_cases | push: c.title %}
-              <!-- Focus -->
-              {% if c.what-form-of-ai-is-the-project-about %}
-                {% for val in c.what-form-of-ai-is-the-project-about %}
-                  {% assign res_focus = res_focus | push: val %}
-                {% endfor %}
-              {% endif %}
-              <!-- Goals -->
-              {% if c.project-goals %}
-                {% for val in c.project-goals %}
-                  {% assign res_goals = res_goals | push: val %}
-                {% endfor %}
-              {% endif %}
-              <!-- Methods & Locations from participants -->
-              {% if c.participants %}
-                {% for part_slug in c.participants %}
-                  {% assign part = site.participants | where: "slug", part_slug | first %}
-                  {% if part %}
-                    {% if part.which-of-the-following-methods-were-used-to %}
-                      {% for method in part.which-of-the-following-methods-were-used-to %}
-                        {% assign res_methods = res_methods | push: method %}
-                      {% endfor %}
-                    {% endif %}
-                    {% if part.locations %}
-                      {% for loc_slug in part.locations %}
-                        {% assign loc = site.locations | where: "slug", loc_slug | first %}
-                        {% if loc and loc.country-code %}
-                          {% assign res_locations = res_locations | push: loc.country-code %}
-                        {% endif %}
-                      {% endfor %}
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        {% endfor %}
-
-        {% assign res_focus_uniq = res_focus | uniq %}
-        {% assign res_methods_uniq = res_methods | uniq %}
-        {% assign res_goals_uniq = res_goals | uniq %}
-        {% assign res_locations_uniq = res_locations | uniq %}
-        {% assign res_cases_uniq = res_cases | uniq %}
-
-        <article class="video-card" 
-                 data-focus="{{ res_focus_uniq | join: '||' | downcase }}" 
-                 data-methods="{{ res_methods_uniq | join: '||' | downcase }}"
-                 data-goals="{{ res_goals_uniq | join: '||' | downcase }}"
-                 data-locations="{{ res_locations_uniq | join: '||' | downcase }}"
-                 data-url="{{ res.external_url | escape }}">
-          
-          <!-- Card Thumbnail Area -->
-          <div class="video-cover-wrapper">
-            <div class="video-cover-container" id="cover-{{ res.slug }}">
-              <!-- Spinner displayed during lazy loads -->
-              <div class="video-spinner"></div>
-              
-              <!-- CURATED COVER ELEMENT (Loaded by JS) -->
-              <div class="video-media-target"></div>
-
-              <!-- Premium Hover & Play Overlay -->
-              <div class="play-overlay">
-                <div class="play-btn-circle">
-                  <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z"></path>
-                  </svg>
-                  <svg class="external-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display: none;">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card Content Area -->
-          <div class="video-card-body">
-            <div class="video-case-link">
-              {% for case_name in res_cases_uniq %}
-                <span class="case-tag-badge">{{ case_name }}</span>
-              {% endfor %}
-            </div>
-
-            <h2 class="video-title">{{ res.title | escape }}</h2>
-
-            <p class="video-description">
-              {% if res.short-description %}
-                {{ res.short-description | escape }}
-              {% else %}
-                <!-- Fallback to case description or nice default -->
-                {% assign fallback_desc = "" %}
-                {% for case_slug in res.cases %}
-                  {% for c in site.cases %}
-                    {% if c.slug == case_slug %}
-                      {% assign fallback_desc = c.provide-a-brief-description-of-the-project | truncatewords: 25 %}
-                    {% endif %}
-                  {% endfor %}
-                {% endfor %}
-                {% if fallback_desc != "" %}
-                  {{ fallback_desc | escape }}
-                {% else %}
-                  Explore key highlights and media coverage from this case study engagement.
-                {% endif %}
-              {% endif %}
-            </p>
-
-            <!-- Specs block -->
-            <div class="card-specs">
-              {% if res_focus_uniq.size > 0 %}
-                <div class="spec-row">
-                  <span class="spec-label">Focus</span>
-                  <span class="spec-value">{{ res_focus_uniq | join: ', ' }}</span>
-                </div>
-              {% endif %}
-
-              {% if res_methods_uniq.size > 0 %}
-                <div class="spec-row">
-                  <span class="spec-label">Methods</span>
-                  <span class="spec-value">{{ res_methods_uniq | join: ', ' }}</span>
-                </div>
-              {% endif %}
-
-              {% if res_locations_uniq.size > 0 %}
-                <div class="spec-row">
-                  <span class="spec-label">Locations</span>
-                  <span class="spec-value">
-                    {% for code in res_locations_uniq %}
-                      {% include country_name.html code=code %}{% unless forloop.last %}, {% endunless %}
-                    {% endfor %}
-                  </span>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-
-          <!-- Hidden case details content parsed on modal open -->
-          <div class="video-case-details-source" style="display: none;">
-            {% for case_slug in res.cases %}
-              {% for c in site.cases %}
-                {% if c.slug == case_slug %}
-                  <div class="modal-case-info">
-                    <span class="modal-case-badge">CASE STUDY</span>
-                    <h3 class="modal-case-title">{{ c.title | escape }}</h3>
-                    {% if c.provide-a-brief-description-of-the-project %}
-                      <p class="modal-case-desc">{{ c.provide-a-brief-description-of-the-project | strip_html | truncatewords: 50 | escape }}</p>
-                    {% endif %}
-                    <div class="modal-case-fields">
-                      {% if c.how-was-the-project-initiated %}
-                        <div class="modal-meta-item">
-                          <span class="modal-meta-label">Initiation:</span>
-                          <span class="modal-meta-val">{{ c.how-was-the-project-initiated | join: ", " }}</span>
-                        </div>
-                      {% endif %}
-                      {% if c.what-form-of-ai-is-the-project-about %}
-                        <div class="modal-meta-item">
-                          <span class="modal-meta-label">AI Focus:</span>
-                          <span class="modal-meta-val">{{ c.what-form-of-ai-is-the-project-about | join: ", " }}</span>
-                        </div>
-                      {% endif %}
-                      {% if c.geographic-scope %}
-                        <div class="modal-meta-item">
-                          <span class="modal-meta-label">Locations:</span>
-                          <span class="modal-meta-val">
-                            {% assign loc_titles = "" | split: "," %}
-                            {% for loc_slug in c.geographic-scope %}
-                              {% assign loc_item = site.locations | where: "slug", loc_slug | first %}
-                              {% if loc_item %}
-                                {% assign loc_titles = loc_titles | push: loc_item.title %}
-                              {% endif %}
-                            {% endfor %}
-                            {{ loc_titles | join: ", " }}
-                          </span>
-                        </div>
-                      {% endif %}
-                    </div>
-                    <a href="{{ c.url | relative_url }}" class="modal-view-case-btn" target="_blank">
-                      <span>View Full Case Study</span>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                      </svg>
-                    </a>
-                  </div>
-                {% endif %}
-              {% endfor %}
-            {% endfor %}
-          </div>
-        </article>
-      {% endif %}
-    {% endfor %}
-
-    <!-- Empty State -->
-    <div id="no-results-msg" class="no-results-message gallery-empty-state" style="display: none;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="8" y1="12" x2="16" y2="12"></line>
-      </svg>
-      <h3>No matches found</h3>
-      <p>Try clearing your active filters or selecting different options.</p>
+<div class="video-playlist-layout">
+  
+  <!-- LEFT SIDEBAR (20% screen width) -->
+  <aside class="playlist-sidebar">
+    <div class="sidebar-brand">
+      <a href="{{ '/' | relative_url }}">
+        <img src="{{ '/assets/images/pave-case-book-logo.png' | relative_url }}" alt="PAVE Logo" class="sidebar-logo">
+      </a>
+      <div class="sidebar-explanation-box">
+        <p>See participation and public voice in action: videos from participatory AI projects around the world.</p>
+      </div>
     </div>
-  </main>
 
-  <!-- Cinema Immersive Full-Screen Video Modal -->
-  <div id="video-modal" class="video-modal" aria-hidden="true" role="dialog" aria-label="Video Player">
-    <div class="modal-backdrop" id="modal-backdrop"></div>
-    <div class="modal-content-container">
-      <button id="modal-close-btn" class="modal-close-btn" aria-label="Close video player">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <div class="modal-split-layout">
-        <div class="modal-video-side">
-          <div class="modal-video-wrapper">
-            <iframe id="modal-video-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <div class="playlist-container">
+      <!-- Sidebar Transport Controls -->
+      <div class="playlist-header-controls">
+        <div class="transport-controls">
+          <button id="btn-prev" class="transport-btn" title="Previous">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button id="btn-play-pause" class="transport-btn transport-btn-main" title="Play">
+            <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+            <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+            </svg>
+          </button>
+          <button id="btn-next" class="transport-btn" title="Next">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+          <button id="btn-shuffle" class="transport-btn" title="Shuffle">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="playlist-tabs">
+        <button class="playlist-tab-btn active" id="tab-btn-queue">Play Queue</button>
+        <button class="playlist-tab-btn" id="tab-btn-edit">Edit Playlist</button>
+      </div>
+
+      <!-- Tab 1: Queue (Case hierarchy) -->
+      <div class="tab-pane active" id="pane-queue">
+        <div id="playlist-queue-list" class="queue-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Tab 2: Edit (Flat sortable list) -->
+      <div class="tab-pane" id="pane-edit">
+        <div class="playlist-controls">
+          <h3 class="controls-title">Playlist Controls</h3>
+          <div class="controls-btn-group">
+            <button id="playlist-btn-featured" class="control-btn accent">Add Featured</button>
+            <button id="playlist-btn-all" class="control-btn secondary">Add All</button>
+            <button id="playlist-btn-clear" class="control-btn danger">Clear</button>
           </div>
         </div>
-        <div class="modal-details-side">
-          <div id="modal-case-details-content">
-            <!-- Populated via Javascript -->
-          </div>
+        <div id="playlist-edit-list" class="edit-list">
+          <!-- Populated by JS -->
         </div>
       </div>
     </div>
-  </div>
+  </aside>
+
+  <!-- RIGHT CONTENT AREA (80% screen width) -->
+  <main class="playlist-main-content">
+    
+    <!-- Top-Right: Embedded Video Player -->
+    <section id="player-section" class="player-section" style="display: none;">
+      <div class="player-aspect-container">
+        <div id="video-player-frame" class="player-iframe-target"></div>
+        <button id="btn-close-player" class="close-player-btn" title="Close Player">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Bottom Case Details Footer (Revealed during playback) -->
+    <section id="case-details-footer" class="case-details-footer" style="display: none;">
+      <div class="case-details-info">
+        <div class="case-details-title-row">
+          <h2 id="footer-case-title" class="case-details-title"></h2>
+        </div>
+        <p id="footer-case-desc" class="case-details-desc"></p>
+        <div id="footer-case-stats" class="case-details-stats-block"></div>
+      </div>
+      
+      <div class="case-details-widgets">
+        <div class="case-details-qr">
+          <span class="case-details-qr-label">Scan to View Case</span>
+          <div id="footer-qr-code" class="qr-container"></div>
+        </div>
+        <div class="case-details-map">
+          <span class="case-details-map-label">Case Locations</span>
+          <div id="footer-mini-map" class="map-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Available Videos Grid (Featured above Others) -->
+    <section class="gallery-grids-section">
+      <div class="gallery-section-header">
+        <h1 class="browse-title">Browse Project Videos</h1>
+      </div>
+
+      <!-- Featured Section -->
+      <div class="video-grid-category">
+        <h3 class="category-title featured-header">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="star-icon">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          </svg>
+          Featured Videos
+        </h3>
+        <div class="video-grid" id="featured-grid">
+          {% for res in site.resources %}
+            {% if res.select == "Video" and res.featured-video-resource == true %}
+              {% include_relative video_card_template.html res=res %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Others Section -->
+      <div class="video-grid-category">
+        <h3 class="category-title">Other Videos</h3>
+        <div class="video-grid" id="others-grid">
+          {% for res in site.resources %}
+            {% if res.select == "Video" and res.featured-video-resource != true %}
+              {% include_relative video_card_template.html res=res %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+  </main>
 </div>
 
-<!-- Custom High-Aesthetic styling (Vanilla CSS) -->
+<!-- Custom High-Aesthetic Styling (Vanilla CSS) -->
 <style>
-/* Variable and Premium Typography Setup */
-.video-gallery-container {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 1.5rem 0.5rem;
-  color: #1e293b;
-}
-
-@media (min-width: 1200px) {
-  .site-header .wrapper,
-  .site-footer .wrapper,
+  /* 1. Immersive full-screen CSS setup */
+  .site-header, .site-footer {
+    display: none !important;
+  }
+  .page-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #fcfcf9 !important;
+  }
   .page-content .wrapper {
-    max-width: 80% !important;
-    transition: max-width 0.3s ease;
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
-}
 
-/* Base header layout */
-.gallery-header {
-  margin-block-end: 2.5rem;
-  text-align: left;
-}
-.header-badge {
-  display: inline-block;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #6366f1;
-  background: rgba(99, 102, 241, 0.08);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  margin-bottom: 0.75rem;
-  border: 1px solid rgba(99, 102, 241, 0.15);
-}
-.gallery-header h1 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0 0 0.5rem 0;
-  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.gallery-header .subtitle {
-  font-size: 1.05rem;
-  color: #64748b;
-  margin: 0;
-  max-width: 600px;
-  line-height: 1.5;
-}
-
-/* Glassmorphic Filter Box */
-.filter-section {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 20px;
-  padding: 1.75rem;
-  margin-bottom: 3rem;
-  box-shadow: 0 4px 20px rgba(148, 163, 184, 0.05), 0 10px 40px rgba(148, 163, 184, 0.03);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.filter-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-  padding-bottom: 1rem;
-}
-.filter-title-group {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.filter-icon {
-  width: 18px;
-  height: 18px;
-  color: #4f46e5;
-}
-.filter-title-group h3 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin: 0;
-  color: #0f172a;
-}
-
-.clear-filters-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: rgba(239, 68, 68, 0.06);
-  color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.15);
-  padding: 0.35rem 0.8rem;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: fadeIn 0.25s ease-out;
-}
-.clear-filters-btn svg {
-  width: 12px;
-  height: 12px;
-}
-.clear-filters-btn:hover {
-  background: #dc2626;
-  color: #ffffff;
-  border-color: #dc2626;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
-}
-
-.filter-groups {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-@media (min-width: 768px) {
-  .filter-groups {
-    grid-template-columns: 1fr 1fr;
+  .video-playlist-layout {
+    display: flex;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #1e293b;
+    height: 100vh;
+    overflow: hidden;
   }
-}
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.filter-group h4 {
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #64748b;
-  margin: 0;
-}
-.toggle-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
+  /* 2. Left Sidebar Styling */
+  .playlist-sidebar {
+    width: 20%;
+    background: #ffffff;
+    border-right: 1px solid rgba(73, 106, 64, 0.12);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-shrink: 0;
+  }
 
-/* Glassmorphic Active Toggle Badges */
-.filter-toggle {
-  background: #f8fafc;
-  color: #475569;
-  border: 1px solid #e2e8f0;
-  padding: 0.4rem 0.9rem;
-  border-radius: 9999px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  user-select: none;
-}
-.filter-toggle:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-  color: #0f172a;
-  transform: translateY(-1px);
-}
-.filter-toggle.active {
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-  color: #ffffff;
-  border-color: #4f46e5;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-  font-weight: 600;
-}
+  .sidebar-brand {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(73, 106, 64, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sidebar-logo {
+    height: 38px;
+    display: block;
+  }
 
-/* CSS Grid for neat, uniform columns */
-.video-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.75rem;
-  transition: all 0.4s ease;
-}
-@media (min-width: 640px) {
+  /* Sidebar Explanation Box */
+  .sidebar-explanation-box {
+    background: rgba(73, 106, 64, 0.06);
+    border: 1px solid rgba(73, 106, 64, 0.15);
+    border-radius: 12px;
+    padding: 0.85rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #243f1f;
+    margin-top: 0.75rem;
+    text-align: left;
+    width: 100%;
+  }
+  .sidebar-explanation-box p {
+    margin: 0;
+  }
+
+  /* Transport Control Bar */
+  .playlist-header-controls {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(73, 106, 64, 0.08);
+    background: rgba(73, 106, 64, 0.01);
+  }
+  .transport-controls {
+    display: flex;
+    gap: 0.35rem;
+    justify-content: center;
+  }
+  .transport-btn {
+    font-family: inherit;
+    border: 1px solid rgba(73, 106, 64, 0.2);
+    background: #ffffff;
+    color: #496a40;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    flex: 1;
+  }
+  .transport-btn:hover {
+    background: rgba(73, 106, 64, 0.06);
+    border-color: #496a40;
+  }
+  .transport-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .transport-btn-main {
+    background: #496a40;
+    color: #ffffff;
+    border-color: #496a40;
+    flex: 1.5;
+  }
+  .transport-btn-main:hover {
+    background: #3c5734;
+    border-color: #3c5734;
+    color: #ffffff;
+  }
+  .transport-btn.active {
+    background: #496a40;
+    color: #ffd700;
+    border-color: #496a40;
+  }
+  .transport-btn.active:hover {
+    background: #3c5734;
+    border-color: #3c5734;
+  }
+
+  .playlist-controls {
+    padding: 0 0 1rem 0;
+    border-bottom: 1px solid rgba(73, 106, 64, 0.08);
+    margin-bottom: 1rem;
+  }
+  .controls-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #556c50;
+    margin: 0 0 0.75rem 0;
+  }
+  .controls-btn-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .control-btn {
+    flex: 1;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 0.25rem;
+    border-radius: 6px;
+    border: 1px solid rgba(73, 106, 64, 0.15);
+    cursor: pointer;
+    background: none;
+    transition: all 0.2s ease;
+  }
+  .control-btn.accent {
+    background: #496a40;
+    color: #ffffff;
+    border-color: #496a40;
+  }
+  .control-btn.accent:hover {
+    background: #3c5734;
+  }
+  .control-btn.secondary {
+    background: rgba(73, 106, 64, 0.05);
+    color: #496a40;
+  }
+  .control-btn.secondary:hover {
+    background: rgba(73, 106, 64, 0.1);
+  }
+  .control-btn.danger {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.03);
+  }
+  .control-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: #ef4444;
+  }
+
+  /* Playlist container & tabs */
+  .playlist-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .playlist-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(73, 106, 64, 0.08);
+    background: rgba(73, 106, 64, 0.02);
+  }
+  .playlist-tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 0.9rem 0;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7a9476;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 2.5px solid transparent;
+  }
+  .playlist-tab-btn:hover {
+    color: #496a40;
+  }
+  .playlist-tab-btn.active {
+    color: #496a40;
+    border-bottom-color: #496a40;
+    background: #ffffff;
+    font-weight: 700;
+  }
+
+  .tab-pane {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+  }
+  .tab-pane.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Queue tab elements */
+  .queue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .queue-case-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    border-left: 2px solid rgba(73, 106, 64, 0.08);
+    padding-left: 0.75rem;
+    transition: border-color 0.25s ease;
+  }
+  .queue-case-group.active-case {
+    border-left-color: #496a40;
+  }
+  .queue-case-title {
+    font-size: 0.725rem;
+    font-weight: 700;
+    color: #8c9f88;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0;
+    transition: color 0.25s ease;
+  }
+  .queue-case-group.active-case .queue-case-title {
+    color: #496a40;
+  }
+  .queue-video-item {
+    font-size: 0.825rem;
+    font-weight: 500;
+    color: #475569;
+    padding: 0.35rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .queue-video-item:hover {
+    background: rgba(73, 106, 64, 0.04);
+    color: #496a40;
+  }
+  .queue-video-item.active {
+    background: rgba(73, 106, 64, 0.08);
+    color: #496a40;
+    font-weight: 700;
+  }
+
+  /* Edit playlist tab */
+  .edit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .playlist-edit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: #ffffff;
+    border: 1px solid rgba(73, 106, 64, 0.1);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: grab;
+    transition: all 0.2s ease;
+  }
+  .playlist-edit-item.dragging {
+    opacity: 0.4;
+    border-style: dashed;
+    background: rgba(73, 106, 64, 0.02);
+  }
+  .playlist-edit-item.drag-over {
+    border-color: #496a40;
+    background: rgba(73, 106, 64, 0.04);
+  }
+  .drag-handle {
+    color: #94a3b8;
+    cursor: grab;
+    font-weight: bold;
+    user-select: none;
+  }
+  .edit-item-info {
+    flex: 1;
+    overflow: hidden;
+  }
+  .edit-item-title {
+    font-weight: 600;
+    color: #334155;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .edit-item-case {
+    font-size: 0.675rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .btn-remove-item {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+  }
+  .btn-remove-item:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+  }
+
+  /* Empty cues */
+  .playlist-empty-state {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    margin-top: 3rem;
+  }
+
+  /* 3. Right Content Area Styling */
+  .playlist-main-content {
+    width: 80%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* Video player wrapper */
+  .player-section {
+    width: 100%;
+  }
+  .player-aspect-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background: #0f172a;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  }
+  .player-iframe-target {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    z-index: 1;
+  }
+  .close-player-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.25s ease;
+  }
+  .player-aspect-container:hover .close-player-btn {
+    opacity: 1;
+  }
+  .close-player-btn:hover {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: #ffffff;
+    transform: scale(1.08);
+  }
+  .close-player-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  .player-placeholder-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #ffffff;
+    padding: 2rem;
+    text-align: center;
+    z-index: 2;
+  }
+  .placeholder-icon {
+    width: 64px;
+    height: 64px;
+    color: rgba(73, 106, 64, 0.4);
+    margin-bottom: 1rem;
+  }
+  .placeholder-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  .player-placeholder-overlay h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+  .player-placeholder-overlay p {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin: 0;
+    max-width: 380px;
+  }
+
+  /* 4. Case Details Footer Styling */
+  .case-details-footer {
+    display: flex;
+    background: #ffffff;
+    border: 1px solid rgba(73, 106, 64, 0.12);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(73, 106, 64, 0.03);
+    gap: 2.5rem;
+    align-items: stretch;
+    width: 95%;
+    animation: slideUpFade 0.4s ease forwards;
+  }
+  @keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .case-details-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .case-details-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .case-details-badge {
+    background: rgba(73, 106, 64, 0.08);
+    color: #496a40;
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .case-details-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a2f16;
+    margin: 0;
+  }
+  .case-details-desc {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #556c50;
+    margin: 0;
+  }
+  .case-details-stats-block {
+    font-size: 0.8rem;
+    color: #7a9476;
+    line-height: 1.4;
+    border-top: 1px dashed rgba(73, 106, 64, 0.12);
+    padding-top: 0.65rem;
+    margin-top: 0.25rem;
+  }
+  .stats-light {
+    font-weight: 600;
+    color: #496a40;
+  }
+
+  .case-details-widgets {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .case-details-qr, .case-details-map {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .case-details-qr-label, .case-details-map-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #7a9476;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .case-details-qr {
+    flex-shrink: 0;
+  }
+  #footer-qr-code {
+    padding: 0.35rem;
+    background: #ffffff;
+    border: 1px solid rgba(73, 106, 64, 0.12);
+    border-radius: 8px;
+    width: 90px;
+    height: 90px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  #footer-qr-code canvas,
+  #footer-qr-code img {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: contain !important;
+  }
+  .map-container {
+    width: 145px;
+    height: 98px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(73, 106, 64, 0.15);
+    z-index: 5;
+  }
+
+  /* 5. Video Grid layout below */
+  .gallery-grids-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .gallery-section-header {
+    border-bottom: 2px solid rgba(73, 106, 64, 0.08);
+    padding-bottom: 0.75rem;
+  }
+  .browse-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a2f16;
+    margin: 0;
+  }
+  .video-grid-category {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .category-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #556c50;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .category-title.featured-header {
+    color: #d97706; /* Curated amber featured color */
+  }
+  .star-icon {
+    width: 16px;
+    height: 16px;
+  }
+
   .video-grid {
-    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1.75rem;
   }
-}
-@media (min-width: 1024px) {
-  .video-grid {
-    grid-template-columns: repeat(3, 1fr);
+
+  /* Video card styling */
+  .video-card {
+    background: #ffffff;
+    border: 1px solid rgba(73, 106, 64, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(73, 106, 64, 0.01);
   }
-}
-
-/* Video Card Styling (Equal Height Layout) */
-.video-card {
-  background: #ffffff;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
-  opacity: 1;
-  transform: scale(1);
-}
-.video-card:hover {
-  transform: translateY(-4px) scale(1.005);
-  border-color: rgba(99, 102, 241, 0.25);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
-}
-
-/* Card image / Video container styling */
-.video-cover-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #0f172a;
-}
-.video-cover-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.video-media-target {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.video-card:hover .video-media-target {
-  transform: scale(1.05);
-}
-
-/* Video Loading Spinner */
-.video-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 32px;
-  height: 32px;
-  margin-top: -16px;
-  margin-left: -16px;
-  border: 3px solid rgba(255,255,255,0.1);
-  border-top-color: #6366f1;
-  border-radius: 50%;
-  animation: spin 1s infinite linear;
-  display: none;
-  z-index: 2;
-}
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Overlay play button styling */
-.play-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
-}
-.video-card:hover .play-overlay {
-  opacity: 1;
-}
-
-.play-btn-circle {
-  width: 54px;
-  height: 54px;
-  background: rgba(255, 255, 255, 0.95);
-  color: #4f46e5;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  transform: scale(0.85);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.play-svg {
-  width: 20px;
-  height: 20px;
-  margin-left: 2px; /* Center-align the play triangle */
-}
-.external-svg {
-  width: 20px;
-  height: 20px;
-}
-.video-card:hover .play-btn-circle {
-  transform: scale(1.12);
-  background: #4f46e5;
-  color: #ffffff;
-  box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
-}
-
-/* Iframe layout matching */
-.video-iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  z-index: 3;
-  position: absolute;
-  top: 0;
-  left: 0;
-  animation: fadeIn 0.4s ease;
-}
-
-/* Card details styling */
-.video-card-body {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  flex-grow: 1; /* Stretch to fill card height */
-}
-.video-case-link {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-.case-tag-badge {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #4f46e5;
-  background: rgba(79, 70, 229, 0.06);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid rgba(79, 70, 229, 0.1);
-}
-
-.video-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  line-height: 1.35;
-  margin: 0;
-  color: #0f172a;
-}
-.video-description {
-  font-size: 0.875rem;
-  line-height: 1.45;
-  color: #475569;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 4.35em; /* Lock description space for neat grid alignment */
-}
-
-/* Specs block styled like Cases */
-.video-card .card-specs {
-  margin-top: auto; /* Push specs and description to bottom and align */
-  margin-bottom: 0.5rem;
-  padding-block: 0.75rem;
-  border-top: 1px solid #496a40 !important;
-  border-bottom: 1px solid #496a40 !important;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.video-card .card-specs .spec-row {
-  display: flex;
-  font-size: 0.775rem !important;
-  line-height: 1.4;
-  gap: 0.5rem;
-}
-.video-card .card-specs .spec-row .spec-label {
-  font-weight: 700;
-  color: #000000 !important;
-  text-transform: uppercase;
-  min-width: 75px;
-  flex-shrink: 0;
-}
-.video-card .card-specs .spec-row .spec-value {
-  color: #496a40 !important;
-}
-
-/* Fade animation effects */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Empty State Styling */
-.gallery-empty-state {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 4rem 2rem;
-  background: #ffffff;
-  border: 1px dashed #cbd5e1;
-  border-radius: 20px;
-  animation: fadeIn 0.3s ease;
-  width: 100%;
-}
-.gallery-empty-state svg {
-  width: 48px;
-  height: 48px;
-  color: #94a3b8;
-  margin-bottom: 1rem;
-}
-.gallery-empty-state h3 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.25rem;
-  margin: 0 0 0.5rem 0;
-  color: #0f172a;
-}
-.gallery-empty-state p {
-  color: #64748b;
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-/* Adaptive transitions for display/hide card actions */
-.video-card.hidden {
-  opacity: 0;
-  transform: scale(0.95);
-  height: 0;
-  margin-bottom: 0;
-  border-width: 0;
-  padding: 0;
-  pointer-events: none;
-  display: none; /* Instant layout hide for columns reflow */
-}
-
-/* Cinema Immersive Full-Screen Video Modal Styling */
-.video-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.video-modal.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-.modal-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(10, 15, 30, 0.85);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  transition: all 0.3s ease;
-}
-.modal-content-container {
-  position: relative;
-  width: 90vw;
-  max-width: 1400px;
-  height: 80vh;
-  max-height: 800px;
-  background: #0f172a;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
-  transform: scale(0.94);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  z-index: 100000;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-.video-modal.active .modal-content-container {
-  transform: scale(1);
-}
-
-/* Modal Split Screen Layout */
-.modal-split-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
-@media (min-width: 768px) {
-  .modal-split-layout {
-    flex-direction: row;
+  .video-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(73, 106, 64, 0.06);
+    border-color: rgba(73, 106, 64, 0.15);
   }
-}
-
-.modal-video-side {
-  flex: 3;
-  background: #000000;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-}
-@media (min-width: 768px) {
-  .modal-video-side {
-    min-height: auto;
+  .video-card.featured {
+    border: 1.5px solid rgba(217, 119, 6, 0.25);
+    box-shadow: 0 4px 15px rgba(217, 119, 6, 0.02);
   }
-}
-
-.modal-video-wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-.modal-video-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.modal-details-side {
-  flex: 1;
-  background: #0f172a;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
-  overflow-y: auto;
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-@media (min-width: 768px) {
-  .modal-details-side {
-    border-top: none;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  .video-card.featured:hover {
+    border-color: rgba(217, 119, 6, 0.5);
+    box-shadow: 0 8px 28px rgba(217, 119, 6, 0.08);
   }
-}
 
-/* Modal Details Elements Styling (Premium typography & contrast) */
-.modal-case-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-.modal-case-info:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-.modal-case-badge {
-  display: inline-block;
-  align-self: flex-start;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #818cf8;
-  background: rgba(129, 140, 248, 0.15);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid rgba(129, 140, 248, 0.2);
-}
-.modal-case-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.3;
-  margin: 0;
-  color: #ffffff;
-}
-.modal-case-desc {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: #94a3b8;
-  margin: 0;
-}
-.modal-case-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.modal-meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-.modal-meta-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.modal-meta-val {
-  font-size: 0.8rem;
-  color: #cbd5e1;
-}
-.modal-view-case-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: #4f46e5;
-  color: #ffffff !important;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-decoration: none !important;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  margin-top: 0.5rem;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
-}
-.modal-view-case-btn:hover {
-  background: #6366f1;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
-}
-.modal-view-case-btn svg {
-  width: 14px;
-  height: 14px;
-}
+  .video-cover-wrapper {
+    position: relative;
+    padding-top: 56.25%;
+    overflow: hidden;
+  }
+  .video-cover-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  .video-media-target {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.4s ease;
+  }
+  .video-card:hover .video-media-target {
+    transform: scale(1.03);
+  }
+  
+  .play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 32, 17, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .video-card:hover .play-overlay {
+    opacity: 1;
+  }
 
-.modal-close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 100001;
-}
-.modal-close-btn:hover {
-  background: rgba(255, 255, 255, 0.28);
-  transform: rotate(90deg) scale(1.05);
-}
-.modal-close-btn svg {
-  width: 20px;
-  height: 20px;
-}
+  .play-btn-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: #496a40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+  }
+  .play-btn-circle:hover {
+    transform: scale(1.1);
+  }
+  .play-svg, .external-svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .video-card-body {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex: 1;
+  }
+  .case-tag-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #7a9476;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .video-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.35;
+  }
+  .video-description {
+    font-size: 0.775rem;
+    line-height: 1.45;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .card-actions-row {
+    margin-top: auto;
+    display: flex;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(73, 106, 64, 0.06);
+    padding-top: 0.75rem;
+  }
+  .card-btn {
+    flex: 1;
+    font-family: inherit;
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.45rem;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+  .card-btn.play {
+    background: #496a40;
+    color: #ffffff;
+  }
+  .card-btn.play:hover {
+    background: #3c5734;
+  }
+  .card-btn.add {
+    background: #ffffff;
+    border-color: rgba(73, 106, 64, 0.25);
+    color: #496a40;
+  }
+  .card-btn.add:hover {
+    background: rgba(73, 106, 64, 0.05);
+  }
+  .card-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Tooltip customization */
+  .leaflet-tooltip.mini-map-tooltip {
+    background: #1a2f16;
+    border: 1px solid rgba(73, 106, 64, 0.2);
+    color: #ffffff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .leaflet-tooltip-top.mini-map-tooltip::before {
+    border-top-color: #1a2f16;
+  }
 </style>
 
-<!-- Custom JS Engine -->
+<!-- Playlist behavior scripting -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Gather all video cards and construct data array
   const cards = document.querySelectorAll('.video-card');
-
-  // Get Cinema Modal Elements
-  const modal = document.getElementById('video-modal');
-  const modalIframe = document.getElementById('modal-video-iframe');
-  const modalClose = document.getElementById('modal-close-btn');
-  const modalBackdrop = document.getElementById('modal-backdrop');
-  const modalCaseDetails = document.getElementById('modal-case-details-content');
-
-  // Helper: Open Modal function
-  function openVideoModal(ytId, title, detailsHtml) {
-    modalIframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&cc_load_policy=1`;
-    modalIframe.title = title;
-    
-    if (modalCaseDetails) {
-      modalCaseDetails.innerHTML = detailsHtml;
+  const allVideos = Array.from(cards).map(card => {
+    let locations = [];
+    try {
+      locations = JSON.parse(card.dataset.caseLocations || '[]');
+    } catch (e) {
+      console.error("Error parsing case locations:", e);
     }
-    
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden'; // prevent background scrolling
-  }
-
-  // Helper: Close Modal function
-  function closeVideoModal() {
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-    modalIframe.src = ''; // completely halt video playback/audio
-    
-    if (modalCaseDetails) {
-      modalCaseDetails.innerHTML = '';
-    }
-    
-    document.body.style.overflow = '';
-  }
-
-  // Bind Cinema Modal close triggers
-  modalClose.addEventListener('click', closeVideoModal);
-  modalBackdrop.addEventListener('click', closeVideoModal);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      closeVideoModal();
-    }
+    return {
+      id: card.dataset.id,
+      title: card.dataset.title,
+      url: card.dataset.url,
+      caseTitle: card.dataset.caseTitle || '',
+      caseDesc: card.dataset.caseDesc || '',
+      caseUrl: card.dataset.caseUrl || '',
+      caseStats: card.dataset.caseStats || '',
+      caseLocations: locations,
+      isFeatured: card.classList.contains('featured')
+    };
   });
 
-  // Helper: Extract YouTube ID
+  // Extract YouTube ID Helper
   function getYouTubeId(url) {
     if (!url) return null;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -1001,84 +976,741 @@ document.addEventListener('DOMContentLoaded', () => {
     return (match && match[2].length === 11) ? match[2] : null;
   }
 
-  // 1. Initial Video Player & Cover Setup
+  function isPlayableInline(video) {
+    if (!video || !video.url) return false;
+    return !!getYouTubeId(video.url);
+  }
+
+  // Bind thumbnails images dynamically on cards
   cards.forEach(card => {
     const url = card.dataset.url;
-    const coverWrapper = card.querySelector('.video-cover-container');
     const mediaTarget = card.querySelector('.video-media-target');
-    const playCircle = card.querySelector('.play-btn-circle');
     const playSvg = card.querySelector('.play-svg');
     const externalSvg = card.querySelector('.external-svg');
-
     const ytId = getYouTubeId(url);
 
-    if (ytId) {
-      // Set high-res YouTube Thumbnail
+    if (ytId && mediaTarget) {
       mediaTarget.style.backgroundImage = `url('https://img.youtube.com/vi/${ytId}/maxresdefault.jpg')`;
-      
-      // Dynamic overlay play click opens modern cinema modal
-      coverWrapper.addEventListener('click', () => {
-        const title = card.querySelector('.video-title').textContent;
-        const desc = card.querySelector('.video-description').textContent.trim();
-        const detailsSource = card.querySelector('.video-case-details-source');
-        
-        let detailsHtml = '';
-        if (detailsSource && detailsSource.innerHTML.trim() !== '') {
-          detailsHtml = detailsSource.innerHTML;
-        } else {
-          detailsHtml = `
-            <div class="modal-case-info">
-              <span class="modal-case-badge">VIDEO RESOURCE</span>
-              <h3 class="modal-case-title">${title}</h3>
-              <p class="modal-case-desc">${desc}</p>
-            </div>
-          `;
-        }
-        
-        openVideoModal(ytId, title, detailsHtml);
-      });
-
-    } else {
-      // Non-YouTube Links (Vimeo or Web pages)
-      const hostname = new URL(url).hostname.replace('www.', '');
-      
-      // Gorgeous premium gradient fallback thumbnail
-      mediaTarget.style.background = 'linear-gradient(135deg, #4f46e5 0%, #a855f7 100%)';
-      
-      // Add custom visual badge for external context
-      const tagBadge = document.createElement('div');
-      tagBadge.className = 'external-source-badge';
-      tagBadge.textContent = hostname;
-      tagBadge.style.cssText = `
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: rgba(15, 23, 42, 0.8);
-        color: #ffffff;
-        font-size: 0.65rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(4px);
-        z-index: 2;
-      `;
-      coverWrapper.appendChild(tagBadge);
-
-      // Display outbound external SVG instead of play
-      playSvg.style.display = 'none';
-      externalSvg.style.display = 'block';
-
-      // Click launches the link in a new tab
-      coverWrapper.addEventListener('click', () => {
-        window.open(url, '_blank', 'noopener,noreferrer');
-      });
+    } else if (mediaTarget) {
+      mediaTarget.style.background = 'linear-gradient(135deg, #7a9476 0%, #496a40 100%)';
+      if (playSvg) playSvg.style.display = 'none';
+      if (externalSvg) externalSvg.style.display = 'block';
     }
   });
+
+  // 2. Playlist State variables
+  let playlist = [];
+  let currentPlaylistIndex = 0;
+  let ytPlayer = null;
+  let miniMap = null;
+  let markerGroup = null;
+  let qrInstance = null;
+  let shuffleEnabled = false;
+
+  // DOM Elements
+  const queueListEl = document.getElementById('playlist-queue-list');
+  const editListEl = document.getElementById('playlist-edit-list');
+  const playerFrameEl = document.getElementById('video-player-frame');
+  const footerEl = document.getElementById('case-details-footer');
+  
+  const tabBtnQueue = document.getElementById('tab-btn-queue');
+  const tabBtnEdit = document.getElementById('tab-btn-edit');
+  const paneQueue = document.getElementById('pane-queue');
+  const paneEdit = document.getElementById('pane-edit');
+
+  const btnFeatured = document.getElementById('playlist-btn-featured');
+  const btnAll = document.getElementById('playlist-btn-all');
+  const btnClear = document.getElementById('playlist-btn-clear');
+
+  const btnPlayPause = document.getElementById('btn-play-pause');
+  const iconPlay = document.getElementById('icon-play');
+  const iconPause = document.getElementById('icon-pause');
+  const btnNext = document.getElementById('btn-next');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnShuffle = document.getElementById('btn-shuffle');
+  const btnClosePlayer = document.getElementById('btn-close-player');
+
+  // Transport button event listeners
+  if (btnPlayPause) {
+    btnPlayPause.addEventListener('click', () => {
+      if (ytPlayer && typeof ytPlayer.getPlayerState === 'function') {
+        const state = ytPlayer.getPlayerState();
+        if (state === YT.PlayerState.PLAYING) {
+          ytPlayer.pauseVideo();
+        } else {
+          ytPlayer.playVideo();
+        }
+      } else {
+        if (playlist.length > 0) {
+          playVideo(currentPlaylistIndex);
+        }
+      }
+    });
+  }
+
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      playNext();
+    });
+  }
+
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      playPrev();
+    });
+  }
+
+  if (btnShuffle) {
+    btnShuffle.addEventListener('click', () => {
+      shuffleEnabled = !shuffleEnabled;
+      btnShuffle.classList.toggle('active', shuffleEnabled);
+      btnShuffle.title = shuffleEnabled ? 'Shuffle: On' : 'Shuffle: Off';
+    });
+  }
+
+  if (btnClosePlayer) {
+    btnClosePlayer.addEventListener('click', () => {
+      if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+        ytPlayer.pauseVideo();
+      }
+      const playerSection = document.getElementById('player-section');
+      if (playerSection) {
+        playerSection.style.display = 'none';
+      }
+      if (footerEl) {
+        footerEl.style.display = 'none';
+      }
+    });
+  }
+
+  function updatePlayPauseButtonState(state) {
+    if (!btnPlayPause) return;
+    if (state === 'playing') {
+      iconPlay.style.display = 'none';
+      iconPause.style.display = 'block';
+      btnPlayPause.title = 'Pause';
+    } else {
+      iconPlay.style.display = 'block';
+      iconPause.style.display = 'none';
+      btnPlayPause.title = 'Play';
+    }
+  }
+
+  // 3. Tab Toggling
+  tabBtnQueue.addEventListener('click', () => {
+    tabBtnQueue.classList.add('active');
+    tabBtnEdit.classList.remove('active');
+    paneQueue.classList.add('active');
+    paneEdit.classList.remove('active');
+  });
+
+  tabBtnEdit.addEventListener('click', () => {
+    tabBtnEdit.classList.add('active');
+    tabBtnQueue.classList.remove('active');
+    paneEdit.classList.add('active');
+    paneQueue.classList.remove('active');
+  });
+
+  // 4. Initialise Mini Map
+  function initMiniMap() {
+    const mapContainer = document.getElementById('footer-mini-map');
+    if (!mapContainer || miniMap) return;
+
+    miniMap = L.map('footer-mini-map', {
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      boxZoom: false
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(miniMap);
+
+    markerGroup = L.layerGroup().addTo(miniMap);
+  }
+
+  // 5. Update Metadata Footer
+  function updateMetadataFooter(video) {
+    if (!video || !video.caseTitle) {
+      footerEl.style.display = 'none';
+      return;
+    }
+
+    footerEl.style.display = 'flex';
+
+    // Update Text Elements
+    document.getElementById('footer-case-title').textContent = video.caseTitle;
+    document.getElementById('footer-case-desc').textContent = video.caseDesc;
+
+    const statsBlock = document.getElementById('footer-case-stats');
+    if (statsBlock) {
+      statsBlock.innerHTML = video.caseStats;
+    }
+
+    // Update QR Code
+    const qrContainer = document.getElementById('footer-qr-code');
+    if (qrContainer && video.caseUrl) {
+      qrContainer.innerHTML = '';
+      qrInstance = new QRCode(qrContainer, {
+        text: video.caseUrl,
+        width: 80,
+        height: 80,
+        colorDark: '#1a2f16',
+        colorLight: 'rgba(0,0,0,0)',
+        correctLevel: QRCode.CorrectLevel.L
+      });
+    }
+
+    // Update Map
+    if (miniMap && markerGroup) {
+      markerGroup.clearLayers();
+      miniMap.invalidateSize();
+      
+      const locations = video.caseLocations;
+      if (locations && locations.length > 0) {
+        let bounds = [];
+        locations.forEach(loc => {
+          if (loc.lat && loc.lng) {
+            const marker = L.circleMarker([loc.lat, loc.lng], {
+              color: '#496a40',
+              fillColor: '#ffd700',
+              fillOpacity: 0.9,
+              radius: 5,
+              weight: 1.5
+            });
+            marker.bindTooltip(loc.name, {
+              className: 'mini-map-tooltip',
+              direction: 'top'
+            });
+            markerGroup.addLayer(marker);
+            bounds.push([loc.lat, loc.lng]);
+          }
+        });
+        
+        if (bounds.length > 0) {
+          miniMap.fitBounds(bounds, { padding: [10, 10], maxZoom: 10 });
+        } else {
+          miniMap.setView([20, 0], 1);
+        }
+      } else {
+        miniMap.setView([20, 0], 1);
+      }
+    }
+  }
+
+  // 6. Playback Engine
+  function playVideo(index) {
+    if (playlist.length === 0) return;
+    
+    // Show player section
+    const playerSection = document.getElementById('player-section');
+    if (playerSection) {
+      playerSection.style.display = 'block';
+    }
+    
+    // Smooth scroll the content area to the top where the video player is
+    const mainContent = document.querySelector('.playlist-main-content');
+    if (mainContent) {
+      mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Bounds check
+    if (index < 0 || index >= playlist.length) {
+      index = 0;
+    }
+    
+    currentPlaylistIndex = index;
+    const video = playlist[currentPlaylistIndex];
+    const ytId = getYouTubeId(video.url);
+
+    if (ytId) {
+      if (btnPlayPause) {
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+        btnPlayPause.title = 'Play';
+      }
+
+      // If player is not initialized yet
+      if (!ytPlayer) {
+        // Load YouTube API
+        if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+          window.onYouTubeIframeAPIReady = () => {
+            createYTPlayer(ytId);
+          };
+          const tag = document.createElement('script');
+          tag.src = "https://www.youtube.com/iframe_api";
+          const firstScriptTag = document.getElementsByTagName('script')[0];
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        } else {
+          createYTPlayer(ytId);
+        }
+      } else {
+        ytPlayer.loadVideoById(ytId);
+      }
+    } else {
+      if (btnPlayPause) {
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+        btnPlayPause.title = 'Play';
+      }
+
+      // Non-YouTube External Links: display outbound panel in player aspect frame
+      if (ytPlayer) {
+        try { ytPlayer.destroy(); } catch (e) {}
+        ytPlayer = null;
+      }
+      playerFrameEl.innerHTML = `
+        <div class="player-placeholder-overlay" style="z-index: 3;">
+          <div class="placeholder-icon" style="color: #ffd700;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </div>
+          <h3>Outbound Video Link</h3>
+          <p class="mb-3">${video.title}</p>
+          <a href="${video.url}" target="_blank" class="control-btn accent" style="text-decoration: none; padding: 0.5rem 1.5rem; display: inline-block; width: auto;">Open Video Website</a>
+          <button id="btn-skip-external" class="control-btn secondary" style="margin-top: 1rem; width: auto;">Skip to Next Video</button>
+        </div>
+      `;
+      document.getElementById('btn-skip-external').addEventListener('click', playNext);
+    }
+
+    // Update layout highlights
+    highlightPlayingVideo();
+
+    // Update map & QR code footer
+    initMiniMap();
+    updateMetadataFooter(video);
+  }
+
+  function createYTPlayer(videoId) {
+    ytPlayer = new YT.Player('video-player-frame', {
+      videoId: videoId,
+      playerVars: {
+        autoplay: 1,
+        rel: 0,
+        modestbranding: 1,
+        enablejsapi: 1
+      },
+      events: {
+        'onStateChange': onPlayerStateChange,
+        'onError': (e) => {
+          console.error("YouTube Player error:", e);
+          playNext();
+        }
+      }
+    });
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED) {
+      playNext();
+    } else if (event.data === YT.PlayerState.PLAYING) {
+      updatePlayPauseButtonState('playing');
+    } else if (event.data === YT.PlayerState.PAUSED) {
+      updatePlayPauseButtonState('paused');
+    }
+  }
+
+  function playNext() {
+    if (playlist.length === 0) return;
+
+    // Check if there is any playable video in the playlist to avoid infinite loops
+    const hasPlayable = playlist.some(v => isPlayableInline(v));
+    if (!hasPlayable) return;
+
+    let targetIndex = currentPlaylistIndex;
+    if (shuffleEnabled) {
+      let rand;
+      do {
+        rand = Math.floor(Math.random() * playlist.length);
+      } while ((rand === currentPlaylistIndex || !isPlayableInline(playlist[rand])) && playlist.length > 1);
+      targetIndex = rand;
+    } else {
+      let found = false;
+      let idx = currentPlaylistIndex;
+      for (let i = 1; i <= playlist.length; i++) {
+        let nextIdx = (idx + i) % playlist.length;
+        if (isPlayableInline(playlist[nextIdx])) {
+          targetIndex = nextIdx;
+          found = true;
+          break;
+        }
+      }
+      if (!found) return;
+    }
+    playVideo(targetIndex);
+  }
+
+  function playPrev() {
+    if (playlist.length === 0) return;
+
+    const hasPlayable = playlist.some(v => isPlayableInline(v));
+    if (!hasPlayable) return;
+
+    let targetIndex = currentPlaylistIndex;
+    if (shuffleEnabled) {
+      let rand;
+      do {
+        rand = Math.floor(Math.random() * playlist.length);
+      } while ((rand === currentPlaylistIndex || !isPlayableInline(playlist[rand])) && playlist.length > 1);
+      targetIndex = rand;
+    } else {
+      let found = false;
+      let idx = currentPlaylistIndex;
+      for (let i = 1; i <= playlist.length; i++) {
+        let prevIdx = (idx - i + playlist.length) % playlist.length;
+        if (isPlayableInline(playlist[prevIdx])) {
+          targetIndex = prevIdx;
+          found = true;
+          break;
+        }
+      }
+      if (!found) return;
+    }
+    playVideo(targetIndex);
+  }
+
+  // 7. Playlist Rendering Functions
+  function renderPlaylist() {
+    renderQueueTab();
+    renderEditTab();
+  }
+
+  // Tab 1: Render Queue Tab (Grouped by Case Study)
+  function renderQueueTab() {
+    queueListEl.innerHTML = '';
+    if (playlist.length === 0) {
+      queueListEl.innerHTML = '<div class="playlist-empty-state">No videos in playlist</div>';
+      return;
+    }
+
+    // Group active playlist videos by Case Title
+    const groups = {};
+    const groupOrder = [];
+
+    playlist.forEach((video, index) => {
+      const caseName = video.caseTitle || "Other Videos";
+      if (!groups[caseName]) {
+        groups[caseName] = [];
+        groupOrder.push(caseName);
+      }
+      groups[caseName].push({ video, index });
+    });
+
+    const activeVideo = playlist[currentPlaylistIndex];
+    const activeCaseName = activeVideo ? (activeVideo.caseTitle || "Other Videos") : null;
+
+    groupOrder.forEach(caseName => {
+      const caseGroupDiv = document.createElement('div');
+      caseGroupDiv.className = 'queue-case-group';
+      if (caseName === activeCaseName) {
+        caseGroupDiv.classList.add('active-case');
+      }
+
+      const caseH = document.createElement('h4');
+      caseH.className = 'queue-case-title';
+      caseH.textContent = caseName;
+      caseGroupDiv.appendChild(caseH);
+
+      groups[caseName].forEach(item => {
+        const videoLink = document.createElement('div');
+        videoLink.className = 'queue-video-item';
+        if (item.index === currentPlaylistIndex) {
+          videoLink.classList.add('active');
+        }
+        videoLink.textContent = item.video.title;
+        videoLink.title = item.video.title;
+
+        // Click plays immediately
+        videoLink.addEventListener('click', () => {
+          playVideo(item.index);
+        });
+
+        caseGroupDiv.appendChild(videoLink);
+      });
+
+      queueListEl.appendChild(caseGroupDiv);
+    });
+  }
+
+  // Tab 2: Render Edit Tab (Flat list with Drag & Drop)
+  function renderEditTab() {
+    editListEl.innerHTML = '';
+    if (playlist.length === 0) {
+      editListEl.innerHTML = '<div class="playlist-empty-state">No videos in playlist</div>';
+      return;
+    }
+
+    playlist.forEach((video, index) => {
+      const editItem = document.createElement('div');
+      editItem.className = 'playlist-edit-item';
+      editItem.setAttribute('draggable', 'true');
+      editItem.dataset.index = index;
+
+      editItem.innerHTML = `
+        <span class="drag-handle">:::</span>
+        <div class="edit-item-info">
+          <div class="edit-item-title" title="${video.title}">${video.title}</div>
+          <div class="edit-item-case" title="${video.caseTitle || 'Project Video'}">${video.caseTitle || 'Project Video'}</div>
+        </div>
+        <button class="btn-remove-item" title="Remove video">&times;</button>
+      `;
+
+      // Drag & Drop Bindings
+      editItem.addEventListener('dragstart', handleDragStart);
+      editItem.addEventListener('dragover', handleDragOver);
+      editItem.addEventListener('dragenter', handleDragEnter);
+      editItem.addEventListener('dragleave', handleDragLeave);
+      editItem.addEventListener('drop', handleDrop);
+      editItem.addEventListener('dragend', handleDragEnd);
+
+      // Remove Click
+      editItem.querySelector('.btn-remove-item').addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeVideo(index);
+      });
+
+      editListEl.appendChild(editItem);
+    });
+  }
+
+  function highlightPlayingVideo() {
+    // 1. Highlight in Queue View
+    const queueLinks = queueListEl.querySelectorAll('.queue-video-item');
+    queueLinks.forEach((link, idx) => {
+      link.classList.remove('active');
+    });
+    const queueGroups = queueListEl.querySelectorAll('.queue-case-group');
+    queueGroups.forEach(group => {
+      group.classList.remove('active-case');
+    });
+
+    const activeVideo = playlist[currentPlaylistIndex];
+    if (activeVideo) {
+      // Re-render Queue is safest to update parent case active markers
+      renderQueueTab();
+    }
+
+    // 2. Highlight in Edit View (no special highlight needed but ensures sync)
+    const editItems = editListEl.querySelectorAll('.playlist-edit-item');
+    editItems.forEach((item, idx) => {
+      if (idx === currentPlaylistIndex) {
+        item.style.borderColor = '#496a40';
+        item.style.background = 'rgba(73, 106, 64, 0.03)';
+      } else {
+        item.style.borderColor = '';
+        item.style.background = '';
+      }
+    });
+  }
+
+  // 8. Playlist Mutation Functions
+  function removeVideo(index) {
+    if (index < 0 || index >= playlist.length) return;
+    
+    playlist.splice(index, 1);
+    
+    // Adjust current index
+    if (currentPlaylistIndex === index) {
+      // If we removed currently playing, load the same index (which is now the next item)
+      if (playlist.length > 0) {
+        playVideo(currentPlaylistIndex);
+      } else {
+        // Queue is empty
+        clearPlayer();
+      }
+    } else if (currentPlaylistIndex > index) {
+      currentPlaylistIndex--;
+      highlightPlayingVideo();
+    } else {
+      highlightPlayingVideo();
+    }
+    
+    renderPlaylist();
+  }
+
+  function clearPlayer() {
+    playlist = [];
+    currentPlaylistIndex = 0;
+    
+    if (ytPlayer) {
+      try { ytPlayer.destroy(); } catch (e) {}
+      ytPlayer = null;
+    }
+    playerFrameEl.innerHTML = '';
+    
+    // Hide player section
+    const playerSection = document.getElementById('player-section');
+    if (playerSection) {
+      playerSection.style.display = 'none';
+    }
+
+    footerEl.style.display = 'none';
+
+    if (btnPlayPause) {
+      iconPlay.style.display = 'block';
+      iconPause.style.display = 'none';
+      btnPlayPause.title = 'Play';
+    }
+
+    renderPlaylist();
+  }
+
+  // 9. HTML5 Drag & Drop Logic
+  let dragSrcEl = null;
+
+  function handleDragStart(e) {
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', this.dataset.index);
+    this.classList.add('dragging');
+  }
+
+  function handleDragOver(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+  }
+
+  function handleDragEnter(e) {
+    this.classList.add('drag-over');
+  }
+
+  function handleDragEnd(e) {
+    this.classList.remove('dragging');
+    const items = editListEl.querySelectorAll('.playlist-edit-item');
+    items.forEach(item => {
+      item.classList.remove('drag-over');
+    });
+  }
+
+  function handleDragLeave(e) {
+    this.classList.remove('drag-over');
+  }
+
+  function handleDrop(e) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+    
+    const srcIndex = parseInt(e.dataTransfer.getData('text/plain'));
+    const destIndex = parseInt(this.dataset.index);
+
+    if (srcIndex !== destIndex && !isNaN(srcIndex) && !isNaN(destIndex)) {
+      // Reorder array
+      const movedItem = playlist.splice(srcIndex, 1)[0];
+      playlist.splice(destIndex, 0, movedItem);
+
+      // Adjust currently playing index
+      if (currentPlaylistIndex === srcIndex) {
+        currentPlaylistIndex = destIndex;
+      } else if (currentPlaylistIndex > srcIndex && currentPlaylistIndex <= destIndex) {
+        currentPlaylistIndex--;
+      } else if (currentPlaylistIndex < srcIndex && currentPlaylistIndex >= destIndex) {
+        currentPlaylistIndex++;
+      }
+
+      renderPlaylist();
+      highlightPlayingVideo();
+    }
+    return false;
+  }
+
+  // 10. Available Grid Bindings
+  cards.forEach((card, idx) => {
+    const videoObj = allVideos[idx];
+
+    // Card Actions
+    const btnPlay = card.querySelector('.card-btn.play');
+    const btnAdd = card.querySelector('.card-btn.add');
+    const coverClick = card.querySelector('.video-cover-container');
+
+    // Helper: Add and play immediately
+    const handleImmediatePlay = () => {
+      // Check if already in playlist
+      let existingIndex = playlist.findIndex(v => v.id === videoObj.id);
+      if (existingIndex === -1) {
+        playlist.splice(currentPlaylistIndex + 1, 0, videoObj);
+        existingIndex = currentPlaylistIndex + 1;
+        renderPlaylist();
+      }
+      playVideo(existingIndex);
+    };
+
+    // Helper: Add to playlist end
+    const handleAddToPlaylist = (e) => {
+      if (e) e.stopPropagation();
+      let existingIndex = playlist.findIndex(v => v.id === videoObj.id);
+      if (existingIndex === -1) {
+        playlist.push(videoObj);
+        renderPlaylist();
+        
+        // Visual feedback
+        const originalText = btnAdd.innerHTML;
+        btnAdd.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Added
+        `;
+        setTimeout(() => {
+          btnAdd.innerHTML = originalText;
+        }, 1200);
+      }
+    };
+
+    if (btnPlay) btnPlay.addEventListener('click', handleImmediatePlay);
+    if (coverClick) coverClick.addEventListener('click', handleImmediatePlay);
+    if (btnAdd) btnAdd.addEventListener('click', handleAddToPlaylist);
+  });
+
+  // 11. Playlist Global Buttons
+  btnFeatured.addEventListener('click', () => {
+    // Add all featured to playlist
+    const featured = allVideos.filter(v => v.isFeatured);
+    featured.forEach(v => {
+      if (!playlist.some(p => p.id === v.id)) {
+        playlist.push(v);
+      }
+    });
+    renderPlaylist();
+    if (playlist.length > 0 && document.getElementById('player-section').style.display === 'none') {
+      playVideo(0);
+    }
+  });
+
+  btnAll.addEventListener('click', () => {
+    // Add all videos to playlist
+    allVideos.forEach(v => {
+      if (!playlist.some(p => p.id === v.id)) {
+        playlist.push(v);
+      }
+    });
+    renderPlaylist();
+    if (playlist.length > 0 && document.getElementById('player-section').style.display === 'none') {
+      playVideo(0);
+    }
+  });
+
+  btnClear.addEventListener('click', clearPlayer);
+
+  // 12. Page Load Initialization
+  // Load featured videos by default
+  const defaultFeatured = allVideos.filter(v => v.isFeatured);
+  if (defaultFeatured.length > 0) {
+    playlist = [...defaultFeatured];
+    renderPlaylist();
+  } else if (allVideos.length > 0) {
+    playlist = [allVideos[0]];
+    renderPlaylist();
+  }
 });
 </script>
-
-{% include filters_script.html %}
-

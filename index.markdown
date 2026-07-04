@@ -341,14 +341,11 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
   <div class="hero-panel">
     <!-- Left Hero: Headers and Counters -->
     <div class="hero-left">
-      <div class="hero-wip-badge">
-        Case Book in Development
-      </div>
       <h1 class="hero-title">
-        Exploring Public Voice & Engagement in AI
+        Exploring Public Voice on AI
       </h1>
       <p class="hero-subtitle">
-        PAVE gathers case studies of participatory practice from across the globe, investigating how communities explore AI options, share views, and co-design futures.
+        How are people across the world engaged in dialogue about data and artificial intelligence? 
       </p>
       
       <!-- Stats Count-up Grid -->
@@ -363,7 +360,7 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
         </div>
         <div class="stat-card" data-target="{{ total_hours }}">
           <div class="stat-number">0</div>
-          <div class="stat-label">Hours of Dialogue</div>
+          <div class="stat-label">Hours of input</div>
         </div>
         <div class="stat-card" data-target="{{ total_countries_count }}">
           <div class="stat-number">0</div>
@@ -391,9 +388,9 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
         </svg>
       </div>
       <div class="action-info">
-        <h2 class="action-card-title">Discover</h2>
+        <h2 class="action-card-title">Browse cases</h2>
         <p class="action-card-description">
-          Browse detailed case studies, check participant demography lotteries, and view interactive slideshow presentation models.
+          Browse case studies of participatory AI projects, and find out about efforts to run informed and inclusive processes.
         </p>
         <span class="action-cta">
           View cases
@@ -414,9 +411,9 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
         </svg>
       </div>
       <div class="action-info">
-        <h2 class="action-card-title">Explore Map</h2>
+        <h2 class="action-card-title">Explore map</h2>
         <p class="action-card-description">
-          Open the full-screen interactive geographic map to trace global public engagement events, locations, and initiatives.
+          Open the interactive map to see the voices seeking to inform AI development, deployment and governance.
         </p>
         <span class="action-cta">
           Launch map
@@ -428,7 +425,7 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
     </a>
 
     <!-- Watch Card -->
-    <a href="{{ '/videos/' | relative_url }}" class="action-card">
+    <a href="{{ '/tools/' | relative_url }}" class="action-card">
       <div class="action-icon-wrapper">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="23 7 16 12 23 17 23 7"></polygon>
@@ -436,12 +433,12 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
         </svg>
       </div>
       <div class="action-info">
-        <h2 class="action-card-title">Watch Playlist</h2>
+        <h2 class="action-card-title">Hear voices</h2>
         <p class="action-card-description">
-          Watch structured community panels, stakeholder lectures, and listen to what different groups say about the impact of generative AI.
+          Look at the recommendations and issues raised in different processes, or watch videos sharing project processes and outcomes. 
         </p>
         <span class="action-cta">
-          Watch videos
+          Expore
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
@@ -450,7 +447,7 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
     </a>
 
     <!-- Contribute Card -->
-    <a href="{{ '/contribute/' | relative_url }}" class="action-card">
+    <a href="{{ '/get-involved/' | relative_url }}" class="action-card">
       <div class="action-icon-wrapper">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -458,12 +455,12 @@ title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
         </svg>
       </div>
       <div class="action-info">
-        <h2 class="action-card-title">Contribute</h2>
+        <h2 class="action-card-title">Get involved</h2>
         <p class="action-card-description">
-          Add your own case studies, public consultation templates, and upcoming AI engagement events to our shared case book.
+          Contribute your projects, find out about the Participatory AI Research & Practice Symposium, or learn how you can run your own process and support the citizens' track on AI.
         </p>
         <span class="action-cta">
-          Submit a case
+          Get involved
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>

@@ -2,6 +2,6 @@
 layout: home
 title: News
 permalink: /news/
-menus: [header]
+menus: []
 menu_order: 4
 ---

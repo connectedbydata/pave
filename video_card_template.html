@@ -1,0 +1,278 @@
+<!-- Retrieve case metadata for current resource -->
+{% assign res_focus = "" | split: "||" %}
+{% assign res_methods = "" | split: "||" %}
+{% assign res_goals = "" | split: "||" %}
+{% assign res_locations = "" | split: "||" %}
+{% assign res_cases = "" | split: "||" %}
+{% assign associated_case = nil %}
+
+{% for case_slug in res.cases %}
+  {% for c in site.cases %}
+    {% if c.slug == case_slug %}
+      {% assign associated_case = c %}
+      {% assign res_cases = res_cases | push: c.title %}
+      <!-- Focus -->
+      {% if c.what-form-of-ai-is-the-project-about %}
+        {% for val in c.what-form-of-ai-is-the-project-about %}
+          {% assign res_focus = res_focus | push: val %}
+        {% endfor %}
+      {% endif %}
+      <!-- Goals -->
+      {% if c.project-goals %}
+        {% for val in c.project-goals %}
+          {% assign res_goals = res_goals | push: val %}
+        {% endfor %}
+      {% endif %}
+      <!-- Methods & Locations from participants -->
+      {% if c.participants %}
+        {% for part_slug in c.participants %}
+          {% assign part = site.participants | where: "slug", part_slug | first %}
+          {% if part %}
+            {% if part.which-of-the-following-methods-were-used-to %}
+              {% for method in part.which-of-the-following-methods-were-used-to %}
+                {% assign res_methods = res_methods | push: method %}
+              {% endfor %}
+            {% endif %}
+            {% if part.locations %}
+              {% for loc_slug in part.locations %}
+                {% assign loc = site.locations | where: "slug", loc_slug | first %}
+                {% if loc and loc.country-code %}
+                  {% assign res_locations = res_locations | push: loc.country-code %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% assign res_focus_uniq = res_focus | uniq %}
+{% assign res_methods_uniq = res_methods | uniq %}
+{% assign res_goals_uniq = res_goals | uniq %}
+{% assign res_locations_uniq = res_locations | uniq %}
+{% assign res_cases_uniq = res_cases | uniq %}
+
+<!-- Case Stats and Locations for dynamic play metadata -->
+{% assign stats_text = "" %}
+{% assign unique_locs = "" | split: "" %}
+
+{% if associated_case %}
+    {% assign deliberating_people = 0 %}
+    {% assign total_deliberating_person_hours = 0 %}
+    {% assign deliberating_people_with_hours = 0 %}
+    {% assign participating_people = 0 %}
+    {% assign total_participating_person_hours = 0 %}
+    {% assign participating_people_with_hours = 0 %}
+    {% assign contributing_people = 0 %}
+    {% assign other_people = 0 %}
+    {% assign has_collective_intelligence = false %}
+    {% assign has_non_delib_participated = false %}
+    {% assign has_non_delib_contributed = false %}
+
+    {% for part_slug in associated_case.participants %}
+      {% assign part = site.participants | where: "slug", part_slug | first %}
+      {% if part %}
+        {% assign is_deliberative_group = false %}
+        {% assign is_participated_group = false %}
+        {% assign is_contributed_group = false %}
+        
+        {% for method in part.which-of-the-following-methods-were-used-to %}
+          {% if method == "Collective Intelligence Process" %}
+            {% assign has_collective_intelligence = true %}
+          {% endif %}
+          {% if site.data.methods_map.deliberated contains method %}
+            {% assign is_deliberative_group = true %}
+          {% endif %}
+          {% if site.data.methods_map.participated contains method %}
+            {% assign is_participated_group = true %}
+          {% endif %}
+          {% if site.data.methods_map.contributed contains method %}
+            {% assign is_contributed_group = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if is_deliberative_group %}
+          {% if part.how-many-people-took-part %}
+            {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+            {% assign deliberating_people = deliberating_people | plus: p_count %}
+            {% if part.on-average-how-many-hours-did-each-participant %}
+              {% assign p_hours = part.on-average-how-many-hours-did-each-participant | plus: 0 %}
+              {% assign group_hours = p_count | times: p_hours %}
+              {% assign total_deliberating_person_hours = total_deliberating_person_hours | plus: group_hours %}
+              {% assign deliberating_people_with_hours = deliberating_people_with_hours | plus: p_count %}
+            {% endif %}
+          {% endif %}
+        {% elsif is_participated_group %}
+          {% assign has_non_delib_participated = true %}
+          {% if part.how-many-people-took-part %}
+            {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+            {% assign participating_people = participating_people | plus: p_count %}
+            {% if part.on-average-how-many-hours-did-each-participant %}
+              {% assign p_hours = part.on-average-how-many-hours-did-each-participant | plus: 0 %}
+              {% assign group_hours = p_count | times: p_hours %}
+              {% assign total_participating_person_hours = total_participating_person_hours | plus: group_hours %}
+              {% assign participating_people_with_hours = participating_people_with_hours | plus: p_count %}
+            {% endif %}
+          {% endif %}
+        {% elsif is_contributed_group %}
+          {% assign has_non_delib_contributed = true %}
+          {% if part.how-many-people-took-part %}
+            {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+            {% assign contributing_people = contributing_people | plus: p_count %}
+          {% endif %}
+        {% else %}
+          {% if part.how-many-people-took-part %}
+            {% assign p_count = part.how-many-people-took-part | plus: 0 %}
+            {% assign other_people = other_people | plus: p_count %}
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% assign avg_delib_hours = 0 %}
+    {% assign avg_delib_hours_display = "" %}
+    {% if deliberating_people_with_hours > 0 %}
+      {% assign raw_avg_delib_hours = total_deliberating_person_hours | times: 1.0 | divided_by: deliberating_people_with_hours %}
+      {% assign rounded_delib = raw_avg_delib_hours | round: 1 | append: "" %}
+      {% if rounded_delib contains ".0" %}
+        {% assign delib_parts = rounded_delib | split: "." %}
+        {% assign avg_delib_hours_display = delib_parts[0] %}
+      {% else %}
+        {% assign avg_delib_hours_display = rounded_delib %}
+      {% endif %}
+      {% assign avg_delib_hours = raw_avg_delib_hours %}
+    {% endif %}
+
+    {% assign avg_part_hours = 0 %}
+    {% assign avg_part_hours_display = "" %}
+    {% if participating_people_with_hours > 0 %}
+      {% assign raw_avg_part_hours = total_participating_person_hours | times: 1.0 | divided_by: participating_people_with_hours %}
+      {% assign rounded_part = raw_avg_part_hours | round: 1 | append: "" %}
+      {% if rounded_part contains ".0" %}
+        {% assign part_parts = rounded_part | split: "." %}
+        {% assign avg_part_hours_display = part_parts[0] %}
+      {% else %}
+        {% assign avg_part_hours_display = rounded_part %}
+      {% endif %}
+      {% assign avg_part_hours = raw_avg_part_hours %}
+    {% endif %}
+
+    {% assign non_delib_people = participating_people | plus: contributing_people | plus: other_people %}
+    {% assign non_delib_verb = "participated" %}
+    {% if has_non_delib_participated %}
+      {% assign non_delib_verb = "participated" %}
+    {% elsif has_non_delib_contributed %}
+      {% if has_collective_intelligence %}
+        {% assign non_delib_verb = "contributed to a collective intelligence process" %}
+      {% else %}
+        {% assign non_delib_verb = "contributed" %}
+      {% endif %}
+    {% endif %}
+
+    {% assign start_year = associated_case.what-year-did-the-project-start %}
+    {% assign end_year = associated_case.what-year-did-the-project-conclude %}
+    {% assign year_text = "" %}
+
+    {% if start_year and end_year %}
+      {% if start_year == end_year %}
+        {% assign year_text = "In " | append: start_year %}
+      {% else %}
+        {% assign year_text = "Between " | append: start_year | append: " and " | append: end_year %}
+      {% endif %}
+    {% elsif start_year %}
+      {% assign year_text = "In " | append: start_year %}
+    {% elsif end_year %}
+      {% assign year_text = "In " | append: end_year %}
+    {% endif %}
+
+    {% capture stats_text %}{% if year_text != "" %}<span class="stats-light">{{ year_text }}</span> {% endif %}{% if deliberating_people > 0 and non_delib_people > 0 %}{% if non_delib_people > 0 %}{{ non_delib_people }} participants{% else %}participants{% endif %} {{ non_delib_verb }}{% if non_delib_verb == "participated" and avg_part_hours > 0 %} over the course of {{ avg_part_hours_display }} hours{% endif %} and {% if deliberating_people > 0 %}{{ deliberating_people }}{% else %}others{% endif %} deliberated{% if avg_delib_hours > 0 %} over the course of {{ avg_delib_hours_display }} hours{% endif %} <span class="stats-light">to explore issues related to AI.</span>{% elsif deliberating_people > 0 %}{% if deliberating_people > 0 %}{{ deliberating_people }} participants{% else %}participants{% endif %} deliberated{% if avg_delib_hours > 0 %} over the course of {{ avg_delib_hours_display }} hours{% endif %} <span class="stats-light">to explore issues related to AI.</span>{% else %}{% if non_delib_people > 0 %}{{ non_delib_people }} participants{% else %}participants{% endif %} {{ non_delib_verb }}{% if non_delib_verb == "participated" and avg_part_hours > 0 %} over the course of {{ avg_part_hours_display }} hours{% endif %} <span class="stats-light">to explore issues related to AI.</span>{% endif %}{% endcapture %}
+
+    {% assign loc_array = "" | split: "" %}
+    {% for part_slug in associated_case.participants %}
+      {% assign part = site.participants | where: "slug", part_slug | first %}
+      {% if part %}
+        {% for loc_slug in part.locations %}
+          {% assign loc = site.locations | where: "slug", loc_slug | first %}
+          {% if loc.latitude and loc.longitude %}
+            {% capture loc_json %}{"lat":{{ loc.latitude }},"lng":{{ loc.longitude }},"name":"{{ loc.title | escape }}"}{% endcapture %}
+            {% assign loc_array = loc_array | push: loc_json %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    {% assign unique_locs = loc_array | uniq %}
+{% endif %}
+
+<article class="video-card {% if res.featured-video-resource == true %}featured{% endif %}" 
+         data-id="{{ res.slug }}"
+         data-title="{{ res.title | escape }}"
+         data-url="{{ res.external_url | escape }}"
+         data-case-title="{{ associated_case.title | escape }}"
+         data-case-desc="{{ associated_case.describe-the-subject-matter-in-your-own-words-one | strip_html | escape }}"
+         data-case-url="{{ '/c/' | append: associated_case.airtable_id | append: '/' | absolute_url }}"
+         data-case-stats="{{ stats_text | escape }}"
+         data-case-locations='[{{ unique_locs | join: "," }}]'>
+  
+  <!-- Card Thumbnail Area -->
+  <div class="video-cover-wrapper">
+    <div class="video-cover-container">
+      <div class="video-media-target"></div>
+      
+      <!-- Hover Play Overlay -->
+      <div class="play-overlay">
+        <div class="play-btn-circle">
+          <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"></path>
+          </svg>
+          <svg class="external-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display: none;">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Content Area -->
+  <div class="video-card-body">
+    <div class="video-case-link">
+      {% for case_name in res_cases_uniq %}
+        <span class="case-tag-badge">{{ case_name }}</span>
+      {% endfor %}
+    </div>
+
+    <h2 class="video-title">{{ res.title | escape }}</h2>
+
+    <p class="video-description">
+      {% if res.short-description %}
+        {{ res.short-description | escape }}
+      {% else %}
+        {% if associated_case.describe-the-subject-matter-in-your-own-words-one %}
+          {{ associated_case.describe-the-subject-matter-in-your-own-words-one | strip_html | truncatewords: 22 | escape }}
+        {% else %}
+          Explore key highlights and media coverage from this case study engagement.
+        {% endif %}
+      {% endif %}
+    </p>
+
+    <!-- Card Action Buttons -->
+    <div class="card-actions-row">
+      <button class="card-btn play">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z"></path>
+        </svg>
+        Play
+      </button>
+      <button class="card-btn add">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add
+      </button>
+    </div>
+  </div>
+</article>

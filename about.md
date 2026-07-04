@@ -16,17 +16,17 @@ In creating this case book, collating examples of AI-focussed public **voice** a
 
 1. **To inform inclusive practice** by inviting cases to describe the ‘Who’, ‘What’ and ‘How’ of engagement, and to outline how choices about recruitment, methods or project design have supported greater diversity or involvement of marginalised groups in meaningful engagement on AI. 
 
-   *Featured cases* offer examples of participatory practice in new contexts, with well considered methods, or particular efforts to give power to marginalised voices. 
+   *Featured cases* offer examples of participatory practice in different contexts, with well considered methods, or particular efforts to give power to marginalised voices. 
 
 2. **To amplify voices** from communities across the world who have been seeking to understand, express opinions on, and take action to shape, AI. 
 
-   For many case book entries we have extracted key recommendations and messages from public participants, and we’ve created a playlist of project videos where participants share their views. We’re experimenting with different ways to display these \- inviting power-holders to better engage with public views on AI. 
+   For many case book entries we have extracted key recommendations and messages from public participants, and we’ve created a playlist of project videos that share both participatory methods and public messages. We’re experimenting with different ways to display these \- inviting power-holders to better engage with public views on AI. 
 
 3. **To inspire new participation projects** by demonstrating how different projects have found best-fit methods for supporting participatory approaches to AI, showing participatory AI projects taking place across the globe, and highlighting gaps that need to be filled. 
 
    Many case book entries include links to supporting method guides, toolkits and learning resources created to help participants have informed and empowered conversations about AI. 
 
-The case book is a living project. The first release was prepared for the 2026 UN Global Dialogue on AI Governance. We are exploring ways to continue to maintain the case book in the year ahead. 
+The case book is a living project. The first release was prepared for the 2026 UN Global Dialogue on AI Governance. We are exploring ways to continue to maintain the case book in the year ahead, and continue to iterate to become a more inclusive resource, with an emphasis on places and communities that are traditionally underrepresented.
 
 # Case Book Methodology
 
@@ -36,7 +36,7 @@ The case book contains three kinds of entry:
 | :---- | :---- | :---- |
 | These full cases demonstrate participatory practice in new contexts, with well considered methods, and/or with particular efforts to give power to marginalised voices.  | Full cases include details of the ‘Who’, ‘What’ and ‘How’ of a participatory process, along with an edited case description and links to further resources.  | These provide basic information about a participatory AI project that has taken place. They may be developed into full cases in future.  |
 
-The case book has been created through crowdsourcing and desk-research.
+The case book is created through crowdsourcing and desk-research.
 
 * We invite people involved in, or aware of, particular participatory AI projects to submit these for considerations, and we identify further potential projects through desk research.  
 * We triage each submission to decide whether to create a full case or mapping entry.  
