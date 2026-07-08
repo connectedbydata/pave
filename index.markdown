@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Welcome to the Participatory AI Voice and Engagement (PAVE) Case Book
+title: Welcome to the Public AI Voice and Engagement (PAVE) Case Book
 ---
 
 {% comment %}
