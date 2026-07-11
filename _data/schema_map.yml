@@ -682,6 +682,12 @@ tblu6lFzOdgEQKGC4:
       type: singleLineText
       sync: false
       slug: video-notes
+    fldwniS1BtpoK4E4t:
+      name: StartAt
+      type: singleLineText
+      sync: true
+      slug: startat
+      comment: Name changed from "Cut" - field slug not updated yet
 tbl3Id3C9tKcFcnKm:
   name: Method Codelist
   primaryFieldId: fldlR2XVxIybX907z

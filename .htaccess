@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Redirect any host that is NOT pave.pairs.site to the canonical domain
+RewriteCond %{HTTP_HOST} !^pave\.pairs\.site$ [NC]
+RewriteRule ^(.*)$ https://pave.pairs.site/$1 [R=301,L]
