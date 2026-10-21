@@ -25,6 +25,10 @@ We will identify on a case-by-case basis whether the request also requires updat
 
 Basic server logging is enabled for this website to allow us to understand patterns of usage. Logs may contain IP Addresses and Referrer information. No other personal information is collected.
 
+Additional website analytics are provided by Plausible. The details about how Plausible generates these statistics [are available on their website](https://plausible.io/privacy-focused-web-analytics): this does not include the collection of any personally identifiable data (including IP addresses).
+
+
+
 ## Your rights
 
 Under UK data protection law, you have rights including:
