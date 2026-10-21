@@ -76,7 +76,7 @@ if (mapContainer && mapMarkers.length > 0) {
   }).setView([20, 0], 2);
 
   // Premium Carto Light Basemap
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_4qtr_1_72e49fe987375b3637f246b7', {
     maxZoom: 20
   }).addTo(miniMap);
 
